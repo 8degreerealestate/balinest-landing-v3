@@ -1,6 +1,13 @@
 import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
 import pg from "pg";
 import * as schema from "./schema";
+import {
+  createPoolConfig,
+  databaseProviderLabel,
+  isDatabaseConfigured,
+  requireDatabaseUrl,
+  resolveDatabaseUrl,
+} from "./connection";
 
 const { Pool } = pg;
 
@@ -9,24 +16,18 @@ type DbSchema = typeof schema;
 let poolInstance: pg.Pool | null = null;
 let dbInstance: NodePgDatabase<DbSchema> | null = null;
 
-export function isDatabaseConfigured(): boolean {
-  return Boolean(process.env.DATABASE_URL?.trim());
-}
-
-function requireDatabaseUrl(): string {
-  const url = process.env.DATABASE_URL?.trim();
-  if (!url) {
-    throw new Error(
-      "DATABASE_URL must be set. Did you forget to provision a database?",
-    );
-  }
-  return url;
-}
+export {
+  createPoolConfig,
+  databaseProviderLabel,
+  isDatabaseConfigured,
+  requireDatabaseUrl,
+  resolveDatabaseUrl,
+};
 
 /** Lazily creates the pool (serverless-safe when only sheet inventory is used). */
 export function getPool(): pg.Pool {
   if (!poolInstance) {
-    poolInstance = new Pool({ connectionString: requireDatabaseUrl() });
+    poolInstance = new Pool(createPoolConfig());
   }
   return poolInstance;
 }
@@ -37,6 +38,17 @@ export function getDb(): NodePgDatabase<DbSchema> {
     dbInstance = drizzle(getPool(), { schema });
   }
   return dbInstance;
+}
+
+/** Quick connectivity check (e.g. health endpoint). */
+export async function pingDatabase(): Promise<boolean> {
+  if (!isDatabaseConfigured()) return false;
+  try {
+    await getPool().query("select 1 as ok");
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 function proxyPool(): pg.Pool {

@@ -11,6 +11,8 @@
     "vercel:login": "npx vercel@latest login",
     "vercel:link": "npx vercel@latest link --scope matts-projects-cb3e7451",
     "vercel:deploy": "npx vercel@latest deploy --prod --scope matts-projects-cb3e7451 --yes",
+    "db:push": "pnpm --filter @workspace/db run push",
+    "db:check": "pnpm exec tsx scripts/check-database.ts",
     "build": "pnpm run typecheck && pnpm -r --if-present run build",
     "typecheck:libs": "tsc --build",
     "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --filter \"./scripts\" --if-present run typecheck"
