@@ -1,4 +1,5 @@
-import { lazy, Suspense, type ComponentType, type LazyExoticComponent } from "react";
+import { Suspense, useEffect, type ComponentType, type LazyExoticComponent } from "react";
+import { clearChunkReloadFlag, lazyWithRetry } from "@/lib/lazy-with-retry";
 import { Switch, Route, Router as WouterRouter, useRoute, Redirect } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { setBaseUrl } from "@workspace/api-client-react";
@@ -15,36 +16,36 @@ import { getApiBaseUrl } from "@/lib/api-base";
 import { Seo } from "@/components/site/Seo";
 import { SITE_NAME } from "@/lib/site-seo";
 
-const Home = lazy(() => import("@/pages/home"));
-const Projects = lazy(() => import("@/pages/projects"));
-const CompletedProjects = lazy(() => import("@/pages/completed"));
-const ProjectDetail = lazy(() => import("@/pages/project-detail"));
-const ListingDetail = lazy(() => import("@/pages/listing-detail"));
-const Blog = lazy(() => import("@/pages/blog"));
-const BlogDetail = lazy(() => import("@/pages/blog-detail"));
-const About = lazy(() => import("@/pages/about"));
-const Contact = lazy(() => import("@/pages/contact"));
-const Invest = lazy(() => import("@/pages/invest"));
-const InvestmentGuide = lazy(() => import("@/pages/investment-guide"));
-const Pricing = lazy(() => import("@/pages/pricing"));
-const InfoPage = lazy(() => import("@/pages/info-page"));
-const LongTermRentals = lazy(() => import("@/pages/long-term-rentals"));
-const BuyerAgent = lazy(() => import("@/pages/buyer-agent"));
-const SellerAgent = lazy(() => import("@/pages/seller-agent"));
-const LegalGuide = lazy(() => import("@/pages/legal-guide"));
-const LocationGuide = lazy(() => import("@/pages/location-guide"));
+const Home = lazyWithRetry(() => import("@/pages/home"));
+const Projects = lazyWithRetry(() => import("@/pages/projects"));
+const CompletedProjects = lazyWithRetry(() => import("@/pages/completed"));
+const ProjectDetail = lazyWithRetry(() => import("@/pages/project-detail"));
+const ListingDetail = lazyWithRetry(() => import("@/pages/listing-detail"));
+const Blog = lazyWithRetry(() => import("@/pages/blog"));
+const BlogDetail = lazyWithRetry(() => import("@/pages/blog-detail"));
+const About = lazyWithRetry(() => import("@/pages/about"));
+const Contact = lazyWithRetry(() => import("@/pages/contact"));
+const Invest = lazyWithRetry(() => import("@/pages/invest"));
+const InvestmentGuide = lazyWithRetry(() => import("@/pages/investment-guide"));
+const Pricing = lazyWithRetry(() => import("@/pages/pricing"));
+const InfoPage = lazyWithRetry(() => import("@/pages/info-page"));
+const LongTermRentals = lazyWithRetry(() => import("@/pages/long-term-rentals"));
+const BuyerAgent = lazyWithRetry(() => import("@/pages/buyer-agent"));
+const SellerAgent = lazyWithRetry(() => import("@/pages/seller-agent"));
+const LegalGuide = lazyWithRetry(() => import("@/pages/legal-guide"));
+const LocationGuide = lazyWithRetry(() => import("@/pages/location-guide"));
 
-const AdminDashboard = lazy(() => import("@/pages/admin/dashboard"));
-const AdminProjects = lazy(() => import("@/pages/admin/projects"));
-const AdminUnits = lazy(() => import("@/pages/admin/units"));
-const AdminBlog = lazy(() => import("@/pages/admin/blog"));
-const AdminEnquiries = lazy(() => import("@/pages/admin/enquiries"));
-const AdminTestimonials = lazy(() => import("@/pages/admin/testimonials"));
-const AdminGuides = lazy(() => import("@/pages/admin/guides"));
-const AdminContent = lazy(() => import("@/pages/admin/content"));
-const AdminInventoryImportRedirect = lazy(() => import("@/pages/admin/inventory-import"));
-const AdminInventory = lazy(() => import("@/pages/admin/inventory"));
-const AdminSettings = lazy(() => import("@/pages/admin/settings"));
+const AdminDashboard = lazyWithRetry(() => import("@/pages/admin/dashboard"));
+const AdminProjects = lazyWithRetry(() => import("@/pages/admin/projects"));
+const AdminUnits = lazyWithRetry(() => import("@/pages/admin/units"));
+const AdminBlog = lazyWithRetry(() => import("@/pages/admin/blog"));
+const AdminEnquiries = lazyWithRetry(() => import("@/pages/admin/enquiries"));
+const AdminTestimonials = lazyWithRetry(() => import("@/pages/admin/testimonials"));
+const AdminGuides = lazyWithRetry(() => import("@/pages/admin/guides"));
+const AdminContent = lazyWithRetry(() => import("@/pages/admin/content"));
+const AdminInventoryImportRedirect = lazyWithRetry(() => import("@/pages/admin/inventory-import"));
+const AdminInventory = lazyWithRetry(() => import("@/pages/admin/inventory"));
+const AdminSettings = lazyWithRetry(() => import("@/pages/admin/settings"));
 
 const apiBaseForClient = getApiBaseUrl();
 if (apiBaseForClient) {
@@ -184,6 +185,10 @@ function Router() {
 }
 
 function App() {
+  useEffect(() => {
+    clearChunkReloadFlag();
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
