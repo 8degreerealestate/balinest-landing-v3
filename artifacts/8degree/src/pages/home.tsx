@@ -343,7 +343,7 @@ export default function Home() {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full min-w-0 overflow-x-clip">
       <Seo
         title="Luxury Bali real estate & strategic developments"
         description={truncateForMeta(DEFAULT_DESCRIPTION)}
@@ -354,13 +354,13 @@ export default function Home() {
         ])}
       />
       {/* Hero Section */}
-      <section className="relative h-[100dvh] min-h-[600px] flex items-center justify-center overflow-hidden">
+      <section className="relative flex h-[100dvh] min-h-[600px] items-center justify-center overflow-x-clip overflow-y-hidden">
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-black/40 z-10" />
           <HeroMedia />
         </div>
         
-        <div className="container relative z-20 px-6 mx-auto text-center text-white">
+        <div className="container relative z-20 mx-auto min-w-0 max-w-full px-4 text-center text-white sm:px-6">
           <motion.h1 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}

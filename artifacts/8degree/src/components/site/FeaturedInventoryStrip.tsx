@@ -141,10 +141,10 @@ export function FeaturedInventoryStrip({
 
   return (
     <section
-      className={sectionSurface[sectionVariant]}
+      className={`${sectionSurface[sectionVariant]} overflow-x-clip`}
       style={{ backgroundColor: sectionBackgroundColor }}
     >
-      <div className="mx-auto max-w-[1400px] px-4 sm:px-6 md:px-10">
+      <div className="mx-auto w-full min-w-0 max-w-[1400px] px-4 sm:px-6 md:px-10">
         {hideHeading ? null : (
           <div className="mb-10 mx-auto max-w-2xl text-center md:mb-14">
             <h2 className="font-serif text-3xl font-bold uppercase tracking-[0.06em] text-primary md:text-4xl lg:text-[2.35rem]">

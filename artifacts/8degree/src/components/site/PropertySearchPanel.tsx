@@ -56,7 +56,14 @@ function filterAreaNames(names: readonly string[], query: string): string[] {
 const SEARCH_SELECT_ITEM =
   "cursor-pointer hover:bg-[#e0fdac] focus:bg-[#e0fdac] focus:text-[#1f1d1b] data-[highlighted]:bg-[#e0fdac] data-[highlighted]:text-[#1f1d1b]";
 const SEARCH_SELECT_TRIGGER =
-  "mt-1 h-auto min-h-10 w-full min-w-0 border-0 border-b border-[#1f1d1b]/35 bg-transparent px-0 py-1 text-base text-[#1f1d1b] shadow-none rounded-none ring-offset-0 focus:ring-0 focus:ring-offset-0 focus:border-[#01514E] whitespace-normal items-start [&>span]:block [&>span]:min-w-0 [&>span]:line-clamp-none [&>span]:overflow-visible [&>span]:whitespace-normal [&>span]:leading-snug [&>svg]:mt-1 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:shrink-0 [&>svg]:opacity-70";
+  "mt-1 h-auto min-h-10 w-full min-w-0 border-0 border-b border-[#1f1d1b]/35 bg-transparent px-0 py-1 text-base text-[#1f1d1b] shadow-none rounded-none ring-offset-0 focus:ring-0 focus:ring-offset-0 focus:border-[#01514E] whitespace-normal items-start [&>span]:block [&>span]:min-w-0 [&>span]:max-w-full [&>span]:overflow-hidden [&>span]:whitespace-normal [&>span]:leading-snug [&>svg]:mt-1 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:shrink-0 [&>svg]:opacity-70";
+
+/** Area map dropdown: full width of field on mobile (avoids 92vw overflow past viewport). */
+const AREA_MENU_PANEL_CLASS =
+  "absolute left-0 right-0 top-12 z-50 grid w-full max-w-full grid-cols-1 gap-2 rounded border border-[#01514E]/25 bg-[#f7f5f1] p-2.5 shadow-xl md:left-0 md:right-auto md:w-[min(92vw,780px)] md:grid-cols-[1fr_1fr_1.45fr]";
+
+const SEARCH_FIELD_LABEL =
+  "text-[11px] font-medium uppercase tracking-[0.14em] text-[#01514E] sm:tracking-[0.22em] md:tracking-[0.28em]";
 
 export type PropertySearchLabels = {
   searchHeadline: string;
@@ -178,10 +185,10 @@ export function PropertySearchPanel({
   const minimalRental = fieldSet === "rentalsMinimal";
 
   const rentalMinimalGrid = minimalRental ? (
-    <div className="grid grid-cols-1 gap-x-5 gap-y-5 md:grid-cols-12 md:items-end">
-      <label className="block md:col-span-12 lg:col-span-4">
-        <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-[#01514E]">{t.area}</span>
-        <div className="relative mt-1" ref={areaMenuRef}>
+    <div className="grid min-w-0 grid-cols-1 gap-x-5 gap-y-5 md:grid-cols-12 md:items-end">
+      <label className="block min-w-0 md:col-span-12 lg:col-span-4">
+        <span className={SEARCH_FIELD_LABEL}>{t.area}</span>
+        <div className="relative mt-1 min-w-0" ref={areaMenuRef}>
           <button
             type="button"
             className="flex h-10 w-full items-center justify-between border-0 border-b border-[#1f1d1b]/35 bg-transparent px-0 text-left text-base text-[#1f1d1b] focus:border-[#01514E] focus:outline-none"
@@ -194,7 +201,7 @@ export function PropertySearchPanel({
           </button>
 
           {isAreaMenuOpen ? (
-            <div className="absolute left-0 top-12 z-50 grid w-[min(92vw,780px)] grid-cols-1 gap-2 rounded border border-[#01514E]/25 bg-[#f7f5f1] p-2.5 shadow-xl md:grid-cols-[1fr_1fr_1.45fr]">
+            <div className={AREA_MENU_PANEL_CLASS}>
               <div>
                 <p className="text-xs font-semibold text-[#01514E]">Search Locations</p>
                 <div className="relative mt-2">
@@ -309,7 +316,7 @@ export function PropertySearchPanel({
         </div>
       </label>
       <div className="block md:col-span-6 lg:col-span-2">
-        <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-[#01514E]">{t.bedrooms}</span>
+        <span className={SEARCH_FIELD_LABEL}>{t.bedrooms}</span>
         <Select value={bedroomsChoice} onValueChange={setBedroomsChoice}>
           <SelectTrigger className={SEARCH_SELECT_TRIGGER} aria-label={t.bedrooms}>
             <SelectValue placeholder={t.bedrooms} />
@@ -337,7 +344,7 @@ export function PropertySearchPanel({
         </Select>
       </div>
       <label className="block md:col-span-12 lg:col-span-4">
-        <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-[#01514E]">{t.priceRange}</span>
+        <span className={SEARCH_FIELD_LABEL}>{t.priceRange}</span>
         <div className="relative mt-1" ref={priceMenuRef}>
           <button
             type="button"
@@ -473,31 +480,37 @@ export function PropertySearchPanel({
     <section
       className={
         embedded
-          ? "relative z-20 mt-6 w-full translate-y-2 md:mt-8 md:translate-y-3"
-          : "-mt-12 relative z-30 pb-2 md:pb-3"
+          ? "relative z-20 mt-6 w-full min-w-0 md:mt-8"
+          : "relative z-30 -mt-14 w-full min-w-0 overflow-x-clip pb-2 sm:-mt-16 md:-mt-20 md:pb-3"
       }
       style={embedded ? undefined : { backgroundColor: HOME_LISTINGS_BAND }}
     >
-      <div className={embedded ? "mx-auto w-full max-w-6xl" : "container mx-auto px-4 sm:px-6"}>
+      <div
+        className={
+          embedded
+            ? "mx-auto w-full min-w-0 max-w-6xl px-4 sm:px-6"
+            : "container mx-auto w-full min-w-0 max-w-full px-4 sm:px-6"
+        }
+      >
         <div
           className={
             embedded
-              ? "rounded-[18px] bg-[#f7f5f1] px-5 py-6 shadow-[0_14px_40px_rgba(0,0,0,0.22)] md:px-10 md:py-7"
-              : "-translate-y-[25%] rounded-[18px] bg-[#f7f5f1] px-6 py-6 shadow-[0_14px_40px_rgba(0,0,0,0.16)] md:px-10 md:py-7"
+              ? "w-full min-w-0 max-w-full rounded-[18px] bg-[#f7f5f1] px-4 py-5 shadow-[0_14px_40px_rgba(0,0,0,0.22)] sm:px-5 sm:py-6 md:px-10 md:py-7"
+              : "w-full min-w-0 max-w-full rounded-[18px] bg-[#f7f5f1] px-4 py-5 shadow-[0_14px_40px_rgba(0,0,0,0.16)] sm:px-6 sm:py-6 md:px-10 md:py-7"
           }
         >
-          <div className="mb-6 flex w-full justify-center px-2 sm:px-4">
-            <h3 className="max-w-full text-balance text-center text-sm font-bold uppercase leading-snug tracking-[0.04em] text-primary sm:text-base sm:tracking-[0.05em] md:text-xl md:leading-tight md:tracking-[0.06em] lg:text-2xl">
+          <div className="mb-5 flex w-full min-w-0 justify-center sm:mb-6">
+            <h3 className="max-w-full min-w-0 text-balance text-center text-sm font-bold uppercase leading-snug tracking-[0.02em] text-primary sm:text-base sm:tracking-[0.04em] md:text-xl md:leading-tight md:tracking-[0.06em] lg:text-2xl">
               {t.searchHeadline}
             </h3>
           </div>
-          <div className="flex flex-col gap-5">
+          <div className="flex min-w-0 flex-col gap-5">
             {rentalMinimalGrid}
             {!minimalRental && (
               <>
-                <div className="grid grid-cols-1 gap-x-5 gap-y-5 md:grid-cols-4">
-                  <div className="block">
-                    <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-[#01514E]">{t.propertyType}</span>
+                <div className="grid min-w-0 grid-cols-1 gap-x-5 gap-y-5 md:grid-cols-4">
+                  <div className="block min-w-0">
+                    <span className={SEARCH_FIELD_LABEL}>{t.propertyType}</span>
                     <Select value={propertyTypeChoice} onValueChange={setPropertyTypeChoice}>
                       <SelectTrigger className={SEARCH_SELECT_TRIGGER} aria-label={t.propertyType}>
                         <SelectValue placeholder={t.propertyType} />
@@ -515,9 +528,9 @@ export function PropertySearchPanel({
                       </SelectContent>
                     </Select>
                   </div>
-              <label className="block">
-                <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-[#01514E]">{t.area}</span>
-                <div className="relative mt-1" ref={areaMenuRef}>
+              <label className="block min-w-0">
+                <span className={SEARCH_FIELD_LABEL}>{t.area}</span>
+                <div className="relative mt-1 min-w-0" ref={areaMenuRef}>
                   <button
                     type="button"
                     className="flex h-10 w-full items-center justify-between border-0 border-b border-[#1f1d1b]/35 bg-transparent px-0 text-left text-base text-[#1f1d1b] focus:border-[#01514E] focus:outline-none"
@@ -530,7 +543,7 @@ export function PropertySearchPanel({
                   </button>
 
                   {isAreaMenuOpen ? (
-                    <div className="absolute left-0 top-12 z-50 grid w-[min(92vw,780px)] grid-cols-1 gap-2 rounded border border-[#01514E]/25 bg-[#f7f5f1] p-2.5 shadow-xl md:grid-cols-[1fr_1fr_1.45fr]">
+                    <div className={AREA_MENU_PANEL_CLASS}>
                       <div>
                         <p className="text-xs font-semibold text-[#01514E]">Search Locations</p>
                         <div className="relative mt-2">
@@ -644,8 +657,8 @@ export function PropertySearchPanel({
                   ) : null}
                 </div>
               </label>
-              <div className="block">
-                <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-[#01514E]">{t.bedrooms}</span>
+              <div className="block min-w-0">
+                <span className={SEARCH_FIELD_LABEL}>{t.bedrooms}</span>
                 <Select value={bedroomsChoice} onValueChange={setBedroomsChoice}>
                   <SelectTrigger className={SEARCH_SELECT_TRIGGER} aria-label={t.bedrooms}>
                     <SelectValue placeholder={t.bedrooms} />
@@ -672,8 +685,8 @@ export function PropertySearchPanel({
                   </SelectContent>
                 </Select>
               </div>
-              <div className="block">
-                <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-[#01514E]">{t.ownership}</span>
+              <div className="block min-w-0">
+                <span className={SEARCH_FIELD_LABEL}>{t.ownership}</span>
                 <Select value={ownershipChoice} onValueChange={setOwnershipChoice}>
                   <SelectTrigger className={SEARCH_SELECT_TRIGGER} aria-label={t.ownership}>
                     <SelectValue placeholder={t.ownership} />
@@ -690,9 +703,9 @@ export function PropertySearchPanel({
               </div>
             </div>
 
-            <div className="grid grid-cols-1 gap-x-5 gap-y-5 md:grid-cols-12 md:items-end">
-              <label className="block md:col-span-4">
-                <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-[#01514E]">{t.priceRange}</span>
+            <div className="grid min-w-0 grid-cols-1 gap-x-5 gap-y-5 md:grid-cols-12 md:items-end">
+              <label className="block min-w-0 md:col-span-4">
+                <span className={SEARCH_FIELD_LABEL}>{t.priceRange}</span>
                 <div className="relative mt-1" ref={priceMenuRef}>
                   <button
                     type="button"
@@ -833,7 +846,7 @@ export function PropertySearchPanel({
                 </div>
               </label>
               <div className="block min-w-0 md:col-span-3">
-                <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-[#01514E]">{t.devStatus}</span>
+                <span className={SEARCH_FIELD_LABEL}>{t.devStatus}</span>
                 <Select value={devStatusChoice} onValueChange={setDevStatusChoice}>
                   <SelectTrigger className={SEARCH_SELECT_TRIGGER} aria-label={t.devStatus}>
                     <SelectValue placeholder={t.devStatus} />
@@ -849,7 +862,7 @@ export function PropertySearchPanel({
                 </Select>
               </div>
               <label className="block min-w-0 md:col-span-3">
-                <span className="text-[11px] font-medium uppercase tracking-[0.28em] text-[#01514E]">{t.propertyCode}</span>
+                <span className={SEARCH_FIELD_LABEL}>{t.propertyCode}</span>
                 <input
                   type="text"
                   value={propertyCode}

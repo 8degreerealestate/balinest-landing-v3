@@ -246,10 +246,12 @@
   html {
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
+    overflow-x: clip;
   }
 
   body {
     @apply antialiased bg-background text-foreground;
+    overflow-x: clip;
     font-family: var(--app-font-family);
     font-weight: 300;
   }
