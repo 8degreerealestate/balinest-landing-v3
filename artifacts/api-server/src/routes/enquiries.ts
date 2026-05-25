@@ -101,11 +101,22 @@ router.post("/enquiries", async (req, res): Promise<void> => {
       })
       .returning();
 
-    void syncEnquiryToGoHighLevel(crmPayload).catch((err) => {
-      logger.warn({ err, enquiryId: enquiry.id }, "GoHighLevel sync failed after enquiry save");
-    });
+    const crm = await syncEnquiryToGoHighLevel(crmPayload);
+    if (!crm.synced) {
+      logger.warn(
+        { enquiryId: enquiry.id, crmError: crm.error },
+        "GoHighLevel sync failed after enquiry saved to database",
+      );
+      res.status(502).json({
+        error:
+          "Your message was saved but could not be sent to our CRM. Please try again shortly or contact us on WhatsApp.",
+        enquiryId: enquiry.id,
+        crmSynced: false,
+      });
+      return;
+    }
 
-    res.status(201).json(mapEnquiry(enquiry, projectTitle));
+    res.status(201).json({ ...mapEnquiry(enquiry, projectTitle), crmSynced: true });
     return;
   }
 

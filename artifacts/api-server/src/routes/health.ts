@@ -5,6 +5,7 @@ import {
   isDatabaseConfigured,
   pingDatabase,
 } from "@workspace/db";
+import { isGoHighLevelSyncEnabled, probeGoHighLevel } from "../lib/gohighlevel";
 
 const router: IRouter = Router();
 
@@ -15,9 +16,16 @@ router.get("/healthz", async (_req, res) => {
   if (isDatabaseConfigured()) {
     database = (await pingDatabase()) ? `connected:${provider}` : `error:${provider}`;
   }
+  let crm = "disabled";
+  if (isGoHighLevelSyncEnabled()) {
+    const ghl = await probeGoHighLevel();
+    crm = ghl.ok ? "connected" : `error:${ghl.detail ?? "unknown"}`;
+  }
+
   res.json({
     ...data,
     database,
+    crm,
     inventorySource: process.env.PROPERTY_INVENTORY_SOURCE?.trim() || "sheet",
   });
 });

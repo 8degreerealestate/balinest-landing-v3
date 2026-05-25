@@ -159,15 +159,18 @@ async function addContactNote(
  */
 export async function syncEnquiryToGoHighLevel(
   payload: EnquiryCrmPayload,
-): Promise<{ synced: boolean; contactId?: string }> {
+): Promise<{ synced: boolean; contactId?: string; error?: string }> {
   if (!isGoHighLevelSyncEnabled()) {
-    return { synced: false };
+    return { synced: false, error: "Go High Level sync disabled or missing GOHIGHLEVEL_API_TOKEN" };
   }
 
   const config = await loadConfig();
   if (!config) {
     logger.warn("GoHighLevel sync skipped: missing API token or location ID");
-    return { synced: false };
+    return {
+      synced: false,
+      error: "Missing GOHIGHLEVEL_API_TOKEN or GOHIGHLEVEL_LOCATION_ID",
+    };
   }
 
   const { firstName, lastName } = splitName(payload.name);
@@ -193,11 +196,15 @@ export async function syncEnquiryToGoHighLevel(
 
     if (!res.ok) {
       const text = await res.text().catch(() => "");
+      const scopeHint =
+        res.status === 401 && text.includes("scope")
+          ? " — regenerate the Private Integration Token with contacts.write scope in Go High Level"
+          : "";
       logger.warn(
         { status: res.status, detail: text.slice(0, 300) },
-        "GoHighLevel contact upsert failed",
+        `GoHighLevel contact upsert failed${scopeHint}`,
       );
-      return { synced: false };
+      return { synced: false, error: text.slice(0, 200) || `HTTP ${res.status}` };
     }
 
     const data = (await res.json()) as { contact?: { id?: string } };
@@ -215,6 +222,33 @@ export async function syncEnquiryToGoHighLevel(
     return { synced: true };
   } catch (err) {
     logger.warn({ err }, "GoHighLevel sync error");
-    return { synced: false };
+    return { synced: false, error: err instanceof Error ? err.message : String(err) };
+  }
+}
+
+/** Lightweight check for health/diagnostics (does not create contacts). */
+export async function probeGoHighLevel(): Promise<{
+  configured: boolean;
+  ok: boolean;
+  detail?: string;
+}> {
+  if (!isGoHighLevelSyncEnabled()) {
+    return { configured: false, ok: false, detail: "sync disabled or no token" };
+  }
+  const config = await loadConfig();
+  if (!config) {
+    return { configured: true, ok: false, detail: "missing location id" };
+  }
+  try {
+    const res = await ghlFetch(config, `/locations/${config.locationId}`, { method: "GET" });
+    if (res.ok) return { configured: true, ok: true };
+    const text = await res.text().catch(() => "");
+    return { configured: true, ok: false, detail: text.slice(0, 120) || `HTTP ${res.status}` };
+  } catch (err) {
+    return {
+      configured: true,
+      ok: false,
+      detail: err instanceof Error ? err.message : String(err),
+    };
   }
 }

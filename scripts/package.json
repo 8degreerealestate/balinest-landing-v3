@@ -9,7 +9,8 @@
     "seed-inventory": "tsx ./src/seed-property-inventory.ts",
     "import-journal": "tsx ./src/import-journal-from-8degree.ts",
     "export-journal": "tsx ./src/import-journal-from-8degree.ts -- --export-only",
-    "import-journal-json": "tsx ./src/import-journal-from-8degree.ts -- --from-json"
+    "import-journal-json": "tsx ./src/import-journal-from-8degree.ts -- --from-json",
+    "crm:test": "tsx ./test-gohighlevel.ts"
   },
   "dependencies": {
     "pg": "^8.20.0"
