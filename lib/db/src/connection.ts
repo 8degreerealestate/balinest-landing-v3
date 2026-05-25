@@ -38,15 +38,38 @@ export function createPoolConfig(): PoolConfig {
   const connectionString = requireDatabaseUrl();
   const serverless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
   const supabase = isSupabaseHost(connectionString);
+  const ssl =
+    supabase || connectionString.includes("sslmode=require")
+      ? { rejectUnauthorized: false as const }
+      : undefined;
+
+  // Prefer discrete credentials when set — avoids URL parsers breaking passwords with ? & etc.
+  const user = process.env.SUPABASE_DB_USER?.trim();
+  const password = process.env.SUPABASE_DB_PASSWORD?.trim();
+  const host = process.env.SUPABASE_DB_HOST?.trim();
+  const port = process.env.SUPABASE_DB_PORT?.trim();
+  const database = process.env.SUPABASE_DB_NAME?.trim() || "postgres";
+
+  if (user && password && host) {
+    return {
+      user,
+      password,
+      host,
+      port: port ? Number(port) : 6543,
+      database,
+      max: serverless ? 2 : 10,
+      idleTimeoutMillis: 20_000,
+      connectionTimeoutMillis: 15_000,
+      ssl,
+    };
+  }
 
   return {
     connectionString,
     max: serverless ? 2 : 10,
     idleTimeoutMillis: 20_000,
     connectionTimeoutMillis: 15_000,
-    ...(supabase || connectionString.includes("sslmode=require")
-      ? { ssl: { rejectUnauthorized: false } }
-      : {}),
+    ssl,
   };
 }
 

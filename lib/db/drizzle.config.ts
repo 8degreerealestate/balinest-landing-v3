@@ -14,11 +14,17 @@ if (!databaseUrl) {
   );
 }
 
+const useSsl =
+  databaseUrl.includes("supabase.co") ||
+  databaseUrl.includes("pooler.supabase.com") ||
+  databaseUrl.includes("sslmode=require");
+
 export default {
   schema: path.join(rootDir, "src/schema"),
   out: path.join(rootDir, "drizzle"),
   dialect: "postgresql",
   dbCredentials: {
     url: databaseUrl,
+    ...(useSsl ? { ssl: { rejectUnauthorized: false } } : {}),
   },
 };
