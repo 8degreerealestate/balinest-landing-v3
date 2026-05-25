@@ -1,0 +1,20 @@
+{
+  "listings": [
+    {
+      "code": "8DV106A",
+      "title": "8DV106A | 8 Degree",
+      "listingUrl": null,
+      "description": "Balangan villas — leasehold 25 years, land 150 m², building 84 m². From USD 173,000. Semi furnished. Contact 8 Degree for details.",
+      "channel": "silent",
+      "sortOrder": 10
+    },
+    {
+      "code": "8DV28",
+      "title": "Semesta Villas – 8 Degree",
+      "listingUrl": null,
+      "description": "Semesta Villas — 3-bedroom villas, land 200 m², building 183 m². IDR 6.2B (~USD 390k). 40-year LH + extension.",
+      "channel": "website",
+      "sortOrder": 100
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "name": "@workspace/scripts",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "hello": "tsx ./src/hello.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "seed-inventory": "tsx ./src/seed-property-inventory.ts",
+    "import-journal": "tsx ./src/import-journal-from-8degree.ts",
+    "export-journal": "tsx ./src/import-journal-from-8degree.ts -- --export-only",
+    "import-journal-json": "tsx ./src/import-journal-from-8degree.ts -- --from-json"
+  },
+  "dependencies": {
+    "pg": "^8.20.0"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@types/pg": "^8.18.0",
+    "tsx": "catalog:"
+  }
+}

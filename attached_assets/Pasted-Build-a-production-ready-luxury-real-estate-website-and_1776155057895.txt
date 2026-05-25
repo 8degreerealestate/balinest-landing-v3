@@ -1,0 +1,321 @@
+Build a production-ready luxury real estate website and internal inventory platform for a Bali property company called 8 Degree.
+
+STACK
+- Next.js 15
+- TypeScript
+- Tailwind CSS
+- App Router
+- Supabase for database, storage, and auth
+- Framer Motion for subtle premium animations
+- Clean reusable component architecture
+- Mobile-first and very fast
+- Vercel-ready deployment
+
+GOAL
+Replace a slow Elementor/WordPress/Hostinger site with a fast premium site that feels like a luxury Bali property brand and also includes:
+1. public-facing marketing site
+2. dynamic project and inventory system
+3. internal admin dashboard
+4. lead capture and CRM-ready structure
+5. AI-ready architecture so new features can be added later with Claude/Cursor/Replit
+
+DESIGN DIRECTION
+The site should feel premium, minimal, elegant, editorial, cinematic, and high-trust.
+Use a clean visual style inspired by modern luxury property/investment websites:
+- large immersive imagery
+- strong typography
+- lots of breathing room
+- refined cards
+- smooth but subtle animations
+- high-end feel, not startup SaaS
+- no clutter
+- no generic template look
+
+BRAND FEEL
+Audience:
+- international buyers
+- investors
+- luxury property seekers
+- Bali lifestyle + yield-focused users
+
+Tone:
+- premium
+- calm
+- confident
+- investment-grade
+- modern
+
+CORE PUBLIC PAGES
+Build these pages:
+1. Home
+2. Ongoing Projects
+3. Completed Projects
+4. Project Detail Page
+5. Blog Index
+6. Blog Article Page
+7. About / Who We Are
+8. Contact
+9. Investment Guide landing/download page
+10. Pricing / Enquiry page
+
+HOME PAGE MUST INCLUDE
+- cinematic hero section
+- premium headline and subheadline
+- featured developments
+- why invest with 8 Degree
+- trust / proof / awards / stats section
+- investment guide CTA
+- WhatsApp CTA
+- featured blog/articles
+- final contact CTA
+
+ONGOING PROJECTS PAGE
+- grid of projects
+- filters for:
+  - area
+  - property type
+  - price band
+  - status
+  - bedrooms
+- premium project cards
+- badges like:
+  - units left
+  - completion date
+  - featured
+- search support
+
+COMPLETED PROJECTS PAGE
+- polished archive of completed projects
+- same visual quality as active developments
+- trust-building focus
+
+PROJECT DETAIL PAGE
+For each project show:
+- hero gallery
+- title
+- area/location
+- price from
+- availability
+- project summary
+- long-form description
+- amenities/features
+- payment plan section
+- completion date
+- gallery
+- brochure download CTA
+- enquire CTA
+- WhatsApp CTA
+- related projects
+- optional ROI / investment highlights section
+- unit availability block
+
+BLOG SYSTEM
+- blog index with categories
+- article page with SEO-ready structure
+- related posts
+- CTA blocks embedded
+- support for featured image, author, publish date, reading time
+
+CONTACT / CONVERSION
+Build lead capture components:
+- enquiry form
+- “Get Pricing” CTA
+- “Download Investment Guide” CTA
+- WhatsApp CTA
+- sticky mobile CTA bar
+- project-specific enquiry support
+
+INTERNAL ADMIN DASHBOARD
+Create a secure admin area with auth.
+The dashboard should include:
+1. Projects management
+2. Units / inventory management
+3. Blog/content management
+4. Leads / enquiries table
+5. Media management via Supabase Storage
+6. Basic analytics overview
+
+ADMIN FEATURES
+Allow admins to:
+- create/edit/delete projects
+- upload hero images and galleries
+- manage unit inventory
+- set project status
+- set completion date
+- set pricing ranges
+- mark units available/reserved/sold
+- create/edit blog posts
+- manage FAQs/testimonials if included
+- view incoming enquiries
+
+SUPABASE DATA MODEL
+Create tables for:
+- projects
+- project_images
+- units
+- blog_posts
+- blog_categories
+- enquiries
+- downloadable_guides
+- testimonials
+- admins/users
+
+Suggested project fields:
+- id
+- title
+- slug
+- status
+- area
+- property_type
+- bedrooms_min
+- bedrooms_max
+- price_from
+- currency
+- completion_date
+- short_description
+- full_description
+- amenities (json)
+- investment_highlights (json)
+- brochure_url
+- hero_image_url
+- featured
+- units_left
+- created_at
+- updated_at
+
+Suggested unit fields:
+- id
+- project_id
+- unit_name
+- bedrooms
+- bathrooms
+- build_size
+- land_size
+- price
+- currency
+- status
+- floorplan_url
+- created_at
+- updated_at
+
+Suggested enquiry fields:
+- id
+- name
+- email
+- phone
+- whatsapp
+- country
+- budget_range
+- message
+- interested_project_id
+- source
+- created_at
+
+SEO REQUIREMENTS
+Implement proper technical SEO:
+- metadata per page
+- dynamic titles/descriptions
+- canonical support
+- sitemap
+- robots
+- Open Graph tags
+- Twitter tags
+- JSON-LD where useful
+- clean URLs
+- internal linking structure
+- blog and project pages SEO-ready
+
+PERFORMANCE REQUIREMENTS
+Optimize for speed:
+- Next.js image optimization
+- lazy loading where appropriate
+- minimal client-side JS
+- server components where sensible
+- clean code splitting
+- no heavy unnecessary animation libraries besides Framer Motion
+- aim for premium feel without hurting load speed
+
+COMPONENTS
+Build reusable components:
+- Navbar
+- Footer
+- Hero
+- SectionHeading
+- ProjectCard
+- FeaturedProjects
+- StatsSection
+- CTASection
+- WhatsAppButton
+- BlogCard
+- FilterBar
+- InquiryForm
+- GuideDownloadForm
+- Gallery
+- Badge
+- EmptyState
+- AdminSidebar
+- AdminTable
+
+ANIMATION RULES
+Use Framer Motion subtly:
+- fade/slide on section reveal
+- premium hover states
+- smooth card transitions
+- no excessive gimmicks
+- no over-animated parallax unless extremely light
+
+AI-READY ARCHITECTURE
+Structure the codebase so future AI-assisted development is easy.
+Include:
+- clear folder organization
+- typed interfaces
+- reusable components
+- helper utilities
+- constants/config
+- content models separated cleanly
+- comments where necessary
+- a README explaining the architecture
+- a short ARCHITECTURE.md explaining:
+  - public site
+  - admin area
+  - Supabase tables
+  - where future AI features can plug in
+
+FUTURE-READY INTEGRATION POINTS
+Add placeholder service modules or stubs for:
+- Claude content generation
+- CRM sync
+- WhatsApp automation
+- investor scoring
+- guide download automation
+
+Do not fully implement external APIs yet, but prepare clean service files like:
+- lib/ai.ts
+- lib/crm.ts
+- lib/whatsapp.ts
+- lib/analytics.ts
+
+CONTENT SEEDING
+Seed the app with sample luxury Bali projects and sample blog posts so the UI looks complete immediately.
+
+OUTPUT REQUIREMENTS
+- build the app end-to-end
+- create all pages and routes
+- create Supabase schema or SQL setup
+- create sample seed data
+- create clean admin dashboard
+- create polished responsive UI
+- make it runnable immediately in Replit
+- do not ask clarifying questions
+- make sensible product decisions and implement them directly
+- prioritize speed, polish, and maintainability
+
+IMPORTANT
+This should not feel like a generic dashboard template or generic real estate template.
+It should feel like a premium custom product for a Bali luxury property/investment brand.
+
+After building:
+1. explain the file structure
+2. explain how to connect Supabase env vars
+3. explain how to deploy
+4. explain where future Claude/AI features can be added

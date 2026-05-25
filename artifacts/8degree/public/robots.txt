@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+
+# Optional: after setting VITE_PUBLIC_SITE_URL, production builds emit sitemap.xml and a Sitemap line here.

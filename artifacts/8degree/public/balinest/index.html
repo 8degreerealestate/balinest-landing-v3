@@ -1,0 +1,876 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Own Your Slice of Bali — 8 Degree x Balinest</title>
+<link rel="stylesheet" href="/fonts/fonts.css" />
+<style>
+  :root {
+    /* Brand */
+    --teal-900: #013f3d;
+    --teal-800: #01514E;       /* primary teal */
+    --teal-700: #1a6b66;
+    --teal-600: #207a74;
+    --teal-50: #e8f0ee;
+    --cream: #FFFFF0;          /* ivory */
+    --cream-2: #f5f5e0;
+    --ink: #01514E;
+    --muted: #5b7472;
+    --line: rgba(1,81,78,.16);
+
+    /* Cool greys + greens (brand) */
+    --slate: #A8B7C2;
+    --mint: #C6FCBB;
+    --lime: #E0FDAC;
+
+    /* Warm sunset CTA — frangipani-against-leaves (kept) */
+    --coral-600: #e0613a;
+    --coral-700: #c44d29;
+    --coral-100: #fde3d7;
+    --amber-500: #e89a3c;
+
+    --maxw: 880px;
+    --font-title: "Rework", "Montserrat", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    color: var(--ink);
+    background: var(--cream);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-wrap: pretty;
+  }
+  .serif { font-family: var(--font-title); font-weight: 100; letter-spacing: -0.02em; }
+  .mono { font-family: 'Montserrat', sans-serif; font-variant-numeric: tabular-nums; }
+  /* Global label treatment */
+  .label, .eyebrow, .tag, .takeaway { font-weight: 500; letter-spacing: 0.28em; text-transform: uppercase; }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    position: relative;
+    min-height: 620px;
+    display: flex;
+    flex-direction: column;
+    color: white;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(180deg, rgba(0,0,0,.25) 0%, rgba(0,0,0,.05) 30%, rgba(0,0,0,.55) 78%, rgba(1,63,61,.85) 100%),
+      url('assets/hero-villa.jpg') center/cover;
+  }
+  .hero-nav {
+    position: relative; z-index: 2;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px clamp(20px, 4vw, 56px);
+  }
+  .brandmark {
+    display: flex; align-items: center; gap: 22px;
+  }
+  .brandmark .x {
+    opacity: .55; font-size: 18px; font-weight: 200;
+    font-family: 'Montserrat', sans-serif; color: white;
+  }
+  .brandmark img { display: block; }
+  .brandmark .logo-8d { height: 22px; width: auto; }
+  .brandmark .logo-bv {
+    height: 44px; width: auto;
+    /* recolor gold artwork to white while preserving alpha */
+    filter: brightness(0) invert(1);
+  }
+  .nav-link {
+    color: white; text-decoration: none;
+    font-size: 12px; font-weight: 500; letter-spacing: 0.28em; text-transform: uppercase;
+    border-bottom: 1px solid rgba(255,255,255,.4);
+    padding-bottom: 2px;
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    margin-top: auto; margin-bottom: 0;
+    padding: 0 clamp(20px, 4vw, 56px) 88px;
+    text-align: center;
+  }
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 11px; font-weight: 500; letter-spacing: 0.32em; text-transform: uppercase;
+    background: rgba(0,0,0,.32);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,.35);
+    padding: 9px 18px; border-radius: 100px;
+    margin-bottom: 22px;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0,0,0,.3);
+  }
+  .hero h1 {
+    font-family: var(--font-title);
+    font-weight: 200;
+    font-size: clamp(46px, 6.2vw, 86px);
+    line-height: 1;
+    margin: 0 0 20px;
+    letter-spacing: -0.03em;
+    text-shadow: 0 2px 24px rgba(0,0,0,.45), 0 1px 2px rgba(0,0,0,.35);
+  }
+  .hero h1 em { font-style: italic; font-weight: 300; }
+  .hero-sub {
+    font-size: clamp(16px, 1.6vw, 19px);
+    font-weight: 400;
+    max-width: 580px; margin: 0 auto 36px;
+    opacity: 1;
+    color: rgba(255,255,255,.95);
+    letter-spacing: 0.01em;
+    text-shadow: 0 1px 12px rgba(0,0,0,.5);
+  }
+  .hero-actions {
+    display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+  }
+
+  /* ---------- BUTTONS ---------- */
+  .btn {
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 16px 28px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px; font-weight: 500;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform .15s ease, background .2s ease, box-shadow .2s ease;
+    white-space: nowrap;
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn-primary {
+    background: var(--coral-600);
+    color: white;
+    box-shadow: 0 4px 14px rgba(224,97,58,.32), inset 0 1px 0 rgba(255,255,255,.18);
+  }
+  .btn-primary:hover { background: var(--coral-700); box-shadow: 0 6px 20px rgba(224,97,58,.42); }
+  .btn-ghost {
+    background: rgba(255,255,255,.92);
+    color: var(--teal-800);
+    backdrop-filter: blur(6px);
+  }
+  .btn-ghost:hover { background: white; }
+  .btn-outline-light {
+    background: transparent;
+    color: white;
+    border: 1px solid rgba(255,255,255,.45);
+  }
+  .btn-outline-light:hover { background: rgba(255,255,255,.1); border-color: white; }
+  .btn .arr { font-family: 'Montserrat', sans-serif; font-size: 18px; line-height: 1; opacity: .9; }
+  .form-modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    place-items: center;
+    padding: 20px;
+    background: rgba(1, 63, 61, 0.72);
+    z-index: 120;
+  }
+  .form-modal.open { display: grid; }
+  .form-modal-dialog {
+    width: min(760px, 96vw);
+    max-height: 92vh;
+    background: transparent;
+    border-radius: 16px;
+    overflow: visible;
+    box-shadow: none;
+    position: relative;
+    display: grid;
+    place-items: center;
+  }
+  .form-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    width: 34px;
+    height: 34px;
+    border: 0;
+    border-radius: 999px;
+    background: rgba(1, 63, 61, 0.1);
+    color: var(--teal-900);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 2;
+  }
+  .form-modal iframe {
+    width: min(520px, 92vw);
+    height: min(620px, 86vh);
+    border: 0;
+    border-radius: 12px;
+    display: block;
+    background: #fff;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+  }
+
+  /* ---------- SECTIONS ---------- */
+  section { padding: 80px clamp(20px, 4vw, 56px); }
+  .wrap { max-width: var(--maxw); margin: 0 auto; }
+
+  .sec-cream { background: var(--cream); color: var(--ink); }
+  .sec-teal { background: var(--teal-800); color: white; }
+  .sec-cream-2 { background: var(--cream-2); color: var(--ink); }
+
+  .lede { font-size: 18px; font-weight: 300; line-height: 1.7; letter-spacing: 0.005em; }
+  .lede p { margin: 0 0 22px; }
+  .lede .pull {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 200;
+    font-style: italic;
+    font-size: 32px;
+    color: var(--teal-800);
+    margin: 28px 0;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .sec-teal .lede .pull { color: var(--cream); opacity: .95; }
+  .lede strong, .lede b { color: var(--teal-800); font-weight: 500; }
+  .sec-teal .lede strong, .sec-teal .lede b { color: var(--cream); font-weight: 500; }
+  .closer {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 200;
+    font-size: 26px;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    color: var(--teal-800);
+    border-top: 1px solid var(--line);
+    padding-top: 26px;
+    margin-top: 32px;
+  }
+
+  h2.section-title {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 100;
+    font-size: clamp(34px, 4.4vw, 56px);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin: 0 0 28px;
+  }
+  h2.section-title em { font-style: italic; font-weight: 200; }
+
+  /* ---------- VILLA EXAMPLE ---------- */
+  .villa-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: 28px;
+    align-items: stretch;
+    margin-top: 36px;
+  }
+  .villa-photo {
+    background: url('assets/sec3-pool.jpg') center/cover;
+    border-radius: 14px;
+    min-height: 380px;
+    border: 1px solid rgba(255,255,255,.08);
+  }
+  .villa-card {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 14px;
+    padding: 28px;
+    display: flex; flex-direction: column;
+  }
+  .villa-card .label {
+    font-size: 11px; font-weight: 500; letter-spacing: 0.28em; text-transform: uppercase;
+    opacity: .7; margin-bottom: 8px;
+  }
+  .villa-card h3 {
+    font-family: 'Montserrat', sans-serif; font-weight: 200;
+    font-size: 28px; margin: 0 0 22px; letter-spacing: -0.02em;
+  }
+  .stat-table {
+    display: grid; grid-template-columns: 1fr auto; gap: 0;
+    border-top: 1px solid rgba(255,255,255,.18);
+  }
+  .stat-table > div {
+    padding: 14px 4px;
+    border-bottom: 1px solid rgba(255,255,255,.18);
+    font-size: 14.5px;
+  }
+  .stat-table .k { opacity: .8; }
+  .stat-table .k { font-weight: 300; }
+  .stat-table .v { font-family: 'Montserrat', sans-serif; font-variant-numeric: tabular-nums; text-align: right; font-size: 13.5px; color: var(--cream); font-weight: 400; }
+  .stat-table .row-hi .v { color: var(--lime); font-weight: 500; }
+  .stat-table .row-hi .k { color: white; font-weight: 500; opacity: 1; }
+
+  .photo-row {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px;
+    margin-top: 22px;
+  }
+  .photo-row > div {
+    aspect-ratio: 4 / 5;
+    border-radius: 12px;
+    background-size: cover; background-position: center;
+    border: 1px solid rgba(255,255,255,.08);
+  }
+  .photo-row .p1 { background-image: url('assets/sec3-kitchen.jpg'); }
+  .photo-row .p2 { background-image: url('assets/sec3-living.jpg'); }
+  .photo-row .p3 { background-image: url('assets/sec3-bedroom.jpg'); }
+
+  .drivers {
+    margin-top: 56px;
+  }
+  .drivers h3 {
+    font-family: 'Montserrat', sans-serif; font-style: italic; font-weight: 200;
+    font-size: 28px; margin: 0 0 18px; letter-spacing: -0.01em;
+  }
+  .drivers ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+  .drivers li {
+    font-size: 16px;
+    padding-left: 22px;
+    position: relative;
+  }
+  .drivers li::before {
+    content: ""; position: absolute; left: 0; top: 11px;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--lime);
+  }
+  .drivers li { font-weight: 300; }
+  .drivers li b { color: white; font-weight: 500; }
+
+  .disclaimer {
+    margin-top: 40px;
+    padding: 26px 28px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(232,154,60,.08), rgba(255,255,255,.04));
+    border: 1px solid rgba(232,154,60,.4);
+    font-size: 15.5px;
+  }
+  .disclaimer .tag {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px; font-weight: 500; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--amber-500);
+    margin-bottom: 10px;
+  }
+  .disclaimer > div:last-child { font-weight: 300; }
+
+  /* ---------- TWO COL ---------- */
+  .splitsec {
+    display: grid; grid-template-columns: 1.1fr 1fr;
+    gap: 56px; align-items: center;
+  }
+  .splitsec .photo {
+    aspect-ratio: 5 / 4;
+    border-radius: 14px;
+    background-size: cover; background-position: center;
+    border: 1px solid var(--line);
+  }
+  .splitsec .copy h2 { margin-bottom: 18px; }
+  .splitsec .copy p { font-size: 17px; font-weight: 300; line-height: 1.7; margin: 0 0 18px; }
+  .splitsec .copy p:last-child { margin-bottom: 0; }
+  .splitsec .copy strong { color: var(--teal-800); font-weight: 500; }
+
+  /* ---------- REPORT ---------- */
+  .report-grid {
+    display: grid; grid-template-columns: 1fr 1.1fr;
+    gap: 56px; align-items: center;
+  }
+  .report-vis {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    background: linear-gradient(135deg, var(--cream), #fff);
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .report-card {
+    position: absolute;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 12px 32px rgba(1,81,78,.18), 0 2px 4px rgba(1,81,78,.08);
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .rc-1 {
+    width: 56%; height: 38%;
+    left: 6%; top: 12%;
+    transform: rotate(-7deg);
+    background: var(--teal-800) url('assets/hero-villa.jpg') center/cover;
+  }
+  .rc-1::after {
+    content: "BALI REAL ESTATE\AINTELLIGENCE\AREPORT 2026";
+    white-space: pre;
+    position: absolute;
+    inset: 0;
+    padding: 18px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    font-size: 12px;
+    line-height: 1.4;
+    color: white;
+    background: linear-gradient(135deg, rgba(1,81,78,.85), rgba(1,81,78,.5));
+  }
+  .rc-2 {
+    width: 50%; height: 36%;
+    right: 8%; top: 18%;
+    transform: rotate(4deg);
+    padding: 16px;
+    background: white;
+  }
+  .rc-2 .h {
+    font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 500;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--teal-800); margin-bottom: 8px;
+  }
+  .rc-2 .bars { display: flex; gap: 4px; align-items: flex-end; height: 56px; margin-bottom: 8px; }
+  .rc-2 .bars i {
+    flex: 1; background: var(--teal-700); border-radius: 2px 2px 0 0; display: block;
+  }
+  .rc-2 .bars i:nth-child(1) { height: 30%; opacity: .35; }
+  .rc-2 .bars i:nth-child(2) { height: 48%; opacity: .5; }
+  .rc-2 .bars i:nth-child(3) { height: 62%; opacity: .65; }
+  .rc-2 .bars i:nth-child(4) { height: 78%; opacity: .8; }
+  .rc-2 .bars i:nth-child(5) { height: 100%; background: var(--coral-600); opacity: 1; }
+  .rc-2 .lbls { display: flex; gap: 4px; font-family: 'Montserrat', sans-serif; font-size: 7px; color: var(--muted); }
+  .rc-2 .lbls span { flex: 1; text-align: center; }
+  .rc-3 {
+    width: 60%; height: 38%;
+    left: 18%; bottom: 8%;
+    transform: rotate(-2deg);
+    padding: 14px 16px;
+    background: white;
+  }
+  .rc-3 .h {
+    font-family: 'Montserrat', sans-serif; font-size: 10px; font-weight: 500;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--teal-800); margin-bottom: 10px;
+  }
+  .rc-3 .row {
+    display: flex; gap: 6px; margin-bottom: 6px;
+    align-items: center;
+  }
+  .rc-3 .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .rc-3 .label-mini { font-size: 9px; color: var(--muted); flex: 1; }
+  .rc-3 .val-mini { font-family: 'Montserrat', sans-serif; font-variant-numeric: tabular-nums; font-size: 9px; color: var(--ink); }
+
+  .report-copy h2 { margin-bottom: 18px; }
+  .report-copy .intro { font-size: 17px; font-weight: 300; line-height: 1.7; margin: 0 0 28px; }
+  .report-copy .intro b { color: var(--teal-800); font-weight: 500; }
+  .report-copy .takeaway { font-size: 11px; color: var(--muted); margin-bottom: 18px; font-weight: 500; letter-spacing: 0.28em; text-transform: uppercase; }
+  .report-copy ul { list-style: none; padding: 0; margin: 0 0 32px; display: grid; gap: 10px; }
+  .report-copy li { font-size: 15px; font-weight: 300; padding-left: 22px; position: relative; }
+  .report-copy li::before {
+    content: "→"; position: absolute; left: 0; top: 0;
+    color: var(--coral-600); font-weight: 500;
+  }
+  .report-copy { position: relative; z-index: 2; }
+  .report-copy .btn { position: relative; z-index: 5; }
+
+  /* ---------- FOOTER BANNER ---------- */
+  .footer-banner {
+    position: relative;
+    color: white;
+    padding: 88px clamp(20px, 4vw, 56px) 56px;
+    overflow: hidden;
+    text-align: center;
+  }
+  .footer-banner-bg {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(180deg, rgba(14,59,58,.78) 0%, rgba(14,59,58,.92) 100%),
+      url('https://images.unsplash.com/photo-1540541338287-41700207dee6?w=1800&q=80') center/cover;
+  }
+  .footer-banner-inner { position: relative; z-index: 2; max-width: 720px; margin: 0 auto; }
+  .footer-q {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 100;
+    font-size: clamp(36px, 5.2vw, 60px);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin: 0 0 14px;
+  }
+  .footer-q em { font-style: italic; font-weight: 200; }
+  .footer-tagline {
+    font-size: 16px; font-weight: 300; letter-spacing: 0.01em;
+    opacity: .82;
+    margin: 0 0 36px;
+    max-width: 520px;
+    margin-left: auto; margin-right: auto;
+  }
+  .footer-cta-wrap { display: flex; justify-content: center; margin-bottom: 56px; }
+  .footer-meta {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 28px;
+    border-top: 1px solid rgba(255,255,255,.16);
+    font-size: 11px; font-weight: 400;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    opacity: .7;
+    flex-wrap: wrap; gap: 14px;
+  }
+  .footer-meta a { color: white; text-decoration: none; opacity: .85; }
+  .footer-meta a:hover { opacity: 1; text-decoration: underline; }
+  .footer-meta .right {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.28em; text-transform: uppercase;
+    font-size: 11px;
+  }
+
+  /* ---------- TWEAKS PANEL ---------- */
+  .tw-fab {
+    position: fixed; bottom: 20px; right: 20px;
+    background: var(--ink); color: white;
+    border: none; border-radius: 999px;
+    padding: 10px 18px;
+    font-family: 'Montserrat', sans-serif; font-size: 11px; font-weight: 500;
+    letter-spacing: 0.28em; text-transform: uppercase;
+    cursor: pointer;
+    z-index: 50;
+    display: none;
+    box-shadow: 0 8px 24px rgba(0,0,0,.25);
+  }
+  .tw-fab.show { display: block; }
+  .tw-panel {
+    position: fixed; bottom: 20px; right: 20px;
+    width: 280px;
+    background: white;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    box-shadow: 0 12px 40px rgba(14,59,58,.25);
+    padding: 18px;
+    z-index: 60;
+    font-size: 13px;
+    display: none;
+  }
+  .tw-panel.show { display: block; }
+  .tw-panel h4 {
+    margin: 0 0 14px; font-family: 'Montserrat', sans-serif; font-weight: 200;
+    font-size: 18px; letter-spacing: -0.01em; color: var(--ink);
+  }
+  .tw-panel .row { margin-bottom: 14px; }
+  .tw-panel label {
+    display: block; font-size: 10px; font-weight: 500; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 6px;
+  }
+  .tw-panel .swatches { display: flex; gap: 8px; }
+  .tw-panel .swatch {
+    width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
+    border: 2px solid white; box-shadow: 0 0 0 1px var(--line);
+    transition: transform .15s;
+  }
+  .tw-panel .swatch.active { box-shadow: 0 0 0 2px var(--ink); transform: scale(1.08); }
+  .tw-panel .close {
+    position: absolute; top: 10px; right: 12px;
+    background: none; border: none; font-size: 18px; cursor: pointer;
+    color: var(--muted);
+  }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 760px) {
+    .villa-grid, .splitsec, .report-grid { grid-template-columns: 1fr; }
+    .photo-row { grid-template-columns: 1fr 1fr; }
+    .photo-row .p3 { display: none; }
+    .footer-meta { flex-direction: column; text-align: center; }
+    .hero-content { padding-bottom: 56px; }
+    section { padding: 56px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============== HERO ============== -->
+<header class="hero" data-screen-label="01 Hero">
+  <div class="hero-bg" aria-hidden="true"></div>
+
+  <nav class="hero-nav">
+    <div class="brandmark">
+      <img class="logo-8d" src="assets/logo-8degree.png" alt="8 Degree Real Estate" />
+      <span class="x">×</span>
+      <img class="logo-bv" src="assets/logo-balinest.png" alt="Balinest Villas" />
+    </div>
+
+  </nav>
+
+  <div class="hero-content">
+    <span class="hero-eyebrow">Invest in Bali · 2026 Edition</span>
+    <h1>Own Your <em>Slice</em> of Bali</h1>
+    <p class="hero-sub">You're already living it. Here's how to invest in it.</p>
+    <div class="hero-actions">
+      <a href="#report" class="btn btn-ghost">
+        <span class="arr">↓</span>
+        Download the 2026 Market Report
+      </a>
+      <a href="#chat" class="btn btn-outline-light">
+        Book a Free Chat
+        <span class="arr">→</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ============== INTRO ============== -->
+<section class="sec-cream" data-screen-label="02 Intro">
+  <div class="wrap lede">
+    <p>You woke up to this for a reason. Many of our clients started exactly where you are — in a Bali villa, coffee in hand, thinking:</p>
+    <p class="pull">"What if this were mine?"</p>
+    <p>Last year, <b>6.95 million international tourists</b> came to Bali, with over 16 million visitors in total, driving a <b>$1.2B+ villa rental market</b>.</p>
+    <p>But today, smart investors don't chase hype — they focus on <b>location, design, and guest experience</b>.</p>
+    <p class="closer">Because the villas that perform best feel exactly like the one you're in right now.</p>
+  </div>
+</section>
+
+<!-- ============== VILLA EXAMPLE ============== -->
+<section class="sec-teal" data-screen-label="03 Villa Example">
+  <div class="wrap">
+    <h2 class="section-title">If This Villa Was <em>Yours…</em></h2>
+    <p style="font-size:17px; margin:0; max-width:640px; opacity:.9;">
+      Every property is different, but here's what a well-positioned, professionally managed villa can look like as an investment.
+    </p>
+
+    <div class="villa-grid">
+      <div class="villa-photo" role="img" aria-label="Villa pool deck at sunset"></div>
+      <div class="villa-card">
+        <div class="label">Example Property</div>
+        <h3>3-Bedroom Villa — Prime Location</h3>
+        <div class="stat-table">
+          <div class="k">Purchase price</div><div class="v">~USD 500,000</div>
+          <div class="k">Avg. nightly rate</div><div class="v">~USD 330</div>
+          <div class="k">Avg. occupancy</div><div class="v">~60% · 228 nts/yr</div>
+          <div class="k">Gross revenue</div><div class="v">~USD 75,240/yr</div>
+          <div class="k">Operating costs (~40%)</div><div class="v">~USD 30,000</div>
+          <div class="row-hi k">Estimated net income</div><div class="row-hi v">~USD 45,000</div>
+          <div class="row-hi k">Estimated net ROI</div><div class="row-hi v">~8 – 14% / year</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="photo-row">
+      <div class="p1" role="img" aria-label="Kitchen interior"></div>
+      <div class="p2" role="img" aria-label="Living room with stairs"></div>
+      <div class="p3" role="img" aria-label="Bedroom with view"></div>
+    </div>
+
+    <div class="drivers">
+      <h3>What drives these returns?</h3>
+      <ul>
+        <li><b>Location</b> — Canggu, Uluwatu, Pererenan, and key parts of Ubud outperform.</li>
+        <li><b>Design</b> — Strong architecture &amp; "Instagrammability" drives demand.</li>
+        <li><b>Experience</b> — Pools, outdoor living, wellness; guests pay for the feeling.</li>
+        <li><b>Management</b> — The right operator maximizes pricing, occupancy, and revenue.</li>
+      </ul>
+    </div>
+
+    <div class="disclaimer">
+      <div class="tag">A note on the numbers</div>
+      <div>These figures are an example, not a promise. When we speak, we'll model scenarios based on your budget, preferred areas, and realistic market assumptions.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== ALREADY EXPERIENCING ============== -->
+<section class="sec-cream" data-screen-label="04 Already Experiencing">
+  <div class="wrap">
+    <div class="splitsec">
+      <div class="photo" role="img" aria-label="Living room interior"
+        style="background-image:url('assets/section4-living.jpg');"></div>
+      <div class="copy">
+        <h2 class="section-title">You're Already Experiencing What We Help <em>People Own</em></h2>
+        <p>The villa you're in is professionally managed by <strong>Balinest</strong>, operating <strong>400+ properties</strong> across Bali.</p>
+        <p>That quality you feel? That's what happens when hospitality meets professional operations.</p>
+        <p style="font-size:15.5px; color:var(--muted); border-top:1px solid var(--line); padding-top:20px; margin-top:24px;">
+          At <strong>8 Degree Real Estate</strong>, we help international investors find, evaluate, and secure properties just like this one. We've guided investors from Australia, the UK, Singapore, Europe, and the UAE through every step — from first conversation to keys in hand.
+        </p>
+        <p style="font-family:'Montserrat',sans-serif; font-weight:200; font-size:24px; line-height:1.4; letter-spacing:-0.015em; color:var(--teal-800); font-style:italic; margin-top:18px;">
+          We don't do hard sells. We do honest conversations over coffee.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== REPORT ============== -->
+<section class="sec-cream-2" id="report" data-screen-label="05 Report">
+  <div class="wrap">
+    <div class="report-grid">
+      <div class="report-vis" aria-hidden="true">
+        <div class="report-card rc-1"></div>
+        <div class="report-card rc-2">
+          <div class="h">Tourism · 5-yr trend</div>
+          <div class="bars"><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="lbls"><span>'21</span><span>'22</span><span>'23</span><span>'24</span><span>'25</span></div>
+        </div>
+        <div class="report-card rc-3">
+          <div class="h">Top performing zones</div>
+          <div class="row"><span class="dot" style="background:var(--coral-600)"></span><span class="label-mini">Canggu</span><span class="val-mini">12.4% ROI</span></div>
+          <div class="row"><span class="dot" style="background:var(--amber-500)"></span><span class="label-mini">Uluwatu</span><span class="val-mini">11.1% ROI</span></div>
+          <div class="row"><span class="dot" style="background:var(--teal-700)"></span><span class="label-mini">Pererenan</span><span class="val-mini">10.6% ROI</span></div>
+          <div class="row"><span class="dot" style="background:var(--teal-600); opacity:.6"></span><span class="label-mini">Ubud (select)</span><span class="val-mini">9.2% ROI</span></div>
+        </div>
+      </div>
+
+      <div class="report-copy">
+        <h2 class="section-title">Get the Full Picture Before You <em>Invest a Dollar</em></h2>
+        <p class="intro">We put together the <b>2026 Bali Real Estate Intelligence Report</b> — a data-driven market analysis built specifically for international investors.</p>
+        <p class="takeaway">What you'll walk away with:</p>
+        <ul>
+          <li>Where to invest, and why certain areas outperform</li>
+          <li>How to structure your ownership the right way (leasehold, HGB, PT PMA)</li>
+          <li>What returns are actually achievable in today's market</li>
+          <li>The exact process to secure a villa in Bali</li>
+          <li>The mistakes that cost first-time investors time and money</li>
+          <li>The data behind Bali's rental demand</li>
+        </ul>
+        <a
+          href="https://api.leadconnectorhq.com/widget/form/ZGch73tA3ARy81tNy2P8"
+          class="btn btn-primary"
+          data-open-form="report"
+        >
+          <span class="arr">↓</span>
+          Download the 2026 Market Report
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== FOOTER BANNER ============== -->
+<footer class="footer-banner" id="chat" data-screen-label="06 Footer">
+  <div class="footer-banner-bg" aria-hidden="true"></div>
+  <div class="footer-banner-inner">
+    <h2 class="footer-q">Ready to explore what ownership <em>looks like</em> for you?</h2>
+    <p class="footer-tagline">No pitch. No pressure. Just an honest conversation over coffee.</p>
+    <div class="footer-cta-wrap">
+      <a
+        href="https://wa.link/5ouk5b"
+        class="btn btn-primary"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Book a Free Chat
+        <span class="arr">→</span>
+      </a>
+    </div>
+    <div class="footer-meta">
+      <div class="left">
+        <a href="mailto:contact@8degree.co">contact@8degree.co</a>
+        &nbsp;·&nbsp;
+        <a href="https://8degree.co">8degree.co</a>
+      </div>
+      <div class="right">8 Degree Real Estate — Hold What Matters</div>
+    </div>
+  </div>
+</footer>
+
+<div class="form-modal" id="reportFormModal" aria-hidden="true">
+  <div class="form-modal-dialog" role="dialog" aria-modal="true" aria-label="Download report form">
+    <button class="form-modal-close" id="reportFormClose" aria-label="Close form">×</button>
+    <iframe
+      src="https://api.leadconnectorhq.com/widget/form/ZGch73tA3ARy81tNy2P8"
+      title="Download report form"
+      loading="lazy"
+    ></iframe>
+  </div>
+</div>
+
+<!-- ============== TWEAKS ============== -->
+<button class="tw-fab" id="twFab">Tweaks</button>
+<div class="tw-panel" id="twPanel">
+  <button class="close" id="twClose">×</button>
+  <h4>Tweaks</h4>
+  <div class="row">
+    <label>CTA Color</label>
+    <div class="swatches" id="ctaSwatches">
+      <div class="swatch active" data-color="#e0613a" data-hover="#c44d29" style="background:#e0613a" title="Coral (default)"></div>
+      <div class="swatch" data-color="#d4541f" data-hover="#b34418" style="background:#d4541f" title="Terracotta"></div>
+      <div class="swatch" data-color="#e89a3c" data-hover="#cc8226" style="background:#e89a3c" title="Amber"></div>
+      <div class="swatch" data-color="#dc7240" data-hover="#bf5d2e" style="background:#dc7240" title="Sunset"></div>
+    </div>
+  </div>
+  <div class="row">
+    <label>Footer simplification</label>
+    <div style="font-size:12px; color:var(--muted); line-height:1.5;">
+      Question + button + tagline are primary. Contact details are smaller, in the bottom meta row.
+    </div>
+  </div>
+</div>
+
+<script>
+  const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+    "ctaColor": "#e0613a",
+    "ctaHover": "#c44d29"
+  }/*EDITMODE-END*/;
+
+  // Apply on load
+  function applyTweaks(t) {
+    document.documentElement.style.setProperty('--coral-600', t.ctaColor);
+    document.documentElement.style.setProperty('--coral-700', t.ctaHover);
+    // Sync swatch active
+    document.querySelectorAll('#ctaSwatches .swatch').forEach(s => {
+      s.classList.toggle('active', s.dataset.color.toLowerCase() === t.ctaColor.toLowerCase());
+    });
+  }
+  applyTweaks(TWEAK_DEFAULTS);
+
+  // Tweaks protocol
+  const fab = document.getElementById('twFab');
+  const panel = document.getElementById('twPanel');
+  const closeBtn = document.getElementById('twClose');
+  const reportFormModal = document.getElementById('reportFormModal');
+  const reportFormClose = document.getElementById('reportFormClose');
+
+  window.addEventListener('message', (e) => {
+    const d = e.data || {};
+    if (d.type === '__activate_edit_mode') {
+      panel.classList.add('show');
+      fab.classList.remove('show');
+    } else if (d.type === '__deactivate_edit_mode') {
+      panel.classList.remove('show');
+      fab.classList.remove('show');
+    }
+  });
+  try { window.parent.postMessage({type: '__edit_mode_available'}, '*'); } catch(e) {}
+
+  closeBtn.addEventListener('click', () => {
+    panel.classList.remove('show');
+    try { window.parent.postMessage({type: '__edit_mode_dismissed'}, '*'); } catch(e) {}
+  });
+
+  document.querySelectorAll('#ctaSwatches .swatch').forEach(s => {
+    s.addEventListener('click', () => {
+      const color = s.dataset.color;
+      const hover = s.dataset.hover;
+      applyTweaks({ ctaColor: color, ctaHover: hover });
+      try {
+        window.parent.postMessage({
+          type: '__edit_mode_set_keys',
+          edits: { ctaColor: color, ctaHover: hover }
+        }, '*');
+      } catch(e) {}
+    });
+  });
+
+  document.querySelectorAll('[data-open-form="report"]').forEach((el) => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      reportFormModal?.classList.add('open');
+      reportFormModal?.setAttribute('aria-hidden', 'false');
+    });
+  });
+  reportFormClose?.addEventListener('click', () => {
+    reportFormModal?.classList.remove('open');
+    reportFormModal?.setAttribute('aria-hidden', 'true');
+  });
+  reportFormModal?.addEventListener('click', (e) => {
+    if (e.target === reportFormModal) {
+      reportFormModal.classList.remove('open');
+      reportFormModal.setAttribute('aria-hidden', 'true');
+    }
+  });
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && reportFormModal?.classList.contains('open')) {
+      reportFormModal.classList.remove('open');
+      reportFormModal.setAttribute('aria-hidden', 'true');
+    }
+  });
+
+</script>
+
+</body>
+</html>

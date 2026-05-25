@@ -1,0 +1,1070 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: 8 Degree Luxury Real Estate API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: projects
+    description: Real estate projects
+  - name: units
+    description: Property units
+  - name: blog
+    description: Blog posts and categories
+  - name: enquiries
+    description: Lead enquiries
+  - name: testimonials
+    description: Client testimonials
+  - name: stats
+    description: Dashboard statistics
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /projects:
+    get:
+      operationId: listProjects
+      tags: [projects]
+      summary: List all projects
+      parameters:
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [ongoing, completed, upcoming]
+        - name: area
+          in: query
+          schema:
+            type: string
+        - name: property_type
+          in: query
+          schema:
+            type: string
+        - name: bedrooms
+          in: query
+          schema:
+            type: integer
+        - name: price_min
+          in: query
+          schema:
+            type: integer
+        - name: price_max
+          in: query
+          schema:
+            type: integer
+        - name: featured
+          in: query
+          schema:
+            type: boolean
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: List of projects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  projects:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Project"
+                  total:
+                    type: integer
+                required: [projects, total]
+
+    post:
+      operationId: createProject
+      tags: [projects]
+      summary: Create a new project
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProjectBody"
+      responses:
+        "201":
+          description: Created project
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+
+  /projects/featured:
+    get:
+      operationId: getFeaturedProjects
+      tags: [projects]
+      summary: Get featured projects for homepage
+      responses:
+        "200":
+          description: Featured projects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  projects:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Project"
+                required: [projects]
+
+  /projects/{slug}:
+    get:
+      operationId: getProject
+      tags: [projects]
+      summary: Get a project by slug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Project details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProjectDetail"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+    put:
+      operationId: updateProject
+      tags: [projects]
+      summary: Update a project
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProjectBody"
+      responses:
+        "200":
+          description: Updated project
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+
+    delete:
+      operationId: deleteProject
+      tags: [projects]
+      summary: Delete a project
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /projects/{slug}/units:
+    get:
+      operationId: getProjectUnits
+      tags: [units]
+      summary: Get units for a project
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Project units
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  units:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Unit"
+                required: [units]
+
+  /units:
+    get:
+      operationId: listUnits
+      tags: [units]
+      summary: List all units
+      parameters:
+        - name: project_id
+          in: query
+          schema:
+            type: integer
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [available, reserved, sold]
+      responses:
+        "200":
+          description: List of units
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  units:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Unit"
+                required: [units]
+
+    post:
+      operationId: createUnit
+      tags: [units]
+      summary: Create a unit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUnitBody"
+      responses:
+        "201":
+          description: Created unit
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Unit"
+
+  /units/{id}:
+    put:
+      operationId: updateUnit
+      tags: [units]
+      summary: Update a unit
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUnitBody"
+      responses:
+        "200":
+          description: Updated unit
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Unit"
+
+    delete:
+      operationId: deleteUnit
+      tags: [units]
+      summary: Delete a unit
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /blog:
+    get:
+      operationId: listBlogPosts
+      tags: [blog]
+      summary: List blog posts
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: featured
+          in: query
+          schema:
+            type: boolean
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 12
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: Blog posts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  posts:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/BlogPost"
+                  total:
+                    type: integer
+                required: [posts, total]
+
+    post:
+      operationId: createBlogPost
+      tags: [blog]
+      summary: Create a blog post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateBlogPostBody"
+      responses:
+        "201":
+          description: Created post
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BlogPost"
+
+  /blog/{slug}:
+    get:
+      operationId: getBlogPost
+      tags: [blog]
+      summary: Get a blog post by slug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Blog post
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BlogPost"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+    put:
+      operationId: updateBlogPost
+      tags: [blog]
+      summary: Update a blog post
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateBlogPostBody"
+      responses:
+        "200":
+          description: Updated post
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BlogPost"
+
+    delete:
+      operationId: deleteBlogPost
+      tags: [blog]
+      summary: Delete a blog post
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /blog/categories:
+    get:
+      operationId: listBlogCategories
+      tags: [blog]
+      summary: List blog categories
+      responses:
+        "200":
+          description: Categories
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  categories:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/BlogCategory"
+                required: [categories]
+
+  /enquiries:
+    get:
+      operationId: listEnquiries
+      tags: [enquiries]
+      summary: List all enquiries
+      parameters:
+        - name: project_id
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: Enquiries list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  enquiries:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Enquiry"
+                  total:
+                    type: integer
+                required: [enquiries, total]
+
+    post:
+      operationId: createEnquiry
+      tags: [enquiries]
+      summary: Submit an enquiry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateEnquiryBody"
+      responses:
+        "201":
+          description: Enquiry submitted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Enquiry"
+
+  /enquiries/{id}:
+    delete:
+      operationId: deleteEnquiry
+      tags: [enquiries]
+      summary: Delete an enquiry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+
+  /testimonials:
+    get:
+      operationId: listTestimonials
+      tags: [testimonials]
+      summary: List testimonials
+      responses:
+        "200":
+          description: Testimonials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  testimonials:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Testimonial"
+                required: [testimonials]
+
+  /stats/dashboard:
+    get:
+      operationId: getDashboardStats
+      tags: [stats]
+      summary: Get admin dashboard statistics
+      responses:
+        "200":
+          description: Dashboard stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardStats"
+
+  /stats/overview:
+    get:
+      operationId: getSiteOverview
+      tags: [stats]
+      summary: Get public site overview stats
+      responses:
+        "200":
+          description: Site overview stats for homepage
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SiteOverview"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required: [status]
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required: [error]
+
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+      required: [success]
+
+    Project:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        slug:
+          type: string
+        status:
+          type: string
+          enum: [ongoing, completed, upcoming]
+        area:
+          type: string
+        propertyType:
+          type: string
+        bedroomsMin:
+          type: integer
+        bedroomsMax:
+          type: integer
+        priceFrom:
+          type: integer
+        currency:
+          type: string
+        completionDate:
+          type: string
+          nullable: true
+        shortDescription:
+          type: string
+        heroImageUrl:
+          type: string
+          nullable: true
+        featured:
+          type: boolean
+        unitsLeft:
+          type: integer
+          nullable: true
+        createdAt:
+          type: string
+      required:
+        - id
+        - title
+        - slug
+        - status
+        - area
+        - propertyType
+        - bedroomsMin
+        - bedroomsMax
+        - priceFrom
+        - currency
+        - shortDescription
+        - featured
+        - createdAt
+
+    ProjectDetail:
+      allOf:
+        - $ref: "#/components/schemas/Project"
+        - type: object
+          properties:
+            fullDescription:
+              type: string
+            amenities:
+              type: array
+              items:
+                type: string
+            investmentHighlights:
+              type: array
+              items:
+                type: string
+            brochureUrl:
+              type: string
+              nullable: true
+            images:
+              type: array
+              items:
+                $ref: "#/components/schemas/ProjectImage"
+            units:
+              type: array
+              items:
+                $ref: "#/components/schemas/Unit"
+          required: [fullDescription, amenities, investmentHighlights, images, units]
+
+    ProjectImage:
+      type: object
+      properties:
+        id:
+          type: integer
+        imageUrl:
+          type: string
+        caption:
+          type: string
+          nullable: true
+        sortOrder:
+          type: integer
+      required: [id, imageUrl, sortOrder]
+
+    CreateProjectBody:
+      type: object
+      properties:
+        title:
+          type: string
+        slug:
+          type: string
+        status:
+          type: string
+          enum: [ongoing, completed, upcoming]
+        area:
+          type: string
+        propertyType:
+          type: string
+        bedroomsMin:
+          type: integer
+        bedroomsMax:
+          type: integer
+        priceFrom:
+          type: integer
+        currency:
+          type: string
+        completionDate:
+          type: string
+          nullable: true
+        shortDescription:
+          type: string
+        fullDescription:
+          type: string
+        amenities:
+          type: array
+          items:
+            type: string
+        investmentHighlights:
+          type: array
+          items:
+            type: string
+        brochureUrl:
+          type: string
+          nullable: true
+        heroImageUrl:
+          type: string
+          nullable: true
+        featured:
+          type: boolean
+        unitsLeft:
+          type: integer
+          nullable: true
+      required:
+        - title
+        - slug
+        - status
+        - area
+        - propertyType
+        - bedroomsMin
+        - bedroomsMax
+        - priceFrom
+        - currency
+        - shortDescription
+        - fullDescription
+        - amenities
+        - investmentHighlights
+        - featured
+
+    Unit:
+      type: object
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        unitName:
+          type: string
+        bedrooms:
+          type: integer
+        bathrooms:
+          type: integer
+        buildSize:
+          type: integer
+          nullable: true
+        landSize:
+          type: integer
+          nullable: true
+        price:
+          type: integer
+        currency:
+          type: string
+        status:
+          type: string
+          enum: [available, reserved, sold]
+        floorplanUrl:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+      required:
+        - id
+        - projectId
+        - unitName
+        - bedrooms
+        - bathrooms
+        - price
+        - currency
+        - status
+        - createdAt
+
+    CreateUnitBody:
+      type: object
+      properties:
+        projectId:
+          type: integer
+        unitName:
+          type: string
+        bedrooms:
+          type: integer
+        bathrooms:
+          type: integer
+        buildSize:
+          type: integer
+          nullable: true
+        landSize:
+          type: integer
+          nullable: true
+        price:
+          type: integer
+        currency:
+          type: string
+        status:
+          type: string
+          enum: [available, reserved, sold]
+        floorplanUrl:
+          type: string
+          nullable: true
+      required:
+        - projectId
+        - unitName
+        - bedrooms
+        - bathrooms
+        - price
+        - currency
+        - status
+
+    BlogPost:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        slug:
+          type: string
+        excerpt:
+          type: string
+        content:
+          type: string
+        featuredImageUrl:
+          type: string
+          nullable: true
+        author:
+          type: string
+        categoryId:
+          type: integer
+          nullable: true
+        categoryName:
+          type: string
+          nullable: true
+        readingTime:
+          type: integer
+        published:
+          type: boolean
+        publishedAt:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+      required:
+        - id
+        - title
+        - slug
+        - excerpt
+        - content
+        - author
+        - readingTime
+        - published
+        - createdAt
+
+    CreateBlogPostBody:
+      type: object
+      properties:
+        title:
+          type: string
+        slug:
+          type: string
+        excerpt:
+          type: string
+        content:
+          type: string
+        featuredImageUrl:
+          type: string
+          nullable: true
+        author:
+          type: string
+        categoryId:
+          type: integer
+          nullable: true
+        readingTime:
+          type: integer
+        published:
+          type: boolean
+      required:
+        - title
+        - slug
+        - excerpt
+        - content
+        - author
+        - readingTime
+        - published
+
+    BlogCategory:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        slug:
+          type: string
+      required: [id, name, slug]
+
+    Enquiry:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+          nullable: true
+        whatsapp:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+        budgetRange:
+          type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+        interestedProjectId:
+          type: integer
+          nullable: true
+        interestedProjectTitle:
+          type: string
+          nullable: true
+        source:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+      required: [id, name, email, createdAt]
+
+    CreateEnquiryBody:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+          nullable: true
+        whatsapp:
+          type: string
+          nullable: true
+        country:
+          type: string
+          nullable: true
+        budgetRange:
+          type: string
+          nullable: true
+        message:
+          type: string
+          nullable: true
+        interestedProjectId:
+          type: integer
+          nullable: true
+        source:
+          type: string
+          nullable: true
+      required: [name, email]
+
+    Testimonial:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        country:
+          type: string
+        quote:
+          type: string
+        projectTitle:
+          type: string
+          nullable: true
+        avatarUrl:
+          type: string
+          nullable: true
+        rating:
+          type: integer
+      required: [id, name, country, quote, rating]
+
+    DashboardStats:
+      type: object
+      properties:
+        totalProjects:
+          type: integer
+        ongoingProjects:
+          type: integer
+        completedProjects:
+          type: integer
+        totalUnits:
+          type: integer
+        availableUnits:
+          type: integer
+        soldUnits:
+          type: integer
+        reservedUnits:
+          type: integer
+        totalEnquiries:
+          type: integer
+        newEnquiriesThisMonth:
+          type: integer
+        totalBlogPosts:
+          type: integer
+      required:
+        - totalProjects
+        - ongoingProjects
+        - completedProjects
+        - totalUnits
+        - availableUnits
+        - soldUnits
+        - reservedUnits
+        - totalEnquiries
+        - newEnquiriesThisMonth
+        - totalBlogPosts
+
+    SiteOverview:
+      type: object
+      properties:
+        totalProjects:
+          type: integer
+        completedProjects:
+          type: integer
+        totalUnits:
+          type: integer
+        yearsExperience:
+          type: integer
+        averageRoi:
+          type: string
+      required:
+        - totalProjects
+        - completedProjects
+        - totalUnits
+        - yearsExperience
+        - averageRoi

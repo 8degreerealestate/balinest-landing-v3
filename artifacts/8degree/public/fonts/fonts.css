@@ -1,0 +1,120 @@
+/**
+ * Self-hosted fonts bundled with the site:
+ * - Montserrat: variable TTFs (UI + body; weights 100–900).
+ * - Rework Display TRIAL: display / Tailwind `font-serif` stack (see `--app-font-serif` in index.css).
+ * Load before app CSS.
+ */
+
+/* Montserrat variable — from Google Fonts zip (variable fonts cover all weights) */
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/montserrat/Montserrat-VariableFont_wght.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Montserrat";
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/montserrat/Montserrat-Italic-VariableFont_wght.ttf") format("truetype");
+}
+
+/* Rework Display TRIAL — title / display stack (CSS family name "Rework") */
+@font-face {
+  font-family: "Rework";
+  font-style: normal;
+  font-weight: 100;
+  font-display: swap;
+  src: url("/fonts/rework/ReworkDisplayTRIAL-Thin-BF64b75902cf6d4.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Rework";
+  font-style: italic;
+  font-weight: 100;
+  font-display: swap;
+  src: url("/fonts/rework/ReworkDisplayTRIAL-ThinItalic-BF64b75902d69f1.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Rework";
+  font-style: normal;
+  font-weight: 200;
+  font-display: swap;
+  src: url("/fonts/rework/ReworkDisplayTRIAL-Extralight-BF64b75902e4b2e.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Rework";
+  font-style: italic;
+  font-weight: 200;
+  font-display: swap;
+  src: url("/fonts/rework/ReworkDisplayTRIAL-ExtralightItalic-BF64b75902da012.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Rework";
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("/fonts/rework/ReworkDisplayTRIAL-Light-BF64b75902dd26f.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Rework";
+  font-style: italic;
+  font-weight: 300;
+  font-display: swap;
+  src: url("/fonts/rework/ReworkDisplayTRIAL-LightItalic-BF64b759029c611.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Rework";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/rework/ReworkDisplayTRIAL-Regular-BF64b75902dd27b.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Rework";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/rework/ReworkDisplayTRIAL-RegularItalic-BF64b759028427f.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Rework";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/rework/ReworkDisplayTRIAL-Semibold-BF64b75902b225c.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Rework";
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/rework/ReworkDisplayTRIAL-SemiboldItalic-BF64b759029fa4d.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Rework";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/rework/ReworkDisplayTRIAL-Bold-BF64b75902cb5ea.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Rework";
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/rework/ReworkDisplayTRIAL-BoldItalic-BF64b759029bdfd.otf") format("opentype");
+}

@@ -1,0 +1,15 @@
+.git
+.local
+.pnpm-store
+.cursor
+.vercel/cache
+node_modules
+**/node_modules
+*.tar.gz
+myproject.tar.gz
+terminals
+agent-transcripts
+dist
+tmp
+out-tsc
+coverage

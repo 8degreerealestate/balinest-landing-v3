@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Invest in Bali — 8 Degree Real Estate</title>
+  <!--
+    Invest landing (static HTML)
+    ─────────────────────────────
+    • Edit this file — it is served at /invest/index.html and embedded on /invest.
+    • Put images/CSS/JS in this folder, e.g.:
+        public/invest/assets/hero.jpg
+        public/invest/styles.css
+      Reference them with relative paths:
+        <img src="assets/hero.jpg" alt="..." />
+        <link rel="stylesheet" href="styles.css" />
+    • Site-wide fonts (optional): /fonts/fonts.css
+  -->
+    <link rel="stylesheet" href="/fonts/fonts.css" />
+    <style>
+      :root {
+        --teal: #0d4542;
+        --cream: #fdfbf7;
+        --lime: #b8e29d;
+        --ink: #1c1917;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: var(--cream);
+        color: var(--ink);
+        font-family: Montserrat, system-ui, sans-serif;
+        font-weight: 300;
+        line-height: 1.6;
+      }
+      .wrap {
+        max-width: 56rem;
+        margin: 0 auto;
+        padding: 3rem 1.5rem 4rem;
+      }
+      h1 {
+        font-family: Rework, Montserrat, serif;
+        font-size: clamp(1.75rem, 4vw, 2.5rem);
+        font-weight: 700;
+        color: var(--teal);
+        letter-spacing: 0.03em;
+      }
+      p {
+        margin: 1rem 0 0;
+        max-width: 40rem;
+      }
+      .note {
+        margin-top: 2rem;
+        padding: 1rem 1.25rem;
+        border: 1px dashed rgba(13, 69, 66, 0.35);
+        border-radius: 8px;
+        font-size: 0.875rem;
+        color: rgba(28, 25, 23, 0.75);
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <p style="font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal)">
+        Invest
+      </p>
+      <h1>Invest in Bali</h1>
+      <p>
+        Replace this file with your full HTML design. Save assets under <code>public/invest/assets/</code> and use
+        relative paths.
+      </p>
+      <p class="note">
+        Investment guide (React): <a href="/investment-guide">/investment-guide</a>
+      </p>
+    </main>
+  </body>
+</html>
