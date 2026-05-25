@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { eq, and, sql, asc } from "drizzle-orm";
-import { db } from "@workspace/db";
+import { db, isDatabaseConfigured } from "@workspace/db";
 import { blogPostsTable, blogCategoriesTable } from "@workspace/db";
 import {
   ListBlogPostsQueryParams,
@@ -21,6 +21,10 @@ import {
 const router = Router();
 
 router.get("/blog/categories", async (_req, res): Promise<void> => {
+  if (!isDatabaseConfigured()) {
+    res.json({ categories: listJournalFallbackCategories() });
+    return;
+  }
   await syncJournalImportToDatabaseIfEmpty();
   const categories = await db
     .select()
@@ -44,44 +48,53 @@ router.get("/blog", async (req, res): Promise<void> => {
     return;
   }
 
+  const { category, limit = 12, offset = 0 } = parsed.data;
+
+  if (!isDatabaseConfigured()) {
+    res.json(listJournalFallback({ category, limit, offset }));
+    return;
+  }
+
   await syncJournalImportToDatabaseIfEmpty();
 
-  const { category, limit = 12, offset = 0 } = parsed.data;
   const conditions = [eq(blogPostsTable.published, true)];
   if (category) conditions.push(eq(blogCategoriesTable.name, category));
 
   const where = and(...conditions);
 
-  const [posts, countResult] = await Promise.all([
-    db
-      .select({
-        post: blogPostsTable,
-        categoryName: blogCategoriesTable.name,
-      })
-      .from(blogPostsTable)
-      .leftJoin(blogCategoriesTable, eq(blogPostsTable.categoryId, blogCategoriesTable.id))
-      .where(where)
-      .orderBy(asc(sql`coalesce(${blogPostsTable.publishedAt}, ${blogPostsTable.createdAt})`))
-      .limit(limit)
-      .offset(offset),
-    db
-      .select({ count: sql<number>`count(*)::int` })
-      .from(blogPostsTable)
-      .leftJoin(blogCategoriesTable, eq(blogPostsTable.categoryId, blogCategoriesTable.id))
-      .where(where),
-  ]);
+  try {
+    const [posts, countResult] = await Promise.all([
+      db
+        .select({
+          post: blogPostsTable,
+          categoryName: blogCategoriesTable.name,
+        })
+        .from(blogPostsTable)
+        .leftJoin(blogCategoriesTable, eq(blogPostsTable.categoryId, blogCategoriesTable.id))
+        .where(where)
+        .orderBy(asc(sql`coalesce(${blogPostsTable.publishedAt}, ${blogPostsTable.createdAt})`))
+        .limit(limit)
+        .offset(offset),
+      db
+        .select({ count: sql<number>`count(*)::int` })
+        .from(blogPostsTable)
+        .leftJoin(blogCategoriesTable, eq(blogPostsTable.categoryId, blogCategoriesTable.id))
+        .where(where),
+    ]);
 
-  const total = Number(countResult[0]?.count ?? 0);
-  if (total === 0) {
-    const fallback = listJournalFallback({ category, limit, offset });
-    res.json(fallback);
-    return;
+    const total = Number(countResult[0]?.count ?? 0);
+    if (total === 0) {
+      res.json(listJournalFallback({ category, limit, offset }));
+      return;
+    }
+
+    res.json({
+      posts: posts.map(({ post, categoryName }) => mapPost(post, categoryName)),
+      total,
+    });
+  } catch {
+    res.json(listJournalFallback({ category, limit, offset }));
   }
-
-  res.json({
-    posts: posts.map(({ post, categoryName }) => mapPost(post, categoryName)),
-    total,
-  });
 });
 
 router.get("/blog/:slug", async (req, res): Promise<void> => {
@@ -91,20 +104,34 @@ router.get("/blog/:slug", async (req, res): Promise<void> => {
     return;
   }
 
+  if (!isDatabaseConfigured()) {
+    const onlyFallback = getJournalFallbackBySlug(params.data.slug);
+    if (!onlyFallback) {
+      res.status(404).json({ error: "Post not found" });
+      return;
+    }
+    res.json(onlyFallback);
+    return;
+  }
+
   await syncJournalImportToDatabaseIfEmpty();
 
-  const [result] = await db
-    .select({
-      post: blogPostsTable,
-      categoryName: blogCategoriesTable.name,
-    })
-    .from(blogPostsTable)
-    .leftJoin(blogCategoriesTable, eq(blogPostsTable.categoryId, blogCategoriesTable.id))
-    .where(eq(blogPostsTable.slug, params.data.slug));
+  try {
+    const [result] = await db
+      .select({
+        post: blogPostsTable,
+        categoryName: blogCategoriesTable.name,
+      })
+      .from(blogPostsTable)
+      .leftJoin(blogCategoriesTable, eq(blogPostsTable.categoryId, blogCategoriesTable.id))
+      .where(eq(blogPostsTable.slug, params.data.slug));
 
-  if (result) {
-    res.json(mapPost(result.post, result.categoryName));
-    return;
+    if (result) {
+      res.json(mapPost(result.post, result.categoryName));
+      return;
+    }
+  } catch {
+    // fall through to bundled journal JSON
   }
 
   const fallback = getJournalFallbackBySlug(params.data.slug);

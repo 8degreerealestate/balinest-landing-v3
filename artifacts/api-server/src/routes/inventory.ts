@@ -3,7 +3,8 @@ import { asc, eq, inArray, sql } from "drizzle-orm";
 import { z } from "zod";
 import {
   db,
-  pool,
+  isDatabaseConfigured,
+  getPool,
   projectsTable,
   unitsTable,
   propertyInventoryTable,
@@ -94,9 +95,10 @@ let inventoryListingMetaReady = false;
  * Returns false when the DB is down or meta cannot be used — callers must skip Drizzle meta queries.
  */
 async function ensureInventoryListingMetaReady(): Promise<boolean> {
+  if (!isDatabaseConfigured()) return false;
   if (inventoryListingMetaReady) return true;
   try {
-    await pool.query("select 1 from inventory_listing_meta limit 1");
+    await getPool().query("select 1 from inventory_listing_meta limit 1");
     inventoryListingMetaReady = true;
     return true;
   } catch (first: unknown) {
@@ -111,7 +113,7 @@ async function ensureInventoryListingMetaReady(): Promise<boolean> {
   }
 
   try {
-    await pool.query(`
+    await getPool().query(`
       CREATE TABLE IF NOT EXISTS inventory_listing_meta (
         code TEXT PRIMARY KEY,
         featured BOOLEAN NOT NULL DEFAULT false,
@@ -120,12 +122,12 @@ async function ensureInventoryListingMetaReady(): Promise<boolean> {
         updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
       );
     `);
-    await pool.query(`
+    await getPool().query(`
       CREATE INDEX IF NOT EXISTS inventory_listing_meta_featured_idx
         ON inventory_listing_meta (featured)
         WHERE featured = true;
     `);
-    await pool.query("select 1 from inventory_listing_meta limit 1");
+    await getPool().query("select 1 from inventory_listing_meta limit 1");
     inventoryListingMetaReady = true;
     return true;
   } catch (error: unknown) {

@@ -1,7 +1,7 @@
 import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { db } from "@workspace/db";
+import { isDatabaseConfigured, getDb } from "@workspace/db";
 import { blogCategoriesTable, blogPostsTable } from "@workspace/db";
 import { sql } from "drizzle-orm";
 import { logger } from "./logger";
@@ -123,10 +123,13 @@ export async function syncJournalImportToDatabaseIfEmpty(): Promise<void> {
   if (syncAttempted) return;
   syncAttempted = true;
 
+  if (!isDatabaseConfigured()) return;
+
   const rows = loadJournalImportRows();
   if (rows.length === 0) return;
 
   try {
+    const db = getDb();
     const [{ count }] = await db
       .select({ count: sql<number>`count(*)::int` })
       .from(blogPostsTable)
