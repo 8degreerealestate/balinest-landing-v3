@@ -276,7 +276,6 @@ export default function Home() {
     data: blogData,
     isPending: blogPending,
     isFetching: blogFetching,
-    isError: blogError,
   } = useListBlogPosts({ limit: 100 });
   const [staticLatestNews, setStaticLatestNews] = useState<
     { id: string; tag: string; title: string; imageUrl: string; href: string }[] | null
