@@ -8,11 +8,10 @@ export default function AdminSettings() {
       <div className="border border-border bg-card p-6 text-sm text-muted-foreground space-y-3">
         <p>No UI toggles yet. Inventory listing source is controlled on the API process:</p>
         <p className="text-foreground/80 text-[13px] font-sans">
-          <strong>Frontend → API host:</strong> If the admin is served from WordPress (e.g.{" "}
-          <code>https://8degree.co</code>), relative <code>/api/…</code> requests hit WordPress and return 404 HTML, not
-          JSON. Build the 8degree app with <code>VITE_API_BASE_URL</code> set to the Express origin (no trailing slash),
-          e.g. <code>https://api.yourdomain.com</code>, so all API client calls and admin <code>fetch</code> helpers use
-          that host. Leave it unset for local Vite dev (proxy still targets <code>API_URL</code> / localhost:8080).
+          <strong>Frontend → API host:</strong> Inventory loads from the Node API (Google Sheet + Postgres), not
+          WordPress. On Vercel with DNS on this project, leave <code>VITE_API_BASE_URL</code> unset so{" "}
+          <code>/api</code> is same-origin. If the SPA is on another host, set <code>VITE_API_BASE_URL</code> to your API
+          origin (no trailing slash). Local dev: unset (Vite proxies to <code>API_URL</code> / localhost:8080).
         </p>
         <ul className="list-disc pl-5 space-y-1 text-xs font-sans text-foreground/90">
           <li>

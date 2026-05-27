@@ -1,3 +1,7 @@
+/**
+ * Property inventory API — Google Sheet (default) + optional Postgres overrides.
+ * Does not read from WordPress; listing images come from sheet cells / Drive folder URLs.
+ */
 import { Router, type Request, type Response } from "express";
 import { asc, eq, inArray, sql } from "drizzle-orm";
 import { z } from "zod";

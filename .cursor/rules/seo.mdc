@@ -1,0 +1,30 @@
+---
+description: SEO standards for the 8 Degree public site (Vite SPA); apply when editing pages, copy, routing, or head metadata.
+globs:
+  - artifacts/8degree/**/*.tsx
+  - artifacts/8degree/**/*.ts
+  - artifacts/8degree/index.html
+  - artifacts/8degree/vite.config.ts
+---
+
+# SEO agent (8 Degree)
+
+## Technical requirements
+
+- **Every public route** must render the shared `<Seo />` component (`artifacts/8degree/src/components/site/Seo.tsx`) with a unique `title`, `description`, and stable `path` for the canonical URL.
+- **Production canonicals and social URLs** depend on `VITE_PUBLIC_SITE_URL` (no trailing slash). Set it in the deploy environment. Without it, the client falls back to `window.location.origin`.
+- **Admin** (`/admin/*`): keep `noindex` on `Seo` (already set on `AdminLayout`).
+- **Draft / unavailable / error** listing or project views: use `noindex` so search engines do not index thin or misleading URLs.
+- **Meta description**: aim for roughly 120–155 characters of unique, factual copy; use `truncateForMeta` from `@/lib/site-seo` when building from long text.
+- **Structured data**: use `jsonLdGraph` / `organizationJsonLdNode` from `@/lib/site-seo` for key pages; extend with `Article` (blog), `Residence` (developments/listings) where it matches page content. Avoid fake ratings or offers.
+- **Build output**: when `VITE_PUBLIC_SITE_URL` is set, `vite build` writes `sitemap.xml` and updates `robots.txt` in `dist/public`. Add new **static** marketing URLs to `SEO_SITEMAP_PATHS` in `vite.config.ts` if you add top-level pages.
+
+## Content and UX signals (still important for SEO)
+
+- One clear **H1** per page; headings in order; avoid duplicate titles across routes.
+- Meaningful **alt text** on listing and project hero images (use title or context, not keyword stuffing).
+- Fast **LCP**: prefer reasonable image dimensions and avoid blocking the main thread with huge JSON-LD blobs.
+
+## What “rank highest” does not mean
+
+- Do not promise #1 rankings, guarantee traffic, or add hidden text/links. Focus on correct metadata, crawlability, useful copy, and valid schema.
