@@ -62,26 +62,23 @@ export default function Blog() {
   }[language];
   const [activeCategory, setActiveCategory] = useState<string>("");
   const [staticPosts, setStaticPosts] = useState<BlogPost[] | null>(null);
-  const { data, isLoading, isError } = useListBlogPosts({ limit: 100 });
+  const { data, isLoading } = useListBlogPosts({ limit: 100 });
   const { data: catData } = useListBlogCategories();
 
   useEffect(() => {
-    const apiCount = data?.posts?.length ?? 0;
-    if (!isLoading && (isError || apiCount === 0)) {
-      void loadStaticJournalPosts().then(setStaticPosts);
-    } else if (apiCount > 0) {
-      setStaticPosts(null);
-    }
-  }, [data?.posts?.length, isError, isLoading]);
+    void loadStaticJournalPosts().then(setStaticPosts);
+  }, []);
 
-  const sourcePosts = staticPosts ?? data?.posts ?? [];
+  const apiPosts = data?.posts ?? [];
+  const sourcePosts = apiPosts.length > 0 ? apiPosts : staticPosts ?? [];
   const posts = [...sourcePosts]
     .filter((p) => !activeCategory || p.categoryName === activeCategory)
     .sort((a, b) => {
       const ta = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
       const tb = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
-      return ta - tb;
+      return tb - ta;
     });
+  const showLoading = isLoading && sourcePosts.length === 0;
   const categories =
     catData?.categories ??
     [...new Set(sourcePosts.map((p) => p.categoryName).filter(Boolean))].map((name, i) => ({
@@ -161,7 +158,7 @@ export default function Blog() {
           ))}
         </div>
 
-        {isLoading ? (
+        {showLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[1, 2, 3, 4, 5, 6].map(i => (
               <div key={i} className="space-y-3">

@@ -42,18 +42,16 @@ export default function BlogDetail() {
 
   useEffect(() => {
     if (!slug) return;
-    if (isLoading) return;
-    if (post) {
-      setStaticPost(null);
-      setStaticReady(true);
-      return;
-    }
     setStaticReady(false);
     void getStaticJournalPost(slug).then((p) => {
       setStaticPost(p);
       setStaticReady(true);
     });
-  }, [slug, isLoading, post]);
+  }, [slug]);
+
+  useEffect(() => {
+    if (post) setStaticPost(null);
+  }, [post]);
 
   useEffect(() => {
     if ((relatedData?.posts?.length ?? 0) > 0) return;
@@ -97,7 +95,7 @@ export default function BlogDetail() {
     }
   };
 
-  if (isLoading || (!post && !staticReady)) {
+  if (!article && (isLoading || !staticReady)) {
     return (
       <Fragment>
         <Seo

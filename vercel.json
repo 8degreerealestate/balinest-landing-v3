@@ -15,14 +15,7 @@
       "destination": "/api/index.js"
     },
     {
-      "source": "/:path*",
-      "has": [
-        {
-          "type": "header",
-          "key": "accept",
-          "value": "text/html"
-        }
-      ],
+      "source": "/((?!api/).*)",
       "destination": "/index.html"
     }
   ],
@@ -56,6 +49,11 @@
     }
   ],
   "redirects": [
+    {
+      "source": "/journal/",
+      "destination": "/journal",
+      "permanent": false
+    },
     {
       "source": "/property/:code",
       "destination": "/properties/:code",

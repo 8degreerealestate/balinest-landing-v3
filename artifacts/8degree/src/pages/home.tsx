@@ -283,28 +283,23 @@ export default function Home() {
   >(null);
 
   useEffect(() => {
-    const apiCount = blogData?.posts?.length ?? 0;
-    if (!blogPending && !blogFetching && (blogError || apiCount === 0)) {
-      void loadLatestJournalPosts(LATEST_NEWS_COUNT).then((posts) => {
-        setStaticLatestNews(
-          posts.map((post) => ({
-            id: String(post.id),
-            tag: post.categoryName ?? "Journal",
-            title: post.title,
-            imageUrl: post.featuredImageUrl ?? JOURNAL_CARD_IMAGE_FALLBACK,
-            href: journalPostPath(post.slug),
-          })),
-        );
-      });
-    } else if (apiCount > 0) {
-      setStaticLatestNews(null);
-    }
-  }, [blogData?.posts?.length, blogError, blogPending, blogFetching]);
+    void loadLatestJournalPosts(LATEST_NEWS_COUNT).then((posts) => {
+      setStaticLatestNews(
+        posts.map((post) => ({
+          id: String(post.id),
+          tag: post.categoryName ?? "Journal",
+          title: post.title,
+          imageUrl: post.featuredImageUrl ?? JOURNAL_CARD_IMAGE_FALLBACK,
+          href: journalPostPath(post.slug),
+        })),
+      );
+    });
+  }, []);
 
   const latestNewsCards = useMemo(() => {
-    if (staticLatestNews?.length) return staticLatestNews;
     const posts = blogData?.posts ?? [];
-    return [...posts]
+    if (posts.length > 0) {
+      return [...posts]
       .filter((p) => p.published !== false)
       .sort(
         (a, b) =>
@@ -318,6 +313,8 @@ export default function Home() {
         imageUrl: post.featuredImageUrl ?? JOURNAL_CARD_IMAGE_FALLBACK,
         href: journalPostPath(post.slug),
       }));
+    }
+    return staticLatestNews ?? [];
   }, [staticLatestNews, blogData?.posts]);
 
   const latestNewsLoading = (blogPending || blogFetching) && latestNewsCards.length === 0;
