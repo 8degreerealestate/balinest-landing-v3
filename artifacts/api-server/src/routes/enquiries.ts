@@ -112,6 +112,7 @@ router.post("/enquiries", async (req, res): Promise<void> => {
           "Your message was saved but could not be sent to our CRM. Please try again shortly or contact us on WhatsApp.",
         enquiryId: enquiry.id,
         crmSynced: false,
+        crmError: crm.error ?? "unknown",
       });
       return;
     }

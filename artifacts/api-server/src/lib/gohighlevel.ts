@@ -226,7 +226,7 @@ export async function syncEnquiryToGoHighLevel(
   }
 }
 
-/** Lightweight check for health/diagnostics (does not create contacts). */
+/** Lightweight check for health/diagnostics (location read + upsert scope). */
 export async function probeGoHighLevel(): Promise<{
   configured: boolean;
   ok: boolean;
@@ -240,10 +240,28 @@ export async function probeGoHighLevel(): Promise<{
     return { configured: true, ok: false, detail: "missing location id" };
   }
   try {
-    const res = await ghlFetch(config, `/locations/${config.locationId}`, { method: "GET" });
-    if (res.ok) return { configured: true, ok: true };
-    const text = await res.text().catch(() => "");
-    return { configured: true, ok: false, detail: text.slice(0, 120) || `HTTP ${res.status}` };
+    const locRes = await ghlFetch(config, `/locations/${config.locationId}`, { method: "GET" });
+    if (!locRes.ok) {
+      const text = await locRes.text().catch(() => "");
+      return { configured: true, ok: false, detail: `location: ${text.slice(0, 80)}` };
+    }
+    const upsertRes = await ghlFetch(config, "/contacts/upsert", {
+      method: "POST",
+      body: JSON.stringify({
+        locationId: config.locationId,
+        firstName: "Health",
+        lastName: "Check",
+        email: `health-probe-${Date.now()}@8degree.invalid`,
+        tags: ["health-probe"],
+      }),
+    });
+    if (upsertRes.ok) return { configured: true, ok: true };
+    const text = await upsertRes.text().catch(() => "");
+    return {
+      configured: true,
+      ok: false,
+      detail: `upsert: ${text.slice(0, 120) || `HTTP ${upsertRes.status}`}`,
+    };
   } catch (err) {
     return {
       configured: true,

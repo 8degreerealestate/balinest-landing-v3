@@ -384,7 +384,7 @@ export default function Home() {
             transition={{ duration: 1, delay: 0.6 }}
             className="flex items-center justify-center"
           >
-            <Link href="/invest">
+            <Link href="/investment-guide">
               <Button size="lg" variant="outline" className="rounded-none tracking-widest uppercase w-full sm:w-auto h-14 px-8 border-white text-white hover:bg-white hover:text-black">
                 {t.investGuide}
               </Button>

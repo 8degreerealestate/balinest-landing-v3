@@ -1154,7 +1154,7 @@ export default function About() {
             <Link href="/contact">
               <Button className="h-12 rounded-none px-8 uppercase tracking-widest">{t.contact}</Button>
             </Link>
-            <Link href="/invest">
+            <Link href="/investment-guide">
               <Button
                 variant="ghost"
                 className="h-12 rounded-none border border-primary/25 bg-[#def86b] px-8 uppercase tracking-widest text-primary shadow-sm hover:bg-[#d4ef5f] hover:text-primary"
