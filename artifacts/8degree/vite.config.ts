@@ -4,33 +4,13 @@ import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
-const SEO_SITEMAP_PATHS = [
-  "/",
-  "/sell",
-  "/about-us",
-  "/buyer-agents",
-  "/buyer-agent",
-  "/journal",
-  "/favorite-properties",
-  "/buy-land",
-  "/frequently-asked-questions",
-  "/company-overview",
-  "/testimony",
-  "/legal-services",
-  "/legal-and-due-diligence",
-  "/data-driven",
-  "/bali-property-guide",
-  "/bali-location-guide",
-  "/location-guide",
-  "/projects",
-  "/projects/completed",
-  "/about",
-  "/contact",
-  "/invest",
-  "/investment-guide",
-  "/pricing",
-  "/blog",
-];
+function loadSitemapPaths(): string[] {
+  const generated = path.resolve(import.meta.dirname, "../../migration/sitemap-paths.json");
+  if (fs.existsSync(generated)) {
+    return JSON.parse(fs.readFileSync(generated, "utf8")) as string[];
+  }
+  return ["/", "/projects", "/journal", "/about-us", "/contact", "/investment-guide"];
+}
 
 function seoStaticPlugin(base: string): Plugin {
   return {
@@ -45,7 +25,8 @@ function seoStaticPlugin(base: string): Plugin {
         return `${site}${baseNorm}${p}`;
       };
       if (site) {
-        const body = SEO_SITEMAP_PATHS.map(
+        const paths = loadSitemapPaths();
+        const body = paths.map(
           (loc) => `  <url>\n    <loc>${absolute(loc)}</loc>\n    <changefreq>weekly</changefreq>\n  </url>`,
         ).join("\n");
         fs.writeFileSync(

@@ -1,0 +1,33 @@
+{
+  "/": {
+    "seoTitle": "Luxury Bali Real Estate & Strategic Developments",
+    "metaDescription": "Boutique Bali property advisory: luxury villas, developments, and curated listings. Portfolio, investment guidance, and opportunities across Bali.",
+    "canonical": "/",
+    "h1": "Luxury Bali Real Estate"
+  },
+  "/projects": {
+    "seoTitle": "Bali Properties for Sale",
+    "metaDescription": "Explore curated villas, developments, and land across Bali. Refine your search and view available listings.",
+    "canonical": "/projects"
+  },
+  "/journal": {
+    "seoTitle": "Journal · Bali Property Insights",
+    "metaDescription": "Market updates, investment guides, and Bali real estate insights from 8 Degree.",
+    "canonical": "/journal"
+  },
+  "/investment-guide": {
+    "seoTitle": "Bali Property Investment Guide",
+    "metaDescription": "Everything international investors need to know before buying property in Bali — ownership, ROI, and due diligence.",
+    "canonical": "/investment-guide"
+  },
+  "/contact": {
+    "seoTitle": "Contact 8 Degree",
+    "metaDescription": "Speak with our Bali property advisory team about acquisitions, listings, and investments.",
+    "canonical": "/contact"
+  },
+  "/about-us": {
+    "seoTitle": "About 8 Degree Real Estate",
+    "metaDescription": "Boutique Bali real estate advisory focused on quality, clarity, and investor outcomes.",
+    "canonical": "/about-us"
+  }
+}

@@ -1,6 +1,7 @@
 import { useEffect, useId, useMemo, useRef, useState } from "react";
-import { Search } from "lucide-react";
+import { ChevronDown, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   activeBaliMapRegions,
@@ -56,7 +57,7 @@ function filterAreaNames(names: readonly string[], query: string): string[] {
 const SEARCH_SELECT_ITEM =
   "cursor-pointer hover:bg-[#e0fdac] focus:bg-[#e0fdac] focus:text-[#1f1d1b] data-[highlighted]:bg-[#e0fdac] data-[highlighted]:text-[#1f1d1b]";
 const SEARCH_SELECT_TRIGGER =
-  "mt-1 h-auto min-h-10 w-full min-w-0 border-0 border-b border-[#1f1d1b]/35 bg-transparent px-0 py-1 text-base text-[#1f1d1b] shadow-none rounded-none ring-offset-0 focus:ring-0 focus:ring-offset-0 focus:border-[#01514E] whitespace-normal items-start [&>span]:block [&>span]:min-w-0 [&>span]:max-w-full [&>span]:overflow-hidden [&>span]:whitespace-normal [&>span]:leading-snug [&>svg]:mt-1 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:shrink-0 [&>svg]:opacity-70";
+  "mt-1 h-auto min-h-10 w-full min-w-0 border-0 border-b border-[#1f1d1b]/35 bg-transparent px-0 py-1 text-base text-[#1f1d1b] shadow-none rounded-none ring-offset-0 focus:ring-0 focus:ring-offset-0 focus:border-[#01514E] whitespace-normal items-start [&>span]:block [&>span]:min-w-0 [&>span]:max-w-full [&>span]:overflow-hidden [&>span]:whitespace-normal [&>span]:leading-snug [&>svg]:mt-1 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:shrink-0 [&>svg]:stroke-[2] [&>svg]:opacity-70";
 
 /** Area map dropdown: full width of field on mobile (avoids 92vw overflow past viewport). */
 const AREA_MENU_PANEL_CLASS =
@@ -64,6 +65,19 @@ const AREA_MENU_PANEL_CLASS =
 
 const SEARCH_FIELD_LABEL =
   "text-[11px] font-medium uppercase tracking-[0.14em] text-[#01514E] sm:tracking-[0.22em] md:tracking-[0.28em]";
+
+const SEARCH_FIELD_CHEVRON_CLASS =
+  "mt-1 h-4 w-4 shrink-0 text-[#1f1d1b] opacity-70 transition-transform duration-200";
+
+function SearchFieldChevron({ open }: { open: boolean }) {
+  return (
+    <ChevronDown
+      className={cn(SEARCH_FIELD_CHEVRON_CLASS, open && "rotate-180")}
+      strokeWidth={2}
+      aria-hidden
+    />
+  );
+}
 
 export type PropertySearchLabels = {
   searchHeadline: string;
@@ -197,7 +211,7 @@ export function PropertySearchPanel({
             aria-label={t.area}
           >
             <span>{selectedArea}</span>
-            <span className="text-sm text-[#1f1d1b]/70">{isAreaMenuOpen ? "▲" : "▼"}</span>
+            <SearchFieldChevron open={isAreaMenuOpen} />
           </button>
 
           {isAreaMenuOpen ? (
@@ -357,7 +371,7 @@ export function PropertySearchPanel({
               {selectedPriceLabel ||
                 (minPrice && maxPrice ? `$${minPrice} – $${maxPrice}` : "Price")}
             </span>
-            <span className="text-sm text-[#1f1d1b]/70">{isPriceMenuOpen ? "▲" : "▼"}</span>
+            <SearchFieldChevron open={isPriceMenuOpen} />
           </button>
 
           {isPriceMenuOpen ? (
@@ -539,7 +553,7 @@ export function PropertySearchPanel({
                     aria-label={t.area}
                   >
                     <span>{selectedArea}</span>
-                    <span className="text-sm text-[#1f1d1b]/70">{isAreaMenuOpen ? "▲" : "▼"}</span>
+                    <SearchFieldChevron open={isAreaMenuOpen} />
                   </button>
 
                   {isAreaMenuOpen ? (
@@ -715,7 +729,7 @@ export function PropertySearchPanel({
                     aria-label={t.priceRange}
                   >
                     <span>{selectedPriceLabel || "Price"}</span>
-                    <span className="text-sm text-[#1f1d1b]/70">{isPriceMenuOpen ? "▲" : "▼"}</span>
+                    <SearchFieldChevron open={isPriceMenuOpen} />
                   </button>
 
                   {isPriceMenuOpen ? (

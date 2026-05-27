@@ -7,6 +7,8 @@ const heroImgClass =
 function preferStaticHeroMedia(): boolean {
   if (typeof window === "undefined") return false;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return true;
+  if (window.matchMedia("(max-width: 767px)").matches) return true;
+  if (window.matchMedia("(pointer: coarse)").matches) return true;
   const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
   if (conn?.saveData) return true;
   return false;

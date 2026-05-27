@@ -9,6 +9,7 @@ import {
   toAbsoluteImageUrl,
   truncateForMeta,
 } from "@/lib/site-seo";
+import { resolveJournalSeo, resolvePageSeo } from "@/lib/seo-migration/resolve";
 
 const LD_ID = "8degree-page-jsonld";
 
@@ -22,6 +23,8 @@ export type SeoProps = {
   jsonLd?: Record<string, unknown> | Record<string, unknown>[] | null;
   /** Admin, drafts, or error states */
   noindex?: boolean;
+  /** Apply WordPress migration metadata when available (default true). */
+  useMigration?: boolean;
 };
 
 function upsertMeta(attr: "name" | "property", key: string, content: string) {
@@ -93,15 +96,28 @@ export function Seo({
   type = "website",
   jsonLd,
   noindex,
+  useMigration = true,
 }: SeoProps) {
   const [location] = useLocation();
   const path = pathProp ?? (location.split("?")[0] || "/");
 
   useLayoutEffect(() => {
-    const pageTitle = formatTitle(title);
-    const desc = truncateForMeta(description.trim() || DEFAULT_DESCRIPTION);
-    const url = canonicalUrl(path);
-    const ogImage = toAbsoluteImageUrl(image) ?? DEFAULT_OG_IMAGE;
+    const journalMatch = path.match(/^\/journal\/([^/]+)$/);
+    const migrated = useMigration
+      ? journalMatch
+        ? resolveJournalSeo(decodeURIComponent(journalMatch[1]), {
+            title,
+            description,
+            canonicalPath: path,
+            image,
+          })
+        : resolvePageSeo(path, { title, description, canonicalPath: path, image })
+      : { title, description, canonicalPath: path, image };
+
+    const pageTitle = formatTitle(migrated.title);
+    const desc = truncateForMeta(migrated.description.trim() || DEFAULT_DESCRIPTION);
+    const url = canonicalUrl(migrated.canonicalPath || path);
+    const ogImage = toAbsoluteImageUrl(migrated.image ?? image) ?? DEFAULT_OG_IMAGE;
 
     document.title = pageTitle;
     upsertMeta("name", "description", desc);
@@ -120,7 +136,7 @@ export function Seo({
     setJsonLd(jsonLd ?? null);
 
     return () => applyDefaults();
-  }, [title, description, path, image, type, jsonLd, noindex]);
+  }, [title, description, path, image, type, jsonLd, noindex, useMigration]);
 
   return null;
 }

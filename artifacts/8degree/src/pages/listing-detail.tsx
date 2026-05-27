@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { useHorizontalSwipe } from "@/lib/use-horizontal-swipe";
 import { useForm } from "react-hook-form";
 import {
   borrowInventoryImages,
@@ -625,6 +626,12 @@ export default function ListingDetail() {
     setHeroIndex((i) => Math.min(allImages.length - 1, i + 1));
   }, [allImages.length]);
 
+  const heroSwipe = useHorizontalSwipe(heroNext, heroPrev);
+  const lightboxSwipe = useHorizontalSwipe(
+    () => setLightboxIndex((i) => (i === null ? i : Math.min(allImages.length - 1, i + 1))),
+    () => setLightboxIndex((i) => (i === null ? i : Math.max(0, i - 1))),
+  );
+
   useEffect(() => {
     setHeroIndex(0);
   }, [code, allImages.length]);
@@ -946,12 +953,18 @@ export default function ListingDetail() {
 
       {/* HERO: full-bleed photo carousel with prev/next arrows ================== */}
       <header className="relative z-[2] w-full overflow-hidden bg-[#e8e2da]">
-        <div className="relative h-[min(75vh,880px)] min-h-[400px] w-full">
+        <div
+          className="relative h-[min(75vh,880px)] min-h-[400px] w-full touch-pan-y"
+          {...heroSwipe.handlers}
+        >
           {allImages.map((url, i) => (
             <button
               key={`${url}-${i}`}
               type="button"
-              onClick={() => setLightboxIndex(i)}
+              onClick={() => {
+                if (heroSwipe.shouldIgnoreClick()) return;
+                setLightboxIndex(i);
+              }}
               className={`absolute inset-0 h-full w-full cursor-zoom-in transition-opacity duration-500 ${
                 i === safeHeroIndex ? "opacity-100 z-[1]" : "opacity-0 z-0 pointer-events-none"
               }`}
@@ -1549,7 +1562,8 @@ export default function ListingDetail() {
 
           {/* Image + arrows */}
           <div
-            className="relative flex flex-1 items-center justify-center px-3 md:px-16"
+            className="relative flex flex-1 touch-pan-y items-center justify-center px-3 md:px-16"
+            {...lightboxSwipe.handlers}
             onClick={(e) => {
               if (e.target === e.currentTarget) closeLightbox();
             }}

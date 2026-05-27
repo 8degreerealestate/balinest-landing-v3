@@ -50,9 +50,17 @@ export function Navbar() {
   };
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const next = window.scrollY > 20;
+        setIsScrolled((prev) => (prev === next ? prev : next));
+        ticking = false;
+      });
     };
+    handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -165,10 +173,10 @@ export function Navbar() {
   return (
     <nav
       className={cn(
-        "fixed left-0 right-0 top-0 z-50 pt-[env(safe-area-inset-top,0px)] transition-all duration-300",
+        "fixed left-0 right-0 top-0 z-50 pt-[env(safe-area-inset-top,0px)] transition-[padding,background-color,border-color] duration-300 max-lg:backdrop-blur-none",
         isScrolled
-          ? "border-b border-white/20 bg-[#01514E]/70 py-3 backdrop-blur-md md:py-4"
-          : "border-b border-white/15 bg-[#01514E]/40 py-4 backdrop-blur-sm md:py-5"
+          ? "border-b border-white/20 bg-[#01514E]/95 py-3 max-lg:bg-[#01514E]/95 lg:bg-[#01514E]/70 lg:backdrop-blur-md md:py-4"
+          : "border-b border-white/15 bg-[#01514E]/92 py-4 max-lg:bg-[#01514E]/92 lg:bg-[#01514E]/40 lg:backdrop-blur-sm md:py-5"
       )}
     >
       <div className="flex w-full min-w-0 items-center justify-between gap-3 pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] sm:pl-6 sm:pr-6 lg:pl-8 lg:pr-8">

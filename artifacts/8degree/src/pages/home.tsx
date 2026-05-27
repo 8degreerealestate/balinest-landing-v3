@@ -11,6 +11,7 @@ import { TopAreaImage } from "@/components/site/TopAreaImage";
 import { useGetFeaturedProjects, useListBlogPosts } from "@workspace/api-client-react";
 import { loadLatestJournalPosts } from "@/lib/journal-static-fallback";
 import { journalPostPath } from "@/lib/journal-paths";
+import { useLiteMotion } from "@/lib/use-lite-motion";
 import {
   Carousel,
   CarouselContent,
@@ -22,11 +23,10 @@ import { Seo } from "@/components/site/Seo";
 import {
   canonicalUrl,
   DEFAULT_DESCRIPTION,
-  jsonLdGraph,
-  organizationJsonLdNode,
   SITE_NAME,
   truncateForMeta,
 } from "@/lib/site-seo";
+import { buildSiteGraph, faqPageJsonLd } from "@/lib/seo-migration/schema";
 import { type SiteLanguage, useSiteLanguage } from "@/lib/site-language";
 import {
   HOME_ADVANTAGE_BAND,
@@ -323,12 +323,26 @@ export default function Home() {
   const latestNewsLoading = (blogPending || blogFetching) && latestNewsCards.length === 0;
 
   const faqItems = (FAQ_ITEMS[language]?.length ? FAQ_ITEMS[language] : FAQ_ITEMS.en) satisfies FaqItem[];
+  const homeJsonLd = useMemo(() => {
+    const faqNode = faqPageJsonLd(
+      faqItems.map((item) => ({
+        question: item.q,
+        answer: item.a.replace(/\n\n/g, " "),
+      })),
+    );
+    return buildSiteGraph([
+      { "@type": "WebSite", name: SITE_NAME, url: canonicalUrl("/") },
+      ...(faqNode ? [faqNode] : []),
+    ]);
+  }, [faqItems]);
   const [openFaqId, setOpenFaqId] = useState<string | null>(faqItems[0]?.id ?? null);
 
   useEffect(() => {
     const items = FAQ_ITEMS[language]?.length ? FAQ_ITEMS[language] : FAQ_ITEMS.en;
     setOpenFaqId(items[0]?.id ?? null);
   }, [language]);
+
+  const liteMotion = useLiteMotion();
 
   const searchLabels = {
     searchHeadline: t.searchHeadline,
@@ -343,15 +357,12 @@ export default function Home() {
   };
 
   return (
-    <div className="w-full min-w-0 overflow-x-clip">
+    <div className="w-full min-w-0">
       <Seo
         title="Luxury Bali real estate & strategic developments"
         description={truncateForMeta(DEFAULT_DESCRIPTION)}
         path="/"
-        jsonLd={jsonLdGraph([
-          organizationJsonLdNode(),
-          { "@type": "WebSite", name: SITE_NAME, url: canonicalUrl("/") },
-        ])}
+        jsonLd={homeJsonLd}
       />
       {/* Hero Section */}
       <section className="relative flex h-[100dvh] min-h-[600px] items-center justify-center overflow-x-clip overflow-y-hidden">
@@ -362,26 +373,26 @@ export default function Home() {
         
         <div className="container relative z-20 mx-auto min-w-0 max-w-full px-4 text-center text-white sm:px-6">
           <motion.h1 
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: liteMotion ? 12 : 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.2 }}
+            transition={{ duration: liteMotion ? 0.45 : 1, delay: liteMotion ? 0.05 : 0.2 }}
             className="mx-auto mb-6 max-w-5xl text-center font-serif text-4xl font-bold leading-[1.1] tracking-[0.04em] md:text-6xl md:leading-[1.08] lg:text-7xl lg:leading-[1.06]"
           >
             <span className="block text-balance">{t.heroLine1}</span>
             <span className="block text-balance">{t.heroLine2}</span>
           </motion.h1>
           <motion.p 
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: liteMotion ? 12 : 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.4 }}
+            transition={{ duration: liteMotion ? 0.45 : 1, delay: liteMotion ? 0.1 : 0.4 }}
             className="text-lg md:text-xl mb-10 max-w-2xl mx-auto text-white/90 font-light"
           >
             {t.heroSub}
           </motion.p>
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: liteMotion ? 12 : 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.6 }}
+            transition={{ duration: liteMotion ? 0.45 : 1, delay: liteMotion ? 0.15 : 0.6 }}
             className="flex items-center justify-center"
           >
             <Link href="/investment-guide">
@@ -407,10 +418,10 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <motion.div
               className="text-left"
-              initial={{ opacity: 0, x: -80 }}
+              initial={{ opacity: 0, x: liteMotion ? 0 : -80 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 1.1, delay: 0, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: liteMotion ? 0.45 : 1.1, delay: 0, ease: [0.22, 1, 0.36, 1] }}
             >
               <h2 className="mb-6 text-center font-serif text-3xl font-bold uppercase tracking-[0.08em] text-primary md:text-5xl">
                 {t.advantage}
@@ -438,10 +449,10 @@ export default function Home() {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, x: 80 }}
+              initial={{ opacity: 0, x: liteMotion ? 0 : 80 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 1.1, delay: 0, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: liteMotion ? 0.45 : 1.1, delay: 0, ease: [0.22, 1, 0.36, 1] }}
               className="relative aspect-square overflow-hidden"
             >
               <TopAreaImage alt="8 Degree · Bali property advisory" />
@@ -587,10 +598,10 @@ export default function Home() {
                   <motion.div
                     initial={false}
                     animate={isOpen ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
-                    transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+                    transition={{ duration: liteMotion ? 0.2 : 0.35, ease: [0.22, 1, 0.36, 1] }}
                     className="overflow-hidden"
                   >
-                    <div className="pb-7 pr-10 text-justify text-sm font-light leading-relaxed text-muted-foreground md:text-base">
+                    <div className="pb-7 pr-10 text-left text-sm font-light leading-relaxed text-muted-foreground md:text-base">
                       {item.a.split("\n\n").map((para) => (
                         <p key={para} className="mt-3 first:mt-0">
                           {para}

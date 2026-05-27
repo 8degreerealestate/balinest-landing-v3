@@ -7,9 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Seo } from "@/components/site/Seo";
-import { canonicalUrl, jsonLdGraph, organizationJsonLdNode, truncateForMeta } from "@/lib/site-seo";
+import { truncateForMeta } from "@/lib/site-seo";
 import { type SiteLanguage, useSiteLanguage } from "@/lib/site-language";
 import { JOURNAL_PATH, journalPostPath } from "@/lib/journal-paths";
+import { Breadcrumbs } from "@/components/site/Breadcrumbs";
+import { articleJsonLd, breadcrumbJsonLd, buildSiteGraph } from "@/lib/seo-migration/schema";
 import { getStaticJournalPost, loadStaticJournalPosts } from "@/lib/journal-static-fallback";
 import type { BlogPost } from "@workspace/api-client-react";
 
@@ -65,17 +67,21 @@ export default function BlogDetail() {
 
   const postJsonLd = useMemo(() => {
     if (!article) return null;
-    return jsonLdGraph([
-      organizationJsonLdNode(),
-      {
-        "@type": "Article",
-        headline: article.title,
+    const path = journalPostPath(article.slug);
+    return buildSiteGraph([
+      breadcrumbJsonLd([
+        { name: "Home", path: "/" },
+        { name: "Journal", path: JOURNAL_PATH },
+        { name: article.title, path },
+      ]),
+      articleJsonLd({
+        title: article.title,
         description: truncateForMeta(article.excerpt),
-        url: canonicalUrl(journalPostPath(article.slug)),
-        datePublished: article.publishedAt ?? undefined,
-        author: { "@type": "Person", name: article.author },
-        ...(article.featuredImageUrl ? { image: [article.featuredImageUrl] } : {}),
-      },
+        path,
+        publishedAt: article.publishedAt,
+        author: article.author,
+        image: article.featuredImageUrl,
+      }),
     ]);
   }, [article]);
 
@@ -146,6 +152,14 @@ export default function BlogDetail() {
       )}
 
       <div className={`container mx-auto max-w-3xl px-6 ${article.featuredImageUrl ? '-mt-24 relative z-10' : 'pt-32'}`}>
+        <Breadcrumbs
+          className="mb-6"
+          items={[
+            { label: "Home", href: "/" },
+            { label: "Journal", href: JOURNAL_PATH },
+            { label: article.title },
+          ]}
+        />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

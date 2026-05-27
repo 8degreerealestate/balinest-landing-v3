@@ -18,10 +18,9 @@
 .hero-image-breathe {
   transform-origin: center center;
   animation: hero-image-breathe 16s ease-in-out infinite;
-  will-change: transform;
 }
 
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion: reduce), (max-width: 767px), (pointer: coarse) {
   .hero-image-breathe {
     animation: none;
     transform: none;
@@ -247,13 +246,20 @@
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
     overflow-x: clip;
+    scroll-behavior: auto;
   }
 
   body {
     @apply antialiased bg-background text-foreground;
-    overflow-x: clip;
     font-family: var(--app-font-family);
     font-weight: 300;
+  }
+
+  /* Native momentum scrolling on touch devices (document scroll stays on html/body). */
+  @media (pointer: coarse) {
+    html {
+      -webkit-overflow-scrolling: touch;
+    }
   }
 
   /* Display headings: Rework via --app-font-title; match Tailwind `font-serif` stack */

@@ -14,6 +14,9 @@
     "db:push": "pnpm --filter @workspace/db run push",
     "db:check": "pnpm exec tsx scripts/check-database.ts",
     "crm:test": "pnpm --filter @workspace/scripts run crm:test",
+    "seo:crawl": "pnpm --filter @workspace/scripts run seo:crawl",
+    "seo:build": "pnpm --filter @workspace/scripts run seo:build",
+    "seo:compare": "pnpm --filter @workspace/scripts run seo:compare",
     "build": "pnpm run typecheck && pnpm -r --if-present run build",
     "typecheck:libs": "tsc --build",
     "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --filter \"./scripts\" --if-present run typecheck"
