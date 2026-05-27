@@ -85,7 +85,7 @@ export function FeaturedInventoryStrip({
 
   const { data, isError, isPending, isFetching } = useListInventoryListings(
     { limit: 500, offset: 0 },
-    { query: { enabled: useApi, staleTime: 60_000 } },
+    { query: { enabled: useApi, staleTime: 5 * 60_000 } },
   );
 
   const [dismissedCodes, setDismissedCodes] = useState(() => new Set<string>());

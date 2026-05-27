@@ -37,7 +37,8 @@ export type SheetListingRow = {
 };
 
 let cache: { key: string; fetchedAt: number; rows: SheetListingRow[] } | null = null;
-const CACHE_TTL_MS = 60_000;
+/** In-memory sheet rows — list endpoints skip Drive folder scraping for speed. */
+const CACHE_TTL_MS = 10 * 60_000;
 const DRIVE_FOLDER_TTL_MS = 10 * 60_000;
 const driveFolderCache = new Map<string, { fetchedAt: number; imageUrls: string[] }>();
 
@@ -484,6 +485,14 @@ async function fetchDriveFolderImageUrls(folderId: string): Promise<string[]> {
   }
 }
 
+/** Resolve Google Drive folder links into thumbnail URLs (slow — use for single listing detail only). */
+export async function enrichListingRowWithDriveImages(row: SheetListingRow): Promise<SheetListingRow> {
+  const folderId = driveFolderIdFromUrl(row.imageUrl);
+  if (!folderId) return row;
+  const [enriched] = await enrichRowsWithDriveImages([row]);
+  return enriched ?? row;
+}
+
 async function enrichRowsWithDriveImages(rows: SheetListingRow[]): Promise<SheetListingRow[]> {
   const folderIds = new Set<string>();
   const maxFoldersToResolve = Math.max(
@@ -575,8 +584,11 @@ export function useSheetAsInventorySource(): boolean {
 
 export async function loadListingsFromGoogleSheet(options?: {
   forceRefresh?: boolean;
+  /** When false (default), skip scraping Drive folders — ~30s faster on cold load. */
+  resolveDriveImages?: boolean;
 }): Promise<SheetListingRow[] | null> {
-  const cacheKey = propertyInventorySheetCacheKey();
+  const resolveDrive = options?.resolveDriveImages === true;
+  const cacheKey = `${propertyInventorySheetCacheKey()}:drive=${resolveDrive ? "1" : "0"}`;
   const now = Date.now();
   if (!options?.forceRefresh && cache && cache.key === cacheKey && now - cache.fetchedAt < CACHE_TTL_MS) {
     return cache.rows.length > 0 ? cache.rows : null;
@@ -599,13 +611,17 @@ export async function loadListingsFromGoogleSheet(options?: {
     try {
       const parsedRows = parsePropertyInventorySheetCsv(csv);
       let rows: SheetListingRow[];
-      try {
-        rows = backfillMissingListingImages(await enrichRowsWithDriveImages(parsedRows));
-      } catch (enrichErr) {
-        logger.warn(
-          { err: enrichErr, url },
-          "property inventory sheet: drive folder image enrich failed; using parsed rows",
-        );
+      if (resolveDrive) {
+        try {
+          rows = backfillMissingListingImages(await enrichRowsWithDriveImages(parsedRows));
+        } catch (enrichErr) {
+          logger.warn(
+            { err: enrichErr, url },
+            "property inventory sheet: drive folder image enrich failed; using parsed rows",
+          );
+          rows = backfillMissingListingImages(parsedRows);
+        }
+      } else {
         rows = backfillMissingListingImages(parsedRows);
       }
       if (rows.length === 0) {

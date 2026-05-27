@@ -147,11 +147,10 @@ export default function LongTermRentalsPage() {
     isLoading: inventoryLoading,
     isError: inventoryError,
     error: inventoryErr,
-  } = useListInventoryListings({
-    channel: "website",
-    limit: 500,
-    offset: 0,
-  });
+  } = useListInventoryListings(
+    { channel: "website", limit: 500, offset: 0 },
+    { query: { staleTime: 5 * 60_000 } },
+  );
 
   const listingsRaw = inventoryError ? EMPTY_LIST : (inventoryData?.listings ?? []);
   const loadErrorMessage =

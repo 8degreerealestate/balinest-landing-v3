@@ -16,6 +16,7 @@ import {
 } from "@workspace/db";
 import {
   clearPropertyInventorySheetCache,
+  enrichListingRowWithDriveImages,
   loadListingsFromGoogleSheet,
   useSheetAsInventorySource,
 } from "../lib/property-inventory-sheet";
@@ -41,8 +42,8 @@ function setInventoryResponseCacheHeaders(res: Response, forceExternalRefresh: b
   }
   // Cache at the edge to reduce serverless cold starts and sheet round-trips.
   res.setHeader("Cache-Control", "public, max-age=0, must-revalidate");
-  res.setHeader("CDN-Cache-Control", "public, s-maxage=60, stale-while-revalidate=300");
-  res.setHeader("Vercel-CDN-Cache-Control", "public, s-maxage=60, stale-while-revalidate=300");
+  res.setHeader("CDN-Cache-Control", "public, s-maxage=300, stale-while-revalidate=600");
+  res.setHeader("Vercel-CDN-Cache-Control", "public, s-maxage=300, stale-while-revalidate=600");
 }
 
 function getPgOrSystemErrorCode(error: unknown): string | undefined {
@@ -360,18 +361,23 @@ async function findListingByCode(code: string): Promise<ListingRowJson | null> {
   const databaseOnly =
     rawSource === "database" || rawSource === "db" || rawSource === "postgres";
 
-  const matchExternal = async (rows: SheetListingRow[]): Promise<ListingRowJson | null> => {
-    const hit = rows.find((r) => r.code.trim() === normalized);
-    if (!hit) return null;
-    const merged = await mergeMetaIntoListings([mapExternalRow(hit)]);
-    return merged[0] ?? null;
-  };
-
   if (!databaseOnly && useSheetAsInventorySource()) {
-    const fromSheet = await loadListingsFromGoogleSheet({ forceRefresh: false });
+    const fromSheet = await loadListingsFromGoogleSheet({
+      forceRefresh: false,
+      resolveDriveImages: false,
+    });
     if (fromSheet && fromSheet.length > 0) {
-      const found = await matchExternal(fromSheet);
-      if (found) return found;
+      const hit = fromSheet.find((r) => r.code.trim() === normalized);
+      if (hit) {
+        let row: SheetListingRow = hit;
+        try {
+          row = await enrichListingRowWithDriveImages(hit);
+        } catch (err) {
+          logger.warn({ err, code: normalized }, "inventory listing detail: drive enrich failed");
+        }
+        const merged = await mergeMetaIntoListings([mapExternalRow(row)]);
+        return merged[0] ?? null;
+      }
     }
   }
 
@@ -565,6 +571,7 @@ router.get("/inventory/listings", async (req, res): Promise<void> => {
     try {
       const fromSheet = await loadListingsFromGoogleSheet({
         forceRefresh: forceExternalRefresh,
+        resolveDriveImages: false,
       });
       if (fromSheet && fromSheet.length > 0) {
         const { listings, total } = jsonFromExternalRows(fromSheet, channel, limit, offset);

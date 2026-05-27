@@ -556,7 +556,7 @@ export default function ListingDetail() {
   });
   const { data: inventoryListData } = useListInventoryListings(
     { channel: "website", limit: 500, offset: 0 },
-    { query: { enabled: Boolean(code) && !isPreview } },
+    { query: { enabled: Boolean(code) && !isPreview, staleTime: 5 * 60_000 } },
   );
   const createEnquiry = useCreateEnquiry();
   const { toast } = useToast();
