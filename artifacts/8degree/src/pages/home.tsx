@@ -406,7 +406,7 @@ export default function Home() {
         <div className="container px-6 mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <motion.div
-              className="text-justify"
+              className="text-left"
               initial={{ opacity: 0, x: -80 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-60px" }}
@@ -419,11 +419,11 @@ export default function Home() {
                 {t.advantageBody}
               </p>
 
-              <div className="mb-10 grid grid-cols-2 gap-x-8 gap-y-9 text-justify">
+              <div className="mb-10 grid grid-cols-2 gap-x-8 gap-y-9">
                 {ADVANTAGE_STATS[language].map((row, idx) => (
                   <div key={`${language}-advantage-stat-${idx}`} className="min-w-0">
                     <div className="mb-2 font-serif text-4xl font-light tracking-[0.04em] text-primary">{row.value}</div>
-                    <p className="font-light leading-relaxed text-muted-foreground">
+                    <p className="text-pretty font-light leading-relaxed text-muted-foreground">
                       {row.description}
                     </p>
                   </div>

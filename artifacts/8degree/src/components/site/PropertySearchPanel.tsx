@@ -481,7 +481,7 @@ export function PropertySearchPanel({
       className={
         embedded
           ? "relative z-20 mt-6 w-full min-w-0 md:mt-8"
-          : "relative z-30 -mt-14 w-full min-w-0 overflow-x-clip pb-2 sm:-mt-16 md:-mt-20 md:pb-3"
+          : "relative z-30 mt-4 w-full min-w-0 overflow-x-clip pb-2 sm:-mt-14 md:-mt-20 md:pb-3"
       }
       style={embedded ? undefined : { backgroundColor: HOME_LISTINGS_BAND }}
     >
