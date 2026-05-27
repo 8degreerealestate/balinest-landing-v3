@@ -37,7 +37,7 @@ export type SheetListingRow = {
 };
 
 let cache: { key: string; fetchedAt: number; rows: SheetListingRow[] } | null = null;
-/** In-memory sheet rows — list endpoints skip Drive folder scraping for speed. */
+/** In-memory sheet rows (includes resolved Drive folder thumbnails). */
 const CACHE_TTL_MS = 10 * 60_000;
 const DRIVE_FOLDER_TTL_MS = 10 * 60_000;
 const driveFolderCache = new Map<string, { fetchedAt: number; imageUrls: string[] }>();
@@ -124,15 +124,26 @@ function parseListingUrl(url: string | undefined): string | null {
   }
 }
 
+function driveFileIdFromUrl(url: string): string | null {
+  const m = /drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]{10,})/i.exec(url);
+  return m?.[1] ?? null;
+}
+
+/** Only use Drive links from description — avoids marketing image URLs in copy. */
 function imageUrlFromDescription(desc: string): string | null {
   const urls = desc.match(/https?:\/\/[^\s<>"')\]]+/gi) ?? [];
   for (const raw of urls) {
     const u = raw.replace(/[.,;]+$/, "");
     const parsed = parseListingUrl(u);
-    if (parsed) return parsed;
-    if (driveFolderIdFromUrl(u)) return u;
+    if (!parsed) continue;
+    if (driveFolderIdFromUrl(parsed) || driveFileIdFromUrl(parsed)) return parsed;
   }
   return null;
+}
+
+function listingHasDriveFolderSource(row: Pick<SheetListingRow, "imageUrl" | "imageUrls">): boolean {
+  const urls = [row.imageUrl, ...row.imageUrls].filter((u): u is string => Boolean(u?.trim()));
+  return urls.some((u) => driveFolderIdFromUrl(u) !== null);
 }
 
 function listingFamilyKey(code: string): string {
@@ -154,25 +165,19 @@ function listingHasDisplayableImages(row: SheetListingRow): boolean {
 /** Copy gallery from a related listing when image_url is empty or a non-URL label. */
 function backfillMissingListingImages(rows: SheetListingRow[]): SheetListingRow[] {
   const donorsByFamily = new Map<string, SheetListingRow>();
-  const donorsByLocation = new Map<string, SheetListingRow>();
 
   for (const row of rows) {
     if (!listingHasDisplayableImages(row)) continue;
     const family = listingFamilyKey(row.code);
     if (!donorsByFamily.has(family)) donorsByFamily.set(family, row);
-    const loc = (row.location ?? "").trim().toLowerCase();
-    if (loc && !donorsByLocation.has(loc)) donorsByLocation.set(loc, row);
   }
 
   let backfilled = 0;
   const out = rows.map((row) => {
     if (listingHasDisplayableImages(row)) return row;
+    if (listingHasDriveFolderSource(row)) return row;
     const family = listingFamilyKey(row.code);
-    let donor = donorsByFamily.get(family);
-    if (!donor || donor.code === row.code) {
-      const loc = (row.location ?? "").trim().toLowerCase();
-      donor = loc ? donorsByLocation.get(loc) : undefined;
-    }
+    const donor = donorsByFamily.get(family);
     if (!donor || donor.code === row.code || !listingHasDisplayableImages(donor)) return row;
     backfilled += 1;
     return {
@@ -507,7 +512,7 @@ async function enrichRowsWithDriveImages(rows: SheetListingRow[]): Promise<Sheet
 
   const byFolder = new Map<string, string[]>();
   const ids = [...folderIds].slice(0, maxFoldersToResolve);
-  const concurrency = Math.max(1, Math.min(8, Number(process.env.PROPERTY_INVENTORY_DRIVE_CONCURRENCY || "4") || 4));
+  const concurrency = Math.max(1, Math.min(8, Number(process.env.PROPERTY_INVENTORY_DRIVE_CONCURRENCY || "6") || 6));
   for (let i = 0; i < ids.length; i += concurrency) {
     const chunk = ids.slice(i, i + concurrency);
     await Promise.all(
@@ -584,10 +589,10 @@ export function useSheetAsInventorySource(): boolean {
 
 export async function loadListingsFromGoogleSheet(options?: {
   forceRefresh?: boolean;
-  /** When false (default), skip scraping Drive folders — ~30s faster on cold load. */
+  /** When false, skip scraping Drive folders (faster but list cards lose photos). Default true. */
   resolveDriveImages?: boolean;
 }): Promise<SheetListingRow[] | null> {
-  const resolveDrive = options?.resolveDriveImages === true;
+  const resolveDrive = options?.resolveDriveImages !== false;
   const cacheKey = `${propertyInventorySheetCacheKey()}:drive=${resolveDrive ? "1" : "0"}`;
   const now = Date.now();
   if (!options?.forceRefresh && cache && cache.key === cacheKey && now - cache.fetchedAt < CACHE_TTL_MS) {

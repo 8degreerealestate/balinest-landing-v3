@@ -571,7 +571,7 @@ router.get("/inventory/listings", async (req, res): Promise<void> => {
     try {
       const fromSheet = await loadListingsFromGoogleSheet({
         forceRefresh: forceExternalRefresh,
-        resolveDriveImages: false,
+        resolveDriveImages: true,
       });
       if (fromSheet && fromSheet.length > 0) {
         const { listings, total } = jsonFromExternalRows(fromSheet, channel, limit, offset);

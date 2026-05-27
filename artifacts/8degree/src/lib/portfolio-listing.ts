@@ -19,6 +19,17 @@ export function isDisplayableInventoryImageUrl(url: string | null | undefined): 
   return true;
 }
 
+/** Listing has its own Drive folder — wait for API resolution; do not borrow another area’s photo. */
+export function listingHasDriveFolderSource(row: {
+  imageUrl?: string | null;
+  imageUrls?: string[] | null;
+}): boolean {
+  const urls = [row.imageUrl, ...(Array.isArray(row.imageUrls) ? row.imageUrls : [])].filter(
+    (u): u is string => Boolean(u?.trim()),
+  );
+  return urls.some((u) => /drive\.google\.com\/drive\/folders\//i.test(u));
+}
+
 /** Same-origin proxy so Google Drive thumbnails load reliably in `<img>` tags. */
 export function proxyInventoryImageUrl(url: string | null | undefined): string | null {
   const t = (url ?? "").trim();
@@ -57,23 +68,16 @@ export function inventoryGalleryUrls(listing: {
 }
 
 /** Use a sibling row’s gallery when this listing has no resolved thumbnail yet. */
-export function borrowInventoryImages<T extends { code: string; location?: string | null; imageUrl?: string | null; imageUrls?: string[] | null }>(
+export function borrowInventoryImages<T extends { code: string; imageUrl?: string | null; imageUrls?: string[] | null }>(
   row: T,
   pool: T[],
 ): T {
   if (pickInventoryThumbnail(row)) return row;
+  if (listingHasDriveFolderSource(row)) return row;
   const family = listingFamilyKey(row.code);
-  const donor =
-    pool.find(
-      (r) => r.code !== row.code && listingFamilyKey(r.code) === family && pickInventoryThumbnail(r),
-    ) ??
-    (() => {
-      const loc = row.location?.trim().toLowerCase();
-      if (!loc) return undefined;
-      return pool.find(
-        (r) => r.code !== row.code && r.location?.trim().toLowerCase() === loc && pickInventoryThumbnail(r),
-      );
-    })();
+  const donor = pool.find(
+    (r) => r.code !== row.code && listingFamilyKey(r.code) === family && pickInventoryThumbnail(r),
+  );
   if (!donor) return row;
   return {
     ...row,
