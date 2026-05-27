@@ -3,9 +3,11 @@
  * Source Drive folder IDs are preserved in scripts/fetch-site-media-from-drive.sh.
  *
  * Hero assets
- *   hero-cinematic.mp4  ← Drive ID 10sSFDovjSw_krEVU918oNqNQPrWVFX9z
- *   hero-still.jpg      ← Drive ID 1qaXnGteqT0MRHOCrCILtQmEh3wRI42_x
- *   hero-poster.jpg     ← Drive ID 1ub5eDDyyhD6lKjTNd5IfHXgd8G-0jqi-
+ *   hero-cinematic.mp4      ← Drive ID 10sSFDovjSw_krEVU918oNqNQPrWVFX9z (desktop hero)
+ *   hero-mobile.mp4         ← encoded from brand mobile hero .mov (~3MB)
+ *   hero-mobile-poster.jpg  ← first frame of hero-mobile.mp4 (mobile poster/thumbnail)
+ *   hero-still.jpg          ← Drive ID 1qaXnGteqT0MRHOCrCILtQmEh3wRI42_x
+ *   hero-poster.jpg         ← Drive ID 1ub5eDDyyhD6lKjTNd5IfHXgd8G-0jqi-
  *
  * Team photos     ← Drive folder 1y_5qRH398Jexl7ccmWx_63lQ7jSXxePb
  * Area images     ← Drive folder 1_XsNdvz-ip0KqnLnecHdyxNDQFlE84Dp
@@ -23,6 +25,9 @@
 export const SITE_MEDIA = {
   heroVideo: "/site-media/hero-cinematic.mp4",
   heroPoster: "/site-media/hero-poster.jpg",
+  /** Homepage hero on mobile — first frame in hero-mobile-poster.jpg */
+  heroMobileVideo: "/site-media/hero-mobile.mp4",
+  heroMobilePoster: "/site-media/hero-mobile-poster.jpg",
   heroStill: "/site-media/hero-still.jpg",
   topArea: "/site-media/area-canggu.jpg",
   /** Navbar Guides mega menu hero (left column). */
