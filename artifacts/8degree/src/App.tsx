@@ -105,9 +105,9 @@ function wrapAdmin(Lazy: LazyExoticComponent<ComponentType<object>>) {
 
 function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-[100dvh] min-h-screen flex-col font-sans">
+    <div className="flex min-h-[100dvh] min-h-screen w-full max-w-full flex-col overflow-x-clip font-sans">
       <Navbar />
-      <main className="min-w-0 flex-1">{children}</main>
+      <main className="min-w-0 max-w-full flex-1 overflow-x-clip">{children}</main>
       <Footer />
       <WhatsAppButton />
     </div>

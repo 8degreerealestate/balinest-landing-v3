@@ -247,12 +247,41 @@
     text-size-adjust: 100%;
     overflow-x: clip;
     scroll-behavior: auto;
+    overscroll-behavior-x: none;
   }
 
   body {
     @apply antialiased bg-background text-foreground;
     font-family: var(--app-font-family);
     font-weight: 300;
+    overflow-x: clip;
+    max-width: 100%;
+    overscroll-behavior-x: none;
+  }
+
+  #root {
+    overflow-x: clip;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  /* Prevent sideways “rubber band” / accidental horizontal pan on phones. */
+  @media (max-width: 767px) {
+    html,
+    body {
+      overflow-x: hidden;
+      width: 100%;
+      max-width: 100%;
+    }
+
+    body {
+      touch-action: pan-y pinch-zoom;
+      position: relative;
+    }
+
+    #root {
+      overflow-x: hidden;
+    }
   }
 
   /* Native momentum scrolling on touch devices (document scroll stays on html/body). */
