@@ -223,12 +223,24 @@ function syncVercelRedirects(redirects: SeoRedirect[]): void {
   const vercel = JSON.parse(readFileSync(VERCEL_JSON_PATH, "utf8")) as Record<string, unknown>;
   const existing = Array.isArray(vercel.redirects) ? (vercel.redirects as SeoRedirect[]) : [];
   const paramRedirects: SeoRedirect[] = [
+    {
+      source: "/:path*",
+      has: [{ type: "host", value: "www.8degree.co" }],
+      destination: "https://8degree.co/:path*",
+      permanent: true,
+    },
     { source: "/property/:code", destination: "/properties/:code", permanent: true },
     { source: "/blog/:slug", destination: "/journal/:slug", permanent: true },
+    { source: "/blog", destination: "/journal", permanent: true },
+    { source: "/property", destination: "/projects", permanent: true },
   ];
   const manual = [
     ...paramRedirects,
-    ...existing.filter((r) => r.source?.includes(":") && !paramRedirects.some((p) => p.source === r.source)),
+    ...existing.filter(
+      (r) =>
+        (r.source?.includes(":") || r.has?.some((h) => h.type === "host")) &&
+        !paramRedirects.some((p) => p.source === r.source && JSON.stringify(p.has) === JSON.stringify(r.has)),
+    ),
   ];
   const merged = [...manual];
   const seen = new Set(manual.map((r) => r.source));

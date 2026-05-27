@@ -1,0 +1,2578 @@
+{
+  "comparedAt": "2026-05-27T04:38:59.525Z",
+  "staging": "https://balinest-landing-v3.vercel.app",
+  "pathsChecked": 257,
+  "errors": [],
+  "warnings": [
+    {
+      "severity": "warn",
+      "path": "/",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/about-us",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/about-us",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/buy-land",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/buy-land",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/buyer-agents",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/buyer-agents",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/contact",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/contact",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/favorite-properties",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/favorite-properties",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/frequently-asked-questions",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/frequently-asked-questions",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/invest",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/invest",
+      "message": "Missing meta description"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/10-best-co-working-cafes-in-canggu-2025",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/10-best-co-working-cafes-in-canggu-2025",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/bali-flooding-2026-what-the-alerts-mean-for-property-investors",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/bali-flooding-2026-what-the-alerts-mean-for-property-investors",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/bali-international-hospital-time-for-investors-to-wake-up",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/bali-international-hospital-time-for-investors-to-wake-up",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/bali-international-tourism-surge-in-2025",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/bali-international-tourism-surge-in-2025",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/bali-tightens-rules-for-foreign-business-investment-property-and-msmes-2025",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/bali-tightens-rules-for-foreign-business-investment-property-and-msmes-2025",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/balinese-houses-architecture-harmony-between-nature-spirit-and-design",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/balinese-houses-architecture-harmony-between-nature-spirit-and-design",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/balis-20-billion-metro-project-a-leap-toward-the-future-but-at-what-cost",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/balis-20-billion-metro-project-a-leap-toward-the-future-but-at-what-cost",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/balis-bingin-beach-demolitions-the-shocking-turn-of-events-every-investor-needs-to-understand",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/balis-bingin-beach-demolitions-the-shocking-turn-of-events-every-investor-needs-to-understand",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/can-you-buy-property-in-bali-with-installments",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/can-you-buy-property-in-bali-with-installments",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/canggu-is-maturing-where-smart-investors-are-moving-next",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/canggu-is-maturing-where-smart-investors-are-moving-next",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/entering-bali-in-2026-do-travelers-really-need-to-show-bank-statements",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/entering-bali-in-2026-do-travelers-really-need-to-show-bank-statements",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/expats-in-bali-can-now-access-indonesias-bpjs-healthcare",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/expats-in-bali-can-now-access-indonesias-bpjs-healthcare",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/foreign-ownership-in-bali-a-legal-guide-for-discerning-investors",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/foreign-ownership-in-bali-a-legal-guide-for-discerning-investors",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/get-to-know-the-property-zoning-in-bali-a-2025-investors-guide-to-real-estate",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/get-to-know-the-property-zoning-in-bali-a-2025-investors-guide-to-real-estate",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/how-to-bring-your-pet-out-of-bali",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/how-to-bring-your-pet-out-of-bali",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/how-to-check-balis-weather-before-your-holiday",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/how-to-check-balis-weather-before-your-holiday",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/hows-the-buying-process-of-property-in-bali",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/hows-the-buying-process-of-property-in-bali",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/indonesias-low-inflation-in-2025-a-green-light-for-real-estate-and-foreign-investment",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/indonesias-low-inflation-in-2025-a-green-light-for-real-estate-and-foreign-investment",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/is-bali-still-a-worthwhile-real-estate-investment-in-2026",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/is-bali-still-a-worthwhile-real-estate-investment-in-2026",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/leasehold-vs-freehold-property-in-bali-a-guide-for-foreign-investors",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/leasehold-vs-freehold-property-in-bali-a-guide-for-foreign-investors",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/living-at-lyvin-melasti-villas-what-you-can-do-in-uluwatu-bali",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/living-at-lyvin-melasti-villas-what-you-can-do-in-uluwatu-bali",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/must-visit-places-in-lombok-famous-beaches-and-cafes-you-shouldnt-miss",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/must-visit-places-in-lombok-famous-beaches-and-cafes-you-shouldnt-miss",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/new-entry-rules-for-bali-in-2025-what-travelers-need-to-know-about-the-all-indonesia-arrival-card",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/new-entry-rules-for-bali-in-2025-what-travelers-need-to-know-about-the-all-indonesia-arrival-card",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/new-tourism-laws-enforcement-in-2026-what-bali-property-investors-must-know",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/new-tourism-laws-enforcement-in-2026-what-bali-property-investors-must-know",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/north-bali-airport-a-rp-50-trillion-project-that-could-rebalance-balis-economy",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/north-bali-airport-a-rp-50-trillion-project-that-could-rebalance-balis-economy",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/nyepi-in-bali-2026-full-ceremony-sequence-and-what-it-means-for-property-owners",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/nyepi-in-bali-2026-full-ceremony-sequence-and-what-it-means-for-property-owners",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/paid-up-capital-for-pt-pma-in-bali-the-2026-investors-guide",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/paid-up-capital-for-pt-pma-in-bali-the-2026-investors-guide",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/pros-and-cons-of-owning-property-in-bali-a-short-investor-guide-2026",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/pros-and-cons-of-owning-property-in-bali-a-short-investor-guide-2026",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/protecting-paradise-how-to-invest-and-develop-ethically-in-bali",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/protecting-paradise-how-to-invest-and-develop-ethically-in-bali",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/the-95m-bet-on-balis-future-how-2026-infrastructure-projects-will-shape-the-islands-growth",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/the-95m-bet-on-balis-future-how-2026-infrastructure-projects-will-shape-the-islands-growth",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/the-digital-nomad-economy-why-bali-became-the-top-digital-nomad-destination-in-southeast-asia-in-2025",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/the-digital-nomad-economy-why-bali-became-the-top-digital-nomad-destination-in-southeast-asia-in-2025",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/the-smart-investors-guide-to-ready-made-villas-in-bali",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/the-smart-investors-guide-to-ready-made-villas-in-bali",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/things-to-avoid-when-visiting-bali-essential-travel-etiquette-and-safety-tips",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/things-to-avoid-when-visiting-bali-essential-travel-etiquette-and-safety-tips",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/understanding-the-0-5-tax-for-pt-pma-in-indonesia",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/understanding-the-0-5-tax-for-pt-pma-in-indonesia",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/what-foreigners-need-to-know-before-renting-a-motorbike-in-bali",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/what-foreigners-need-to-know-before-renting-a-motorbike-in-bali",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/what-to-avoid-during-rainy-season-in-bali-important-travel-tips-for-november-march",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/what-to-avoid-during-rainy-season-in-bali-important-travel-tips-for-november-march",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/what-to-do-for-nye-2025-in-bali",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/what-to-do-for-nye-2025-in-bali",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/where-to-live-in-bali-the-best-areas-for-families-couples-and-retirees",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/where-to-live-in-bali-the-best-areas-for-families-couples-and-retirees",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/why-bali-is-the-ultimate-investment-destination",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/why-bali-is-the-ultimate-investment-destination",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/why-bali-remains-one-of-the-worlds-most-desirable-real-estate-markets",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/why-bali-remains-one-of-the-worlds-most-desirable-real-estate-markets",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/why-do-investors-choose-to-buy-off-plan",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/why-do-investors-choose-to-buy-off-plan",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/why-investors-are-choosing-bali-for-generational-wealth",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/why-investors-are-choosing-bali-for-generational-wealth",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/why-tap-water-in-bali-isnt-reliably-safe",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/why-tap-water-in-bali-isnt-reliably-safe",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/why-uluwatu-is-balis-fastest-growing-lifestyle-destination-in-2025",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/journal/why-uluwatu-is-balis-fastest-growing-lifestyle-destination-in-2025",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/legal-services",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/legal-services",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/projects",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/projects",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2501",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2501",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2505",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2505",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2506",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2506",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2507",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2507",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25100",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25100",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25102",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25102",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25103",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25103",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25104",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25104",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25105",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25105",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25106A",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25106A",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25106B",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25106B",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25107",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25107",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25108",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25108",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25109",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25109",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25110",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25110",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25111",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25111",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25112",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25112",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25113",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25113",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25114",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25114",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25115",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25115",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25116",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25116",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25117",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25117",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25118",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25118",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25119",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25119",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25120",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25120",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25121",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25121",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25122",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25122",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25124",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25124",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25125",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25125",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25125A",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25125A",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25125B",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25125B",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25126",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25126",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25127",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25127",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25128",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25128",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25129",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25129",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25130",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25130",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25131",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25131",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25132",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25132",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25133",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25133",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25133A",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25133A",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25133B",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25133B",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25134A",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25134A",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25134B",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25134B",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25135",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25135",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25136",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25136",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25137",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25137",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25138",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25138",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25139",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25139",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25141A",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25141A",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25141B",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25141B",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25142",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25142",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25144",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25144",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25145",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25145",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25145-2",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25145-2",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25146A",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25146A",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25146B",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25146B",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25147",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25147",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25148",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25148",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25149",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25149",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25150",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25150",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25151",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25151",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25152",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25152",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25153",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25153",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25154",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25154",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25155",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25155",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25156",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25156",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25157A",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25157A",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25157B",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25157B",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25158",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25158",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25159",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25159",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25160",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25160",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25161",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25161",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25162",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25162",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25163",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25163",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25164",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25164",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25167",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25167",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25168",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25168",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25169",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25169",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25171",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25171",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25172",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25172",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25173",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25173",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25174A",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25174A",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25174B",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25174B",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25179",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25179",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2518",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2518",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25180",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25180",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25181",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25181",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25182",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25182",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25183",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25183",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25185",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25185",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25190",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25190",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25192",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25192",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25195",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25195",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25196",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25196",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25199",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D25199",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2521",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2521",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2525",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2525",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2528",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2528",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2530",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2530",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2531",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2531",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2534",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2534",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2535",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2535",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2536A",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2536A",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2536B-2",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2536B-2",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2538",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2538",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2539",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2539",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2541A",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2541A",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2541B",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2541B",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2542",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2542",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2544",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2544",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2545",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2545",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2548B",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2548B",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2549",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2549",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2550",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2550",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2551",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2551",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2552",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2552",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2553",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2553",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2554",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2554",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2555",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2555",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2556",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2556",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2557",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2557",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2559",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2559",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2560",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2560",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2561",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2561",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2562",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2562",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2563",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2563",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2564",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2564",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2565",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2565",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2568A",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2568A",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2569",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2569",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2571",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2571",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2572",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2572",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2574",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2574",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2575",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2575",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2576",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2576",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2576B",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2576B",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2577",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2577",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2578",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2578",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2579",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2579",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2580",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2580",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2581",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2581",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2582A",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2582A",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2582B",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2582B",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2583",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2583",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2584",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2584",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2585",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2585",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2586",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2586",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2587",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2587",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2588",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2588",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2590",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2590",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2591",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2591",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2592",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2592",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2594",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2594",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2595",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2595",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2596",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2596",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2597",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2597",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2599",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8D2599",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL04",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL04",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL05",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL05",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL06",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL06",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL07",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL07",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL08",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL08",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL09",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL09",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL10",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL10",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL11",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL11",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL12",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL12",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL13",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL13",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL14",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL14",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL15",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL15",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL16",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL16",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL17",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL17",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL18",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL18",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL20",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL20",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL21",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL21",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL22",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL22",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL23",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL23",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL24",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DL24",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DR01",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DR01",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DR02",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DR02",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DR03",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DR03",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DR04",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DR04",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DR05",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DR05",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DV105",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DV105",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DV106A",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DV106A",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DV106B",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DV106B",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DV106C",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DV106C",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DV28",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DV28",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DV33",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DV33",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DV35B",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DV35B",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DV36A",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DV36A",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DV37",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DV37",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DV45",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DV45",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DV54",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DV54",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DV56",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DV56",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DV57",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DV57",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DV92",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/8DV92",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/LILY-VILLAS-TOWNHOUSES-LUXURY-LIVING-IN-PERERENAN-BALI-8DV35A",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/LILY-VILLAS-TOWNHOUSES-LUXURY-LIVING-IN-PERERENAN-BALI-8DV35A",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/LILY-VILLAS-TOWNHOUSES-STYLISH-2BR-ECO-VILLAS-IN-PERERENAN-BALI-8DV35C",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/LILY-VILLAS-TOWNHOUSES-STYLISH-2BR-ECO-VILLAS-IN-PERERENAN-BALI-8DV35C",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/LUXURY-3BR-RICE-FIELD-VIEW-VILLA-NEAR-MENGENING-BEACH-8D2502",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/LUXURY-3BR-RICE-FIELD-VIEW-VILLA-NEAR-MENGENING-BEACH-8D2502",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/LUXURY-6BR-JAPANDI-VILLA-IN-PERERENAN-BALI-8D25206",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/LUXURY-6BR-JAPANDI-VILLA-IN-PERERENAN-BALI-8D25206",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/RIVERSIDE-DESIGNER-4BR-VILLA-IN-PERERENAN-BALI-8D25205",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/properties/RIVERSIDE-DESIGNER-4BR-VILLA-IN-PERERENAN-BALI-8D25205",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    },
+    {
+      "severity": "warn",
+      "path": "/sell",
+      "message": "Title differs significantly from WordPress"
+    },
+    {
+      "severity": "warn",
+      "path": "/sell",
+      "message": "Missing H1 in HTML (may be client-rendered)"
+    }
+  ]
+}

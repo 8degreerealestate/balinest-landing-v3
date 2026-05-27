@@ -1,33 +1,305 @@
 {
+  "/journal": {
+    "seoTitle": "Journal",
+    "metaDescription": "Journal | 8 Degree",
+    "canonical": "/journal",
+    "h1": "JOURNAL",
+    "ogTitle": "Journal | 8 Degree"
+  },
   "/": {
-    "seoTitle": "Luxury Bali Real Estate & Strategic Developments",
-    "metaDescription": "Boutique Bali property advisory: luxury villas, developments, and curated listings. Portfolio, investment guidance, and opportunities across Bali.",
+    "seoTitle": "8 Degree – Real Estate Agency in Bali",
+    "metaDescription": "Discover your dream home or property investment with 8 Degree Real Estate in Bali. We guide you with clarity, confidence, and insightful.",
     "canonical": "/",
-    "h1": "Luxury Bali Real Estate"
+    "h1": "Real Estate Agency in Bali",
+    "ogTitle": "8 Degree – Real Estate Agency in Bali",
+    "ogDescription": "Discover your dream home or property investment with 8 Degree Real Estate in Bali. We guide you with clarity, confidence, and insightful.",
+    "ogImage": "https://8degree.co/wp-content/uploads/2025/01/pexels-lukasfst-21077134c-1.webp"
+  },
+  "/my-profile": {
+    "seoTitle": "8 Degree – Real Estate Agency in Bali",
+    "metaDescription": "Discover your dream home or property investment with 8 Degree Real Estate in Bali. We guide you with clarity, confidence, and insightful.",
+    "canonical": "/",
+    "h1": "Real Estate Agency in Bali",
+    "ogTitle": "8 Degree – Real Estate Agency in Bali",
+    "ogDescription": "Discover your dream home or property investment with 8 Degree Real Estate in Bali. We guide you with clarity, confidence, and insightful.",
+    "ogImage": "https://8degree.co/wp-content/uploads/2025/01/pexels-lukasfst-21077134c-1.webp"
+  },
+  "/my-properties": {
+    "seoTitle": "8 Degree – Real Estate Agency in Bali",
+    "metaDescription": "Discover your dream home or property investment with 8 Degree Real Estate in Bali. We guide you with clarity, confidence, and insightful.",
+    "canonical": "/",
+    "h1": "Real Estate Agency in Bali",
+    "ogTitle": "8 Degree – Real Estate Agency in Bali",
+    "ogDescription": "Discover your dream home or property investment with 8 Degree Real Estate in Bali. We guide you with clarity, confidence, and insightful.",
+    "ogImage": "https://8degree.co/wp-content/uploads/2025/01/pexels-lukasfst-21077134c-1.webp"
+  },
+  "/terms-and-conditions": {
+    "seoTitle": "Terms and Conditions",
+    "metaDescription": "Terms and Conditions | 8 Degree",
+    "canonical": "/terms-and-conditions",
+    "h1": "Terms and Conditions",
+    "ogTitle": "Terms and Conditions | 8 Degree",
+    "ogDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ut lacinia ex. Curabitur iaculis elit lorem, vitae fringilla turpis ultricies vel. Mauris pr…"
+  },
+  "/privacy": {
+    "seoTitle": "Privacy Policy",
+    "metaDescription": "Privacy Policy | 8 Degree",
+    "canonical": "/privacy",
+    "h1": "Privacy Policy",
+    "ogTitle": "Privacy Policy | 8 Degree",
+    "ogDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ut lacinia ex. Curabitur iaculis elit lorem, vitae fringilla turpis ultricies vel. Mauris pr…"
+  },
+  "/compare-properties": {
+    "seoTitle": "Compare Properties",
+    "metaDescription": "Compare Properties | 8 Degree",
+    "canonical": "/compare-properties",
+    "h1": "Compare Properties",
+    "ogTitle": "Compare Properties | 8 Degree"
+  },
+  "/invoices": {
+    "seoTitle": "8 Degree – Real Estate Agency in Bali",
+    "metaDescription": "Discover your dream home or property investment with 8 Degree Real Estate in Bali. We guide you with clarity, confidence, and insightful.",
+    "canonical": "/",
+    "h1": "Real Estate Agency in Bali",
+    "ogTitle": "8 Degree – Real Estate Agency in Bali",
+    "ogDescription": "Discover your dream home or property investment with 8 Degree Real Estate in Bali. We guide you with clarity, confidence, and insightful.",
+    "ogImage": "https://8degree.co/wp-content/uploads/2025/01/pexels-lukasfst-21077134c-1.webp"
+  },
+  "/saved-search": {
+    "seoTitle": "8 Degree – Real Estate Agency in Bali",
+    "metaDescription": "Discover your dream home or property investment with 8 Degree Real Estate in Bali. We guide you with clarity, confidence, and insightful.",
+    "canonical": "/",
+    "h1": "Real Estate Agency in Bali",
+    "ogTitle": "8 Degree – Real Estate Agency in Bali",
+    "ogDescription": "Discover your dream home or property investment with 8 Degree Real Estate in Bali. We guide you with clarity, confidence, and insightful.",
+    "ogImage": "https://8degree.co/wp-content/uploads/2025/01/pexels-lukasfst-21077134c-1.webp"
+  },
+  "/board": {
+    "seoTitle": "8 Degree – Real Estate Agency in Bali",
+    "metaDescription": "Discover your dream home or property investment with 8 Degree Real Estate in Bali. We guide you with clarity, confidence, and insightful.",
+    "canonical": "/",
+    "h1": "Real Estate Agency in Bali",
+    "ogTitle": "8 Degree – Real Estate Agency in Bali",
+    "ogDescription": "Discover your dream home or property investment with 8 Degree Real Estate in Bali. We guide you with clarity, confidence, and insightful.",
+    "ogImage": "https://8degree.co/wp-content/uploads/2025/01/pexels-lukasfst-21077134c-1.webp"
+  },
+  "/insights": {
+    "seoTitle": "8 Degree – Real Estate Agency in Bali",
+    "metaDescription": "Discover your dream home or property investment with 8 Degree Real Estate in Bali. We guide you with clarity, confidence, and insightful.",
+    "canonical": "/",
+    "h1": "Real Estate Agency in Bali",
+    "ogTitle": "8 Degree – Real Estate Agency in Bali",
+    "ogDescription": "Discover your dream home or property investment with 8 Degree Real Estate in Bali. We guide you with clarity, confidence, and insightful.",
+    "ogImage": "https://8degree.co/wp-content/uploads/2025/01/pexels-lukasfst-21077134c-1.webp"
+  },
+  "/developments": {
+    "seoTitle": "Developments",
+    "metaDescription": "Developments | 8 Degree",
+    "canonical": "/developments",
+    "h1": "EXPLORE NEW LIVING SPACE IN BALI",
+    "ogTitle": "Developments | 8 Degree",
+    "ogDescription": "EXPLORENEWLIVINGSPACEIN BALI Embark on the journey of finding your dream house with us. We specialize in helping you uncover the perfect property that meets…",
+    "ogImage": "https://8degree.co/wp-content/uploads/2023/01/apartment-0007.jpg"
+  },
+  "/investment-consulting": {
+    "seoTitle": "Investment Consulting",
+    "metaDescription": "Investment Consulting | 8 Degree",
+    "canonical": "/investment-consulting",
+    "h1": "EXPLORE NEW LIVING SPACE IN BALI",
+    "ogTitle": "Investment Consulting | 8 Degree",
+    "ogDescription": "EXPLORENEWLIVINGSPACEIN BALI Embark on the journey of finding your dream house with us. We specialize in helping you uncover the perfect property that meets…",
+    "ogImage": "https://8degree.co/wp-content/uploads/2023/01/apartment-0007.jpg"
+  },
+  "/legal-services": {
+    "seoTitle": "Legal Services",
+    "metaDescription": "Legal Services | 8 Degree",
+    "canonical": "/legal-services",
+    "h1": "EXPLORE NEW LIVING SPACE IN BALI",
+    "ogTitle": "Legal Services | 8 Degree",
+    "ogDescription": "EXPLORENEWLIVINGSPACEIN BALI Embark on the journey of finding your dream house with us. We specialize in helping you uncover the perfect property that meets…",
+    "ogImage": "https://8degree.co/wp-content/uploads/2023/01/apartment-0007.jpg"
+  },
+  "/our-story": {
+    "seoTitle": "Our Story",
+    "metaDescription": "Our Story | 8 Degree",
+    "canonical": "/our-story",
+    "h1": "Our Story",
+    "ogTitle": "Our Story | 8 Degree",
+    "ogDescription": "Our Story sub heading Our mission Our company is one of the leading providers in high-end real estate. Our services includes wide variety of luxurious proper…",
+    "ogImage": "https://8degree.co/wp-content/uploads/2023/01/ts-03.jpg"
+  },
+  "/land-for-sale": {
+    "seoTitle": "Land for Sale",
+    "metaDescription": "Land for Sale | 8 Degree",
+    "canonical": "/land-for-sale",
+    "h1": "Land for Sale",
+    "ogTitle": "Land for Sale | 8 Degree"
+  },
+  "/our-story-2": {
+    "seoTitle": "Mission & Values",
+    "metaDescription": "Mission & Values | 8 Degree",
+    "canonical": "/our-story-2",
+    "h1": "Our Purpose: Empowering Change in Bali Real Estate",
+    "ogTitle": "Mission & Values | 8 Degree",
+    "ogDescription": "Our Purpose: Empowering Change in Bali Real Estate 8 Degree Real Estate aims to empower young developers, support ethical investments, and guide home buyers…"
+  },
+  "/agents-2": {
+    "seoTitle": "Agents",
+    "metaDescription": "Agents | 8 Degree",
+    "canonical": "/agents-2",
+    "h1": "Agents",
+    "ogTitle": "Agents | 8 Degree"
+  },
+  "/invest/freehold": {
+    "seoTitle": "Invest Freehold",
+    "metaDescription": "Invest Freehold | 8 Degree",
+    "canonical": "/invest/freehold",
+    "h1": "Investment Properties You Can Trust",
+    "ogTitle": "Invest Freehold | 8 Degree",
+    "ogDescription": "Investment Properties You Can Trust Your One-Stop Real Estate Solution for Buying and Investing Worldwide! Take the first step Secure your spot now and claim…",
+    "ogImage": "https://8degree.co/wp-content/uploads/2025/01/1350000-studio-1_11zon-1-scaled.webp"
+  },
+  "/invest": {
+    "seoTitle": "Invest",
+    "metaDescription": "Invest | 8 Degree",
+    "canonical": "/invest",
+    "h1": "Welcome to the future of property investment",
+    "ogTitle": "Invest | 8 Degree",
+    "ogDescription": "Welcome to the future of property investment 8 Degree connects you with Bali’s finest properties, making your investment journey seamless and rewarding. BOOK…",
+    "ogImage": "https://8degree.co/wp-content/uploads/2025/01/1350000-studio-1_11zon-1-scaled.webp"
+  },
+  "/ready-units": {
+    "seoTitle": "Ready Units",
+    "metaDescription": "Bali's premier luxury properties with 8 Degree Real Estate. Discover your dream home or real estate investment in Bali.",
+    "canonical": "/ready-units",
+    "h1": "Ready Units",
+    "ogTitle": "Ready Units | 8 Degree",
+    "ogDescription": "Bali's premier luxury properties with 8 Degree Real Estate. Discover your dream home or real estate investment in Bali.",
+    "ogImage": "https://8degree.co/wp-content/uploads/2025/03/Blog-post-7.webp"
+  },
+  "/buy": {
+    "seoTitle": "Buy",
+    "metaDescription": "Bali's premier luxury properties with 8 Degree Real Estate. Discover your dream home or real estate investment in Bali.",
+    "canonical": "/buy",
+    "h1": "Buy",
+    "ogTitle": "Buy | 8 Degree",
+    "ogDescription": "Bali's premier luxury properties with 8 Degree Real Estate. Discover your dream home or real estate investment in Bali.",
+    "ogImage": "https://8degree.co/wp-content/uploads/2025/03/Cover-Blog-2.webp"
+  },
+  "/create-listing": {
+    "seoTitle": "Create Listing",
+    "metaDescription": "Create Listing | 8 Degree",
+    "canonical": "/create-listing",
+    "ogTitle": "Create Listing | 8 Degree"
+  },
+  "/property-management": {
+    "seoTitle": "Property Management",
+    "metaDescription": "Property Management | 8 Degree",
+    "canonical": "/property-management",
+    "h1": "EXPLORE NEW LIVING SPACE IN BALI",
+    "ogTitle": "Property Management | 8 Degree",
+    "ogDescription": "EXPLORENEWLIVINGSPACEIN BALI Embark on the journey of finding your dream house with us. We specialize in helping you uncover the perfect property that meets…",
+    "ogImage": "https://demo29.houzez.co/wp-content/uploads/2023/01/icon-02a.png"
+  },
+  "/no-access": {
+    "seoTitle": "No Access",
+    "metaDescription": "No Access | 8 Degree",
+    "canonical": "/no-access",
+    "h1": "No Access",
+    "ogTitle": "No Access | 8 Degree",
+    "ogDescription": "[dlm_no_access]"
+  },
+  "/contact": {
+    "seoTitle": "Contact",
+    "metaDescription": "Get in touch with 8 Degree Real Estate, your trusted partner in Bali real estate. Our team is here to assist you.",
+    "canonical": "/contact",
+    "h1": "Contact Us",
+    "ogTitle": "Contact | 8 Degree",
+    "ogDescription": "Get in touch with 8 Degree Real Estate, your trusted partner in Bali real estate. Our team is here to assist you.",
+    "ogImage": "https://8degree.co/wp-content/uploads/2025/01/Buy-Page-opt-3.webp"
+  },
+  "/off-plan-projects": {
+    "seoTitle": "Off-Plan Projects",
+    "metaDescription": "Off-Plan Projects | 8 Degree",
+    "canonical": "/off-plan-projects",
+    "h1": "Off-Plan Projects",
+    "ogTitle": "Off-Plan Projects | 8 Degree"
+  },
+  "/favorite-properties": {
+    "seoTitle": "Favorite Properties",
+    "metaDescription": "Favorite Properties | 8 Degree",
+    "canonical": "/favorite-properties",
+    "h1": "Favorite Properties",
+    "ogTitle": "Favorite Properties | 8 Degree",
+    "ogDescription": "Featured Ready Units Freehold IDR29,957,000,000 Ready Units Freehold 8D2524 IDR29,957,000,000 Kedungu, Indonesia 3200 sqm 530 sqm Beds: 4 Baths: 5 Villa Deta…",
+    "ogImage": "https://8degree.co/wp-content/uploads/2025/05/Jahten-House-Senyum-Design-1.-Exteriors-View-013-IMG_3858-1024x683.jpg"
+  },
+  "/buy-land": {
+    "seoTitle": "Buy Land",
+    "metaDescription": "Buy Land | 8 Degree",
+    "canonical": "/buy-land",
+    "h1": "Buy Land in Bali",
+    "ogTitle": "Buy Land | 8 Degree",
+    "ogDescription": "Looking to Buy Land in Bali?​ We work directly with landowners across Bali and Indonesia — from cliff-front plots to hidden investment gems. Many of these op…"
+  },
+  "/buyer-agents": {
+    "seoTitle": "Buyer's Agent #2",
+    "metaDescription": "Buyer's Agent #2 | 8 Degree",
+    "canonical": "/buyer-agents",
+    "h1": "Your Property. Your Interests. Fully Represented.",
+    "ogTitle": "Buyer's Agent #2 | 8 Degree",
+    "ogDescription": "Your Property. Your Interests. Fully Represented. Buying real estate in Bali? Don’t go in blind. Our Buyer’s Agent service is designed for serious investors…",
+    "ogImage": "https://8degree.co/wp-content/uploads/2025/10/3-1.jpg"
+  },
+  "/sell": {
+    "seoTitle": "Sell",
+    "metaDescription": "Sell | 8 Degree",
+    "canonical": "/sell",
+    "h1": "Partner with Bali’s First Master Agency",
+    "ogTitle": "Sell | 8 Degree",
+    "ogDescription": "Partner with Bali’s First Master Agency We don’t just list properties — we represent them. As a Master Agency, we work exclusively with selected developers w…"
+  },
+  "/submit-form": {
+    "seoTitle": "Thank You - Submit Form",
+    "metaDescription": "Thank You - Submit Form | 8 Degree",
+    "canonical": "/submit-form",
+    "ogTitle": "Thank You - Submit Form | 8 Degree",
+    "ogDescription": "Thank You! Your Form Has Been Successfully Submitted. We’ve received your details and our team is already reviewing your request. Expect a response shortly."
+  },
+  "/search-results": {
+    "seoTitle": "Search Results",
+    "metaDescription": "Search Results | 8 Degree",
+    "canonical": "/search-results",
+    "h1": "Search Results",
+    "ogTitle": "Search Results | 8 Degree"
+  },
+  "/frequently-asked-questions": {
+    "seoTitle": "Frequently Asked Questions",
+    "metaDescription": "Frequently Asked Questions | 8 Degree",
+    "canonical": "/frequently-asked-questions",
+    "h1": "Frequently Asked Questions",
+    "ogTitle": "Frequently Asked Questions | 8 Degree",
+    "ogDescription": "Frequently Asked Questions Common questions asked about real estate in Bali. Here are some important questions that are frequently asked and the answers to t…"
+  },
+  "/about-us": {
+    "seoTitle": "About us",
+    "metaDescription": "A purpose-driven Bali real estate agency dedicated to guiding investors, developers, and home buyers through seamless property journeys",
+    "canonical": "/about-us",
+    "h1": "About 8 Degree",
+    "ogTitle": "About us | 8 Degree",
+    "ogDescription": "A purpose-driven Bali real estate agency dedicated to guiding investors, developers, and home buyers through seamless property journeys",
+    "ogImage": "https://8degree.co/wp-content/uploads/2025/01/Untitled-3-e1736223012708.webp"
   },
   "/projects": {
-    "seoTitle": "Bali Properties for Sale",
-    "metaDescription": "Explore curated villas, developments, and land across Bali. Refine your search and view available listings.",
-    "canonical": "/projects"
-  },
-  "/journal": {
-    "seoTitle": "Journal · Bali Property Insights",
-    "metaDescription": "Market updates, investment guides, and Bali real estate insights from 8 Degree.",
-    "canonical": "/journal"
+    "seoTitle": "Properties Archive",
+    "metaDescription": "Properties Archive | 8 Degree",
+    "canonical": "/property",
+    "h1": "Properties",
+    "ogTitle": "Properties Archive | 8 Degree"
   },
   "/investment-guide": {
     "seoTitle": "Bali Property Investment Guide",
     "metaDescription": "Everything international investors need to know before buying property in Bali — ownership, ROI, and due diligence.",
     "canonical": "/investment-guide"
-  },
-  "/contact": {
-    "seoTitle": "Contact 8 Degree",
-    "metaDescription": "Speak with our Bali property advisory team about acquisitions, listings, and investments.",
-    "canonical": "/contact"
-  },
-  "/about-us": {
-    "seoTitle": "About 8 Degree Real Estate",
-    "metaDescription": "Boutique Bali real estate advisory focused on quality, clarity, and investor outcomes.",
-    "canonical": "/about-us"
   }
 }

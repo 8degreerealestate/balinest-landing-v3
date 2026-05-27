@@ -3,7 +3,7 @@
 import type { MigrationBundle } from "../../../../migration/seo-types";
 
 export const SEO_MIGRATION: MigrationBundle = {
-  "generatedAt": "2026-05-27T04:14:11.794Z",
+  "generatedAt": "2026-05-27T04:38:34.351Z",
   "redirects": [
     {
       "source": "/10-best-co-working-cafes-in-canggu-2025",
@@ -161,6 +161,1011 @@ export const SEO_MIGRATION: MigrationBundle = {
       "permanent": true
     },
     {
+      "source": "/property/8d2501",
+      "destination": "/properties/8D2501",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2505",
+      "destination": "/properties/8D2505",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2506",
+      "destination": "/properties/8D2506",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2507",
+      "destination": "/properties/8D2507",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25100",
+      "destination": "/properties/8D25100",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25102",
+      "destination": "/properties/8D25102",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25103",
+      "destination": "/properties/8D25103",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25104",
+      "destination": "/properties/8D25104",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25105",
+      "destination": "/properties/8D25105",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25106a",
+      "destination": "/properties/8D25106A",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25106b",
+      "destination": "/properties/8D25106B",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25107",
+      "destination": "/properties/8D25107",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25108",
+      "destination": "/properties/8D25108",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25109",
+      "destination": "/properties/8D25109",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25110",
+      "destination": "/properties/8D25110",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25111",
+      "destination": "/properties/8D25111",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25112",
+      "destination": "/properties/8D25112",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25113",
+      "destination": "/properties/8D25113",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25114",
+      "destination": "/properties/8D25114",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25115",
+      "destination": "/properties/8D25115",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25116",
+      "destination": "/properties/8D25116",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25117",
+      "destination": "/properties/8D25117",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25118",
+      "destination": "/properties/8D25118",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25119",
+      "destination": "/properties/8D25119",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25120",
+      "destination": "/properties/8D25120",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25121",
+      "destination": "/properties/8D25121",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25122",
+      "destination": "/properties/8D25122",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25124",
+      "destination": "/properties/8D25124",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25125",
+      "destination": "/properties/8D25125",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25125a",
+      "destination": "/properties/8D25125A",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25125b",
+      "destination": "/properties/8D25125B",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25126",
+      "destination": "/properties/8D25126",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25127",
+      "destination": "/properties/8D25127",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25128",
+      "destination": "/properties/8D25128",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25129",
+      "destination": "/properties/8D25129",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25130",
+      "destination": "/properties/8D25130",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25131",
+      "destination": "/properties/8D25131",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25132",
+      "destination": "/properties/8D25132",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25133",
+      "destination": "/properties/8D25133",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25133a",
+      "destination": "/properties/8D25133A",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25133b",
+      "destination": "/properties/8D25133B",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25134a",
+      "destination": "/properties/8D25134A",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25134b",
+      "destination": "/properties/8D25134B",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25135",
+      "destination": "/properties/8D25135",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25136",
+      "destination": "/properties/8D25136",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25137",
+      "destination": "/properties/8D25137",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25138",
+      "destination": "/properties/8D25138",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25139",
+      "destination": "/properties/8D25139",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25141a",
+      "destination": "/properties/8D25141A",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25141b",
+      "destination": "/properties/8D25141B",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25142",
+      "destination": "/properties/8D25142",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25144",
+      "destination": "/properties/8D25144",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25145",
+      "destination": "/properties/8D25145",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25145-2",
+      "destination": "/properties/8D25145-2",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25146a",
+      "destination": "/properties/8D25146A",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25146b",
+      "destination": "/properties/8D25146B",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25147",
+      "destination": "/properties/8D25147",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25148",
+      "destination": "/properties/8D25148",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25149",
+      "destination": "/properties/8D25149",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25150",
+      "destination": "/properties/8D25150",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25151",
+      "destination": "/properties/8D25151",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25152",
+      "destination": "/properties/8D25152",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25153",
+      "destination": "/properties/8D25153",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25154",
+      "destination": "/properties/8D25154",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25155",
+      "destination": "/properties/8D25155",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25156",
+      "destination": "/properties/8D25156",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25157a",
+      "destination": "/properties/8D25157A",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25157b",
+      "destination": "/properties/8D25157B",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25158",
+      "destination": "/properties/8D25158",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25159",
+      "destination": "/properties/8D25159",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25160",
+      "destination": "/properties/8D25160",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25161",
+      "destination": "/properties/8D25161",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25162",
+      "destination": "/properties/8D25162",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25163",
+      "destination": "/properties/8D25163",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25164",
+      "destination": "/properties/8D25164",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25167",
+      "destination": "/properties/8D25167",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25168",
+      "destination": "/properties/8D25168",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25169",
+      "destination": "/properties/8D25169",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25171",
+      "destination": "/properties/8D25171",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25172",
+      "destination": "/properties/8D25172",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25173",
+      "destination": "/properties/8D25173",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25174a",
+      "destination": "/properties/8D25174A",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25174b",
+      "destination": "/properties/8D25174B",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25179",
+      "destination": "/properties/8D25179",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2518",
+      "destination": "/properties/8D2518",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25180",
+      "destination": "/properties/8D25180",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25181",
+      "destination": "/properties/8D25181",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25182",
+      "destination": "/properties/8D25182",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25183",
+      "destination": "/properties/8D25183",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25185",
+      "destination": "/properties/8D25185",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25190",
+      "destination": "/properties/8D25190",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25192",
+      "destination": "/properties/8D25192",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25195",
+      "destination": "/properties/8D25195",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25196",
+      "destination": "/properties/8D25196",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25199",
+      "destination": "/properties/8D25199",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2521",
+      "destination": "/properties/8D2521",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2525",
+      "destination": "/properties/8D2525",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2528",
+      "destination": "/properties/8D2528",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2530",
+      "destination": "/properties/8D2530",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2531",
+      "destination": "/properties/8D2531",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2534",
+      "destination": "/properties/8D2534",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2535",
+      "destination": "/properties/8D2535",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2536a",
+      "destination": "/properties/8D2536A",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2536b-2",
+      "destination": "/properties/8D2536B-2",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2538",
+      "destination": "/properties/8D2538",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2539",
+      "destination": "/properties/8D2539",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2541a",
+      "destination": "/properties/8D2541A",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2541b",
+      "destination": "/properties/8D2541B",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2542",
+      "destination": "/properties/8D2542",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2544",
+      "destination": "/properties/8D2544",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2545",
+      "destination": "/properties/8D2545",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2548b",
+      "destination": "/properties/8D2548B",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2549",
+      "destination": "/properties/8D2549",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2550",
+      "destination": "/properties/8D2550",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2551",
+      "destination": "/properties/8D2551",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2552",
+      "destination": "/properties/8D2552",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2553",
+      "destination": "/properties/8D2553",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2554",
+      "destination": "/properties/8D2554",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2555",
+      "destination": "/properties/8D2555",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2556",
+      "destination": "/properties/8D2556",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2557",
+      "destination": "/properties/8D2557",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2559",
+      "destination": "/properties/8D2559",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2560",
+      "destination": "/properties/8D2560",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2561",
+      "destination": "/properties/8D2561",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2562",
+      "destination": "/properties/8D2562",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2563",
+      "destination": "/properties/8D2563",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2564",
+      "destination": "/properties/8D2564",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2565",
+      "destination": "/properties/8D2565",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2568a",
+      "destination": "/properties/8D2568A",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2569",
+      "destination": "/properties/8D2569",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2571",
+      "destination": "/properties/8D2571",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2572",
+      "destination": "/properties/8D2572",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2574",
+      "destination": "/properties/8D2574",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2575",
+      "destination": "/properties/8D2575",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2576",
+      "destination": "/properties/8D2576",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2576b",
+      "destination": "/properties/8D2576B",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2577",
+      "destination": "/properties/8D2577",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2578",
+      "destination": "/properties/8D2578",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2579",
+      "destination": "/properties/8D2579",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2580",
+      "destination": "/properties/8D2580",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2581",
+      "destination": "/properties/8D2581",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2582a",
+      "destination": "/properties/8D2582A",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2582b",
+      "destination": "/properties/8D2582B",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2583",
+      "destination": "/properties/8D2583",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2584",
+      "destination": "/properties/8D2584",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2585",
+      "destination": "/properties/8D2585",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2586",
+      "destination": "/properties/8D2586",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2587",
+      "destination": "/properties/8D2587",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2588",
+      "destination": "/properties/8D2588",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2590",
+      "destination": "/properties/8D2590",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2591",
+      "destination": "/properties/8D2591",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2592",
+      "destination": "/properties/8D2592",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2594",
+      "destination": "/properties/8D2594",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2595",
+      "destination": "/properties/8D2595",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2596",
+      "destination": "/properties/8D2596",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2597",
+      "destination": "/properties/8D2597",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2599",
+      "destination": "/properties/8D2599",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl04",
+      "destination": "/properties/8DL04",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl05",
+      "destination": "/properties/8DL05",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl06",
+      "destination": "/properties/8DL06",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl07",
+      "destination": "/properties/8DL07",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl08",
+      "destination": "/properties/8DL08",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl09",
+      "destination": "/properties/8DL09",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl10",
+      "destination": "/properties/8DL10",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl11",
+      "destination": "/properties/8DL11",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl12",
+      "destination": "/properties/8DL12",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl13",
+      "destination": "/properties/8DL13",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl14",
+      "destination": "/properties/8DL14",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl15",
+      "destination": "/properties/8DL15",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl16",
+      "destination": "/properties/8DL16",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl17",
+      "destination": "/properties/8DL17",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl18",
+      "destination": "/properties/8DL18",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl20",
+      "destination": "/properties/8DL20",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl21",
+      "destination": "/properties/8DL21",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl22",
+      "destination": "/properties/8DL22",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl23",
+      "destination": "/properties/8DL23",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl24",
+      "destination": "/properties/8DL24",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dr01",
+      "destination": "/properties/8DR01",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dr02",
+      "destination": "/properties/8DR02",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dr03",
+      "destination": "/properties/8DR03",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dr04",
+      "destination": "/properties/8DR04",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dr05",
+      "destination": "/properties/8DR05",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dv105",
+      "destination": "/properties/8DV105",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dv106a",
+      "destination": "/properties/8DV106A",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dv106b",
+      "destination": "/properties/8DV106B",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dv106c",
+      "destination": "/properties/8DV106C",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dv28",
+      "destination": "/properties/8DV28",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dv33",
+      "destination": "/properties/8DV33",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dv35b",
+      "destination": "/properties/8DV35B",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dv36a",
+      "destination": "/properties/8DV36A",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dv37",
+      "destination": "/properties/8DV37",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dv45",
+      "destination": "/properties/8DV45",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dv54",
+      "destination": "/properties/8DV54",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dv56",
+      "destination": "/properties/8DV56",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dv57",
+      "destination": "/properties/8DV57",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dv92",
+      "destination": "/properties/8DV92",
+      "permanent": true
+    },
+    {
+      "source": "/property/lily-villas-townhouses-luxury-living-in-pererenan-bali-8dv35a",
+      "destination": "/properties/LILY-VILLAS-TOWNHOUSES-LUXURY-LIVING-IN-PERERENAN-BALI-8DV35A",
+      "permanent": true
+    },
+    {
+      "source": "/property/lily-villas-townhouses-stylish-2br-eco-villas-in-pererenan-bali-8dv35c",
+      "destination": "/properties/LILY-VILLAS-TOWNHOUSES-STYLISH-2BR-ECO-VILLAS-IN-PERERENAN-BALI-8DV35C",
+      "permanent": true
+    },
+    {
+      "source": "/property/luxury-3br-rice-field-view-villa-near-mengening-beach-8d2502",
+      "destination": "/properties/LUXURY-3BR-RICE-FIELD-VIEW-VILLA-NEAR-MENGENING-BEACH-8D2502",
+      "permanent": true
+    },
+    {
+      "source": "/property/luxury-6br-japandi-villa-in-pererenan-bali-8d25206",
+      "destination": "/properties/LUXURY-6BR-JAPANDI-VILLA-IN-PERERENAN-BALI-8D25206",
+      "permanent": true
+    },
+    {
+      "source": "/property/riverside-designer-4br-villa-in-pererenan-bali-8d25205",
+      "destination": "/properties/RIVERSIDE-DESIGNER-4BR-VILLA-IN-PERERENAN-BALI-8D25205",
+      "permanent": true
+    },
+    {
       "source": "/pros-and-cons-of-owning-property-in-bali-a-short-investor-guide-2026",
       "destination": "/journal/pros-and-cons-of-owning-property-in-bali-a-short-investor-guide-2026",
       "permanent": true
@@ -252,61 +1257,342 @@ export const SEO_MIGRATION: MigrationBundle = {
     }
   ],
   "pageMetadata": {
+    "/journal": {
+      "seoTitle": "Journal",
+      "metaDescription": "Journal | 8 Degree",
+      "canonical": "/journal",
+      "h1": "JOURNAL",
+      "ogTitle": "Journal | 8 Degree"
+    },
     "/": {
-      "seoTitle": "Luxury Bali Real Estate & Strategic Developments",
-      "metaDescription": "Boutique Bali property advisory: luxury villas, developments, and curated listings. Portfolio, investment guidance, and opportunities across Bali.",
+      "seoTitle": "8 Degree – Real Estate Agency in Bali",
+      "metaDescription": "Discover your dream home or property investment with 8 Degree Real Estate in Bali. We guide you with clarity, confidence, and insightful.",
       "canonical": "/",
-      "h1": "Luxury Bali Real Estate"
+      "h1": "Real Estate Agency in Bali",
+      "ogTitle": "8 Degree – Real Estate Agency in Bali",
+      "ogDescription": "Discover your dream home or property investment with 8 Degree Real Estate in Bali. We guide you with clarity, confidence, and insightful.",
+      "ogImage": "https://8degree.co/wp-content/uploads/2025/01/pexels-lukasfst-21077134c-1.webp"
+    },
+    "/my-profile": {
+      "seoTitle": "8 Degree – Real Estate Agency in Bali",
+      "metaDescription": "Discover your dream home or property investment with 8 Degree Real Estate in Bali. We guide you with clarity, confidence, and insightful.",
+      "canonical": "/",
+      "h1": "Real Estate Agency in Bali",
+      "ogTitle": "8 Degree – Real Estate Agency in Bali",
+      "ogDescription": "Discover your dream home or property investment with 8 Degree Real Estate in Bali. We guide you with clarity, confidence, and insightful.",
+      "ogImage": "https://8degree.co/wp-content/uploads/2025/01/pexels-lukasfst-21077134c-1.webp"
+    },
+    "/my-properties": {
+      "seoTitle": "8 Degree – Real Estate Agency in Bali",
+      "metaDescription": "Discover your dream home or property investment with 8 Degree Real Estate in Bali. We guide you with clarity, confidence, and insightful.",
+      "canonical": "/",
+      "h1": "Real Estate Agency in Bali",
+      "ogTitle": "8 Degree – Real Estate Agency in Bali",
+      "ogDescription": "Discover your dream home or property investment with 8 Degree Real Estate in Bali. We guide you with clarity, confidence, and insightful.",
+      "ogImage": "https://8degree.co/wp-content/uploads/2025/01/pexels-lukasfst-21077134c-1.webp"
+    },
+    "/terms-and-conditions": {
+      "seoTitle": "Terms and Conditions",
+      "metaDescription": "Terms and Conditions | 8 Degree",
+      "canonical": "/terms-and-conditions",
+      "h1": "Terms and Conditions",
+      "ogTitle": "Terms and Conditions | 8 Degree",
+      "ogDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ut lacinia ex. Curabitur iaculis elit lorem, vitae fringilla turpis ultricies vel. Mauris pr…"
+    },
+    "/privacy": {
+      "seoTitle": "Privacy Policy",
+      "metaDescription": "Privacy Policy | 8 Degree",
+      "canonical": "/privacy",
+      "h1": "Privacy Policy",
+      "ogTitle": "Privacy Policy | 8 Degree",
+      "ogDescription": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque ut lacinia ex. Curabitur iaculis elit lorem, vitae fringilla turpis ultricies vel. Mauris pr…"
+    },
+    "/compare-properties": {
+      "seoTitle": "Compare Properties",
+      "metaDescription": "Compare Properties | 8 Degree",
+      "canonical": "/compare-properties",
+      "h1": "Compare Properties",
+      "ogTitle": "Compare Properties | 8 Degree"
+    },
+    "/invoices": {
+      "seoTitle": "8 Degree – Real Estate Agency in Bali",
+      "metaDescription": "Discover your dream home or property investment with 8 Degree Real Estate in Bali. We guide you with clarity, confidence, and insightful.",
+      "canonical": "/",
+      "h1": "Real Estate Agency in Bali",
+      "ogTitle": "8 Degree – Real Estate Agency in Bali",
+      "ogDescription": "Discover your dream home or property investment with 8 Degree Real Estate in Bali. We guide you with clarity, confidence, and insightful.",
+      "ogImage": "https://8degree.co/wp-content/uploads/2025/01/pexels-lukasfst-21077134c-1.webp"
+    },
+    "/saved-search": {
+      "seoTitle": "8 Degree – Real Estate Agency in Bali",
+      "metaDescription": "Discover your dream home or property investment with 8 Degree Real Estate in Bali. We guide you with clarity, confidence, and insightful.",
+      "canonical": "/",
+      "h1": "Real Estate Agency in Bali",
+      "ogTitle": "8 Degree – Real Estate Agency in Bali",
+      "ogDescription": "Discover your dream home or property investment with 8 Degree Real Estate in Bali. We guide you with clarity, confidence, and insightful.",
+      "ogImage": "https://8degree.co/wp-content/uploads/2025/01/pexels-lukasfst-21077134c-1.webp"
+    },
+    "/board": {
+      "seoTitle": "8 Degree – Real Estate Agency in Bali",
+      "metaDescription": "Discover your dream home or property investment with 8 Degree Real Estate in Bali. We guide you with clarity, confidence, and insightful.",
+      "canonical": "/",
+      "h1": "Real Estate Agency in Bali",
+      "ogTitle": "8 Degree – Real Estate Agency in Bali",
+      "ogDescription": "Discover your dream home or property investment with 8 Degree Real Estate in Bali. We guide you with clarity, confidence, and insightful.",
+      "ogImage": "https://8degree.co/wp-content/uploads/2025/01/pexels-lukasfst-21077134c-1.webp"
+    },
+    "/insights": {
+      "seoTitle": "8 Degree – Real Estate Agency in Bali",
+      "metaDescription": "Discover your dream home or property investment with 8 Degree Real Estate in Bali. We guide you with clarity, confidence, and insightful.",
+      "canonical": "/",
+      "h1": "Real Estate Agency in Bali",
+      "ogTitle": "8 Degree – Real Estate Agency in Bali",
+      "ogDescription": "Discover your dream home or property investment with 8 Degree Real Estate in Bali. We guide you with clarity, confidence, and insightful.",
+      "ogImage": "https://8degree.co/wp-content/uploads/2025/01/pexels-lukasfst-21077134c-1.webp"
+    },
+    "/developments": {
+      "seoTitle": "Developments",
+      "metaDescription": "Developments | 8 Degree",
+      "canonical": "/developments",
+      "h1": "EXPLORE NEW LIVING SPACE IN BALI",
+      "ogTitle": "Developments | 8 Degree",
+      "ogDescription": "EXPLORENEWLIVINGSPACEIN BALI Embark on the journey of finding your dream house with us. We specialize in helping you uncover the perfect property that meets…",
+      "ogImage": "https://8degree.co/wp-content/uploads/2023/01/apartment-0007.jpg"
+    },
+    "/investment-consulting": {
+      "seoTitle": "Investment Consulting",
+      "metaDescription": "Investment Consulting | 8 Degree",
+      "canonical": "/investment-consulting",
+      "h1": "EXPLORE NEW LIVING SPACE IN BALI",
+      "ogTitle": "Investment Consulting | 8 Degree",
+      "ogDescription": "EXPLORENEWLIVINGSPACEIN BALI Embark on the journey of finding your dream house with us. We specialize in helping you uncover the perfect property that meets…",
+      "ogImage": "https://8degree.co/wp-content/uploads/2023/01/apartment-0007.jpg"
+    },
+    "/legal-services": {
+      "seoTitle": "Legal Services",
+      "metaDescription": "Legal Services | 8 Degree",
+      "canonical": "/legal-services",
+      "h1": "EXPLORE NEW LIVING SPACE IN BALI",
+      "ogTitle": "Legal Services | 8 Degree",
+      "ogDescription": "EXPLORENEWLIVINGSPACEIN BALI Embark on the journey of finding your dream house with us. We specialize in helping you uncover the perfect property that meets…",
+      "ogImage": "https://8degree.co/wp-content/uploads/2023/01/apartment-0007.jpg"
+    },
+    "/our-story": {
+      "seoTitle": "Our Story",
+      "metaDescription": "Our Story | 8 Degree",
+      "canonical": "/our-story",
+      "h1": "Our Story",
+      "ogTitle": "Our Story | 8 Degree",
+      "ogDescription": "Our Story sub heading Our mission Our company is one of the leading providers in high-end real estate. Our services includes wide variety of luxurious proper…",
+      "ogImage": "https://8degree.co/wp-content/uploads/2023/01/ts-03.jpg"
+    },
+    "/land-for-sale": {
+      "seoTitle": "Land for Sale",
+      "metaDescription": "Land for Sale | 8 Degree",
+      "canonical": "/land-for-sale",
+      "h1": "Land for Sale",
+      "ogTitle": "Land for Sale | 8 Degree"
+    },
+    "/our-story-2": {
+      "seoTitle": "Mission & Values",
+      "metaDescription": "Mission & Values | 8 Degree",
+      "canonical": "/our-story-2",
+      "h1": "Our Purpose: Empowering Change in Bali Real Estate",
+      "ogTitle": "Mission & Values | 8 Degree",
+      "ogDescription": "Our Purpose: Empowering Change in Bali Real Estate 8 Degree Real Estate aims to empower young developers, support ethical investments, and guide home buyers…"
+    },
+    "/agents-2": {
+      "seoTitle": "Agents",
+      "metaDescription": "Agents | 8 Degree",
+      "canonical": "/agents-2",
+      "h1": "Agents",
+      "ogTitle": "Agents | 8 Degree"
+    },
+    "/invest/freehold": {
+      "seoTitle": "Invest Freehold",
+      "metaDescription": "Invest Freehold | 8 Degree",
+      "canonical": "/invest/freehold",
+      "h1": "Investment Properties You Can Trust",
+      "ogTitle": "Invest Freehold | 8 Degree",
+      "ogDescription": "Investment Properties You Can Trust Your One-Stop Real Estate Solution for Buying and Investing Worldwide! Take the first step Secure your spot now and claim…",
+      "ogImage": "https://8degree.co/wp-content/uploads/2025/01/1350000-studio-1_11zon-1-scaled.webp"
+    },
+    "/invest": {
+      "seoTitle": "Invest",
+      "metaDescription": "Invest | 8 Degree",
+      "canonical": "/invest",
+      "h1": "Welcome to the future of property investment",
+      "ogTitle": "Invest | 8 Degree",
+      "ogDescription": "Welcome to the future of property investment 8 Degree connects you with Bali’s finest properties, making your investment journey seamless and rewarding. BOOK…",
+      "ogImage": "https://8degree.co/wp-content/uploads/2025/01/1350000-studio-1_11zon-1-scaled.webp"
+    },
+    "/ready-units": {
+      "seoTitle": "Ready Units",
+      "metaDescription": "Bali's premier luxury properties with 8 Degree Real Estate. Discover your dream home or real estate investment in Bali.",
+      "canonical": "/ready-units",
+      "h1": "Ready Units",
+      "ogTitle": "Ready Units | 8 Degree",
+      "ogDescription": "Bali's premier luxury properties with 8 Degree Real Estate. Discover your dream home or real estate investment in Bali.",
+      "ogImage": "https://8degree.co/wp-content/uploads/2025/03/Blog-post-7.webp"
+    },
+    "/buy": {
+      "seoTitle": "Buy",
+      "metaDescription": "Bali's premier luxury properties with 8 Degree Real Estate. Discover your dream home or real estate investment in Bali.",
+      "canonical": "/buy",
+      "h1": "Buy",
+      "ogTitle": "Buy | 8 Degree",
+      "ogDescription": "Bali's premier luxury properties with 8 Degree Real Estate. Discover your dream home or real estate investment in Bali.",
+      "ogImage": "https://8degree.co/wp-content/uploads/2025/03/Cover-Blog-2.webp"
+    },
+    "/create-listing": {
+      "seoTitle": "Create Listing",
+      "metaDescription": "Create Listing | 8 Degree",
+      "canonical": "/create-listing",
+      "ogTitle": "Create Listing | 8 Degree"
+    },
+    "/property-management": {
+      "seoTitle": "Property Management",
+      "metaDescription": "Property Management | 8 Degree",
+      "canonical": "/property-management",
+      "h1": "EXPLORE NEW LIVING SPACE IN BALI",
+      "ogTitle": "Property Management | 8 Degree",
+      "ogDescription": "EXPLORENEWLIVINGSPACEIN BALI Embark on the journey of finding your dream house with us. We specialize in helping you uncover the perfect property that meets…",
+      "ogImage": "https://demo29.houzez.co/wp-content/uploads/2023/01/icon-02a.png"
+    },
+    "/no-access": {
+      "seoTitle": "No Access",
+      "metaDescription": "No Access | 8 Degree",
+      "canonical": "/no-access",
+      "h1": "No Access",
+      "ogTitle": "No Access | 8 Degree",
+      "ogDescription": "[dlm_no_access]"
+    },
+    "/contact": {
+      "seoTitle": "Contact",
+      "metaDescription": "Get in touch with 8 Degree Real Estate, your trusted partner in Bali real estate. Our team is here to assist you.",
+      "canonical": "/contact",
+      "h1": "Contact Us",
+      "ogTitle": "Contact | 8 Degree",
+      "ogDescription": "Get in touch with 8 Degree Real Estate, your trusted partner in Bali real estate. Our team is here to assist you.",
+      "ogImage": "https://8degree.co/wp-content/uploads/2025/01/Buy-Page-opt-3.webp"
+    },
+    "/off-plan-projects": {
+      "seoTitle": "Off-Plan Projects",
+      "metaDescription": "Off-Plan Projects | 8 Degree",
+      "canonical": "/off-plan-projects",
+      "h1": "Off-Plan Projects",
+      "ogTitle": "Off-Plan Projects | 8 Degree"
+    },
+    "/favorite-properties": {
+      "seoTitle": "Favorite Properties",
+      "metaDescription": "Favorite Properties | 8 Degree",
+      "canonical": "/favorite-properties",
+      "h1": "Favorite Properties",
+      "ogTitle": "Favorite Properties | 8 Degree",
+      "ogDescription": "Featured Ready Units Freehold IDR29,957,000,000 Ready Units Freehold 8D2524 IDR29,957,000,000 Kedungu, Indonesia 3200 sqm 530 sqm Beds: 4 Baths: 5 Villa Deta…",
+      "ogImage": "https://8degree.co/wp-content/uploads/2025/05/Jahten-House-Senyum-Design-1.-Exteriors-View-013-IMG_3858-1024x683.jpg"
+    },
+    "/buy-land": {
+      "seoTitle": "Buy Land",
+      "metaDescription": "Buy Land | 8 Degree",
+      "canonical": "/buy-land",
+      "h1": "Buy Land in Bali",
+      "ogTitle": "Buy Land | 8 Degree",
+      "ogDescription": "Looking to Buy Land in Bali?​ We work directly with landowners across Bali and Indonesia — from cliff-front plots to hidden investment gems. Many of these op…"
+    },
+    "/buyer-agents": {
+      "seoTitle": "Buyer's Agent #2",
+      "metaDescription": "Buyer's Agent #2 | 8 Degree",
+      "canonical": "/buyer-agents",
+      "h1": "Your Property. Your Interests. Fully Represented.",
+      "ogTitle": "Buyer's Agent #2 | 8 Degree",
+      "ogDescription": "Your Property. Your Interests. Fully Represented. Buying real estate in Bali? Don’t go in blind. Our Buyer’s Agent service is designed for serious investors…",
+      "ogImage": "https://8degree.co/wp-content/uploads/2025/10/3-1.jpg"
+    },
+    "/sell": {
+      "seoTitle": "Sell",
+      "metaDescription": "Sell | 8 Degree",
+      "canonical": "/sell",
+      "h1": "Partner with Bali’s First Master Agency",
+      "ogTitle": "Sell | 8 Degree",
+      "ogDescription": "Partner with Bali’s First Master Agency We don’t just list properties — we represent them. As a Master Agency, we work exclusively with selected developers w…"
+    },
+    "/submit-form": {
+      "seoTitle": "Thank You - Submit Form",
+      "metaDescription": "Thank You - Submit Form | 8 Degree",
+      "canonical": "/submit-form",
+      "ogTitle": "Thank You - Submit Form | 8 Degree",
+      "ogDescription": "Thank You! Your Form Has Been Successfully Submitted. We’ve received your details and our team is already reviewing your request. Expect a response shortly."
+    },
+    "/search-results": {
+      "seoTitle": "Search Results",
+      "metaDescription": "Search Results | 8 Degree",
+      "canonical": "/search-results",
+      "h1": "Search Results",
+      "ogTitle": "Search Results | 8 Degree"
+    },
+    "/frequently-asked-questions": {
+      "seoTitle": "Frequently Asked Questions",
+      "metaDescription": "Frequently Asked Questions | 8 Degree",
+      "canonical": "/frequently-asked-questions",
+      "h1": "Frequently Asked Questions",
+      "ogTitle": "Frequently Asked Questions | 8 Degree",
+      "ogDescription": "Frequently Asked Questions Common questions asked about real estate in Bali. Here are some important questions that are frequently asked and the answers to t…"
+    },
+    "/about-us": {
+      "seoTitle": "About us",
+      "metaDescription": "A purpose-driven Bali real estate agency dedicated to guiding investors, developers, and home buyers through seamless property journeys",
+      "canonical": "/about-us",
+      "h1": "About 8 Degree",
+      "ogTitle": "About us | 8 Degree",
+      "ogDescription": "A purpose-driven Bali real estate agency dedicated to guiding investors, developers, and home buyers through seamless property journeys",
+      "ogImage": "https://8degree.co/wp-content/uploads/2025/01/Untitled-3-e1736223012708.webp"
     },
     "/projects": {
-      "seoTitle": "Bali Properties for Sale",
-      "metaDescription": "Explore curated villas, developments, and land across Bali. Refine your search and view available listings.",
-      "canonical": "/projects"
-    },
-    "/journal": {
-      "seoTitle": "Journal · Bali Property Insights",
-      "metaDescription": "Market updates, investment guides, and Bali real estate insights from 8 Degree.",
-      "canonical": "/journal"
+      "seoTitle": "Properties Archive",
+      "metaDescription": "Properties Archive | 8 Degree",
+      "canonical": "/property",
+      "h1": "Properties",
+      "ogTitle": "Properties Archive | 8 Degree"
     },
     "/investment-guide": {
       "seoTitle": "Bali Property Investment Guide",
       "metaDescription": "Everything international investors need to know before buying property in Bali — ownership, ROI, and due diligence.",
       "canonical": "/investment-guide"
-    },
-    "/contact": {
-      "seoTitle": "Contact 8 Degree",
-      "metaDescription": "Speak with our Bali property advisory team about acquisitions, listings, and investments.",
-      "canonical": "/contact"
-    },
-    "/about-us": {
-      "seoTitle": "About 8 Degree Real Estate",
-      "metaDescription": "Boutique Bali real estate advisory focused on quality, clarity, and investor outcomes.",
-      "canonical": "/about-us"
     }
   },
   "journalSeo": {
     "why-bali-is-the-ultimate-investment-destination": {
       "seoTitle": "Why Bali is the Ultimate Investment Destination",
-      "metaDescription": "Bali, often referred to as the “Island of the Gods,” is not only a top tourist destination but also a promising investment hotspot. Here are several compelli…",
-      "canonical": "/journal/why-bali-is-the-ultimate-investment-destination",
-      "ogImage": "https://8degree.co/wp-content/uploads/2024/07/blog-3-8D.webp",
+      "metaDescription": "Bali is a top investment hotspot. Explore real estate investment in Bali for profitable opportunities in this thriving destination",
+      "canonical": "/why-bali-is-the-ultimate-investment-destination",
+      "h1": "Why Bali is the Ultimate Investment Destination",
+      "ogTitle": "Why Bali is the Ultimate Investment Destination | 8 Degree",
+      "ogDescription": "Bali is a top investment hotspot. Explore real estate investment in Bali for profitable opportunities in this thriving destination",
+      "ogImage": "https://8degree.co/wp-content/uploads/2024/07/blog-3-8D.png",
       "slug": "why-bali-is-the-ultimate-investment-destination",
       "oldPath": "/why-bali-is-the-ultimate-investment-destination",
       "publishedAt": "2024-07-10T01:37:00"
     },
     "protecting-paradise-how-to-invest-and-develop-ethically-in-bali": {
       "seoTitle": "Protecting Paradise: How to Invest and Develop Ethically in Bali",
-      "metaDescription": "Bali is more than just a tropical paradise; it is a place rich in culture, heritage, and natural beauty. As the island continues to attract global investors…",
-      "canonical": "/journal/protecting-paradise-how-to-invest-and-develop-ethically-in-bali",
-      "ogImage": "https://8degree.co/wp-content/uploads/2025/02/2.webp",
+      "metaDescription": "Invest in 8 Degree Bali responsibly with ethical real estate choices. Develop sustainably while preserving Bali’s culture and environment",
+      "canonical": "/protecting-paradise-how-to-invest-and-develop-ethically-in-bali",
+      "h1": "Protecting Paradise: How to Invest and Develop Ethically in Bali",
+      "ogTitle": "Protecting Paradise: How to Invest and Develop Ethically in Bali | 8 Degree",
+      "ogDescription": "Invest in 8 Degree Bali responsibly with ethical real estate choices. Develop sustainably while preserving Bali’s culture and environment",
+      "ogImage": "https://8degree.co/wp-content/uploads/2025/02/2-1024x640.png",
       "slug": "protecting-paradise-how-to-invest-and-develop-ethically-in-bali",
       "oldPath": "/protecting-paradise-how-to-invest-and-develop-ethically-in-bali",
       "publishedAt": "2025-02-18T03:45:23"
     },
     "why-investors-are-choosing-bali-for-generational-wealth": {
       "seoTitle": "Why Investors Are Choosing Bali for Generational Wealth",
-      "metaDescription": "True wealth isn’t just about owning property—it’s about building a legacy. In today’s dynamic economy, savvy investors seek assets that offer long-term secur…",
-      "canonical": "/journal/why-investors-are-choosing-bali-for-generational-wealth",
+      "metaDescription": "Bali is the top choice for investors seeking generational wealth, high rental yields, passive income from Bali villas, and sustainable real estate opportunit…",
+      "canonical": "/why-investors-are-choosing-bali-for-generational-wealth",
+      "h1": "Why Investors Are Choosing Bali for Generational Wealth",
+      "ogTitle": "Why Investors Are Choosing Bali for Generational Wealth | 8 Degree",
+      "ogDescription": "Bali is the top choice for investors seeking generational wealth, high rental yields, passive income from Bali villas, and sustainable real estate opportunit…",
       "ogImage": "https://8degree.co/wp-content/uploads/2025/03/Blog-4-8D.webp",
       "slug": "why-investors-are-choosing-bali-for-generational-wealth",
       "oldPath": "/why-investors-are-choosing-bali-for-generational-wealth",
@@ -314,8 +1600,11 @@ export const SEO_MIGRATION: MigrationBundle = {
     },
     "the-smart-investors-guide-to-ready-made-villas-in-bali": {
       "seoTitle": "The Smart Investor’s Guide to Ready-Made Villas in Bali",
-      "metaDescription": "Bali’s real estate market has been booming, with investors from around the world looking to own a slice of paradise. But when it comes to property investment…",
-      "canonical": "/journal/the-smart-investors-guide-to-ready-made-villas-in-bali",
+      "metaDescription": "Invest smarter with ready villas in Bali, low-risk, and high return units under $300K. Discover your ideal villa today with 8 Degree",
+      "canonical": "/the-smart-investors-guide-to-ready-made-villas-in-bali",
+      "h1": "The Smart Investor’s Guide to Ready-Made Villas in Bali",
+      "ogTitle": "The Smart Investor’s Guide to Ready-Made Villas in Bali | 8 Degree",
+      "ogDescription": "Invest smarter with ready villas in Bali, low-risk, and high return units under $300K. Discover your ideal villa today with 8 Degree",
       "ogImage": "https://8degree.co/wp-content/uploads/2025/03/Cover-Blog-1.webp",
       "slug": "the-smart-investors-guide-to-ready-made-villas-in-bali",
       "oldPath": "/the-smart-investors-guide-to-ready-made-villas-in-bali",
@@ -323,8 +1612,11 @@ export const SEO_MIGRATION: MigrationBundle = {
     },
     "why-do-investors-choose-to-buy-off-plan": {
       "seoTitle": "Why do Investors Choose to Buy Off-Plan?",
-      "metaDescription": "When it comes to investing in Bali real estate, savvy buyers often look beyond the present—they invest in the future. Buying off-plan (before a property is c…",
-      "canonical": "/journal/why-do-investors-choose-to-buy-off-plan",
+      "metaDescription": "off-plan villa investment in Bali offers early pricing, capital growth, and flexible payments. Start building your future today with 8 Degree",
+      "canonical": "/why-do-investors-choose-to-buy-off-plan",
+      "h1": "Why do Investors Choose to Buy Off-Plan?",
+      "ogTitle": "Why do Investors Choose to Buy Off-Plan? | 8 Degree",
+      "ogDescription": "off-plan villa investment in Bali offers early pricing, capital growth, and flexible payments. Start building your future today with 8 Degree",
       "ogImage": "https://8degree.co/wp-content/uploads/2025/03/Cover-Blog-2.webp",
       "slug": "why-do-investors-choose-to-buy-off-plan",
       "oldPath": "/why-do-investors-choose-to-buy-off-plan",
@@ -332,8 +1624,11 @@ export const SEO_MIGRATION: MigrationBundle = {
     },
     "balis-20-billion-metro-project-a-leap-toward-the-future-but-at-what-cost": {
       "seoTitle": "Bali’s $20 Billion Metro Project: A Leap Toward the Future, But at What Cost?",
-      "metaDescription": "When most people think of Bali, they picture lush rice fields, winding scooter rides, and the kind of spiritual that Instagram influencers dream about. But t…",
-      "canonical": "/journal/balis-20-billion-metro-project-a-leap-toward-the-future-but-at-what-cost",
+      "metaDescription": "Earlier this month, the government officially launched the $20 billion Bali Metro — a sweeping transportation project that promises to reshape the island’s f…",
+      "canonical": "/balis-20-billion-metro-project-a-leap-toward-the-future-but-at-what-cost",
+      "h1": "Bali’s $20 Billion Metro Project: A Leap Toward the Future, But at What Cost?",
+      "ogTitle": "Bali’s $20 Billion Metro Project: A Leap Toward the Future, But at What Cost? | 8 Degree",
+      "ogDescription": "Earlier this month, the government officially launched the $20 billion Bali Metro — a sweeping transportation project that promises to reshape the island’s f…",
       "ogImage": "https://8degree.co/wp-content/uploads/2025/05/ChatGPT-Image-May-21-2025-01_25_15-PM-e1747926018968.png",
       "slug": "balis-20-billion-metro-project-a-leap-toward-the-future-but-at-what-cost",
       "oldPath": "/balis-20-billion-metro-project-a-leap-toward-the-future-but-at-what-cost",
@@ -342,7 +1637,10 @@ export const SEO_MIGRATION: MigrationBundle = {
     "how-to-bring-your-pet-out-of-bali": {
       "seoTitle": "How to Bring Your Pet Out of Bali: Everything You Need to Know",
       "metaDescription": "Bringing a pet home from Bali is not just a logistical decision—it’s often an emotional one. Many expats and travelers meet their furry soulmates here: a res…",
-      "canonical": "/journal/how-to-bring-your-pet-out-of-bali",
+      "canonical": "/how-to-bring-your-pet-out-of-bali",
+      "h1": "How to Bring Your Pet Out of Bali: Everything You Need to Know",
+      "ogTitle": "How to Bring Your Pet Out of Bali: Everything You Need to Know | 8 Degree",
+      "ogDescription": "Bringing a pet home from Bali is not just a logistical decision—it’s often an emotional one. Many expats and travelers meet their furry soulmates here: a res…",
       "ogImage": "https://8degree.co/wp-content/uploads/2025/06/BLOG.png",
       "slug": "how-to-bring-your-pet-out-of-bali",
       "oldPath": "/how-to-bring-your-pet-out-of-bali",
@@ -351,7 +1649,10 @@ export const SEO_MIGRATION: MigrationBundle = {
     "can-you-buy-property-in-bali-with-installments": {
       "seoTitle": "Can You Buy Property in Bali with Installments? Here’s What You Need to Know",
       "metaDescription": "Dreaming of owning a tropical villa in Bali but hesitant about upfront costs? You’re not alone. With Bali’s property market booming, especially among digital…",
-      "canonical": "/journal/can-you-buy-property-in-bali-with-installments",
+      "canonical": "/can-you-buy-property-in-bali-with-installments",
+      "h1": "Can You Buy Property in Bali with Installments? Here’s What You Need to Know",
+      "ogTitle": "Can You Buy Property in Bali with Installments? Here’s What You Need to Know | 8 Degree",
+      "ogDescription": "Dreaming of owning a tropical villa in Bali but hesitant about upfront costs? You’re not alone. With Bali’s property market booming, especially among digital…",
       "ogImage": "https://8degree.co/wp-content/uploads/2025/06/Untitled-design-2.png",
       "slug": "can-you-buy-property-in-bali-with-installments",
       "oldPath": "/can-you-buy-property-in-bali-with-installments",
@@ -360,7 +1661,10 @@ export const SEO_MIGRATION: MigrationBundle = {
     "bali-international-tourism-surge-in-2025": {
       "seoTitle": "Bali’s International Tourism Surge in 2025: Who’s Visiting and Why It Matters",
       "metaDescription": "As Bali welcomes over 600,000 international visitors in May 2025 alone, the island’s tourism industry is entering a new phase of global engagement and econom…",
-      "canonical": "/journal/bali-international-tourism-surge-in-2025",
+      "canonical": "/bali-international-tourism-surge-in-2025",
+      "h1": "Bali’s International Tourism Surge in 2025: Who’s Visiting and Why It Matters",
+      "ogTitle": "Bali’s International Tourism Surge in 2025: Who’s Visiting and Why It Matters | 8 Degree",
+      "ogDescription": "As Bali welcomes over 600,000 international visitors in May 2025 alone, the island’s tourism industry is entering a new phase of global engagement and econom…",
       "ogImage": "https://8degree.co/wp-content/uploads/2025/07/Untitled-1024-x-640-px.png",
       "slug": "bali-international-tourism-surge-in-2025",
       "oldPath": "/bali-international-tourism-surge-in-2025",
@@ -369,35 +1673,47 @@ export const SEO_MIGRATION: MigrationBundle = {
     "indonesias-low-inflation-in-2025-a-green-light-for-real-estate-and-foreign-investment": {
       "seoTitle": "Indonesia’s Low Inflation in 2025: A Green Light for Real Estate and Foreign Investment",
       "metaDescription": "Indonesia is steering through 2025 with an exceptional economic narrative: moderate inflation that fosters confidence among real estate investors. With year-…",
-      "canonical": "/journal/indonesias-low-inflation-in-2025-a-green-light-for-real-estate-and-foreign-investment",
+      "canonical": "/indonesias-low-inflation-in-2025-a-green-light-for-real-estate-and-foreign-investment",
+      "h1": "Indonesia’s Low Inflation in 2025: A Green Light for Real Estate and Foreign Investment",
+      "ogTitle": "Indonesia’s Low Inflation in 2025: A Green Light for Real Estate and Foreign Investment | 8 Degree",
+      "ogDescription": "Indonesia is steering through 2025 with an exceptional economic narrative: moderate inflation that fosters confidence among real estate investors. With year-…",
       "ogImage": "https://8degree.co/wp-content/uploads/2025/07/ChatGPT-Image-Jul-4-2025-04_01_19-PM.png",
       "slug": "indonesias-low-inflation-in-2025-a-green-light-for-real-estate-and-foreign-investment",
       "oldPath": "/indonesias-low-inflation-in-2025-a-green-light-for-real-estate-and-foreign-investment",
       "publishedAt": "2025-07-05T07:00:00"
     },
     "north-bali-airport-a-rp-50-trillion-project-that-could-rebalance-balis-economy": {
-      "seoTitle": "North Bali Airport: A Rp 50 Trillion Project That Could Rebalance Bali’s Economy",
+      "seoTitle": "North Bali Airport: A Rp 50 Trillion Project That Could Rebalance Bali's Economy",
       "metaDescription": "A bold new airport is coming to North Bali—fully funded by private investors and poised to reshape the island’s future. But is it the answer to Bali’s inequa…",
-      "canonical": "/journal/north-bali-airport-a-rp-50-trillion-project-that-could-rebalance-balis-economy",
-      "ogImage": "https://8degree.co/wp-content/uploads/2025/07/7.png",
+      "canonical": "/north-bali-airport-a-rp-50-trillion-project-that-could-rebalance-balis-economy",
+      "h1": "North Bali Airport: A Rp 50 Trillion Project That Could Rebalance Bali’s Economy",
+      "ogTitle": "North Bali Airport: A Rp 50 Trillion Project That Could Rebalance Bali's Economy | 8 Degree",
+      "ogDescription": "A bold new airport is coming to North Bali—fully funded by private investors and poised to reshape the island’s future. But is it the answer to Bali’s inequa…",
+      "ogImage": "https://8degree.co/wp-content/uploads/2025/07/7-1024x683.png",
       "slug": "north-bali-airport-a-rp-50-trillion-project-that-could-rebalance-balis-economy",
       "oldPath": "/north-bali-airport-a-rp-50-trillion-project-that-could-rebalance-balis-economy",
       "publishedAt": "2025-07-11T08:00:10"
     },
     "bali-international-hospital-time-for-investors-to-wake-up": {
       "seoTitle": "Bali International Hospital: Time for Investors to Wake Up",
-      "metaDescription": "As Southeast Asia’s healthcare landscape evolves, Bali International Hospital is quietly becoming the region’s next major investment opportunity. Bali Intern…",
-      "canonical": "/journal/bali-international-hospital-time-for-investors-to-wake-up",
-      "ogImage": "https://8degree.co/wp-content/uploads/2025/07/Copy-of-Website-2.png",
+      "metaDescription": "Bali International Hospital (BIH) was officially introduced to the public with a groundbreaking ceremony in the Sanur Health Special Economic Zone (SEZ), Bal…",
+      "canonical": "/bali-international-hospital-time-for-investors-to-wake-up",
+      "h1": "Bali International Hospital: Time for Investors to Wake Up",
+      "ogTitle": "Bali International Hospital: Time for Investors to Wake Up | 8 Degree",
+      "ogDescription": "Bali International Hospital (BIH) was officially introduced to the public with a groundbreaking ceremony in the Sanur Health Special Economic Zone (SEZ), Bal…",
+      "ogImage": "https://8degree.co/wp-content/uploads/2025/07/Copy-of-Website-2-1024x683.png",
       "slug": "bali-international-hospital-time-for-investors-to-wake-up",
       "oldPath": "/bali-international-hospital-time-for-investors-to-wake-up",
       "publishedAt": "2025-07-21T06:56:04"
     },
     "balis-bingin-beach-demolitions-the-shocking-turn-of-events-every-investor-needs-to-understand": {
-      "seoTitle": "Bali’s Bingin Beach Demolitions: The Shocking Turn of Events Every Investor Needs to Understand",
+      "seoTitle": "Bali's Bingin Beach Demolitions: The Shocking Turn of Events Every Investor Needs to Understand",
       "metaDescription": "In July 2025, the serene cliffs of Bingin Beach in Uluwatu, Bali—long known for their raw natural beauty and grassroots tourism—became ground zero for one of…",
-      "canonical": "/journal/balis-bingin-beach-demolitions-the-shocking-turn-of-events-every-investor-needs-to-understand",
-      "ogImage": "https://8degree.co/wp-content/uploads/2025/07/Copy-of-Website-3.png",
+      "canonical": "/balis-bingin-beach-demolitions-the-shocking-turn-of-events-every-investor-needs-to-understand",
+      "h1": "Bali’s Bingin Beach Demolitions: The Shocking Turn of Events Every Investor Needs to Understand",
+      "ogTitle": "Bali's Bingin Beach Demolitions: The Shocking Turn of Events Every Investor Needs to Understand | 8 Degree",
+      "ogDescription": "In July 2025, the serene cliffs of Bingin Beach in Uluwatu, Bali—long known for their raw natural beauty and grassroots tourism—became ground zero for one of…",
+      "ogImage": "https://8degree.co/wp-content/uploads/2025/07/Copy-of-Website-3-1024x683.png",
       "slug": "balis-bingin-beach-demolitions-the-shocking-turn-of-events-every-investor-needs-to-understand",
       "oldPath": "/balis-bingin-beach-demolitions-the-shocking-turn-of-events-every-investor-needs-to-understand",
       "publishedAt": "2025-07-24T08:41:16"
@@ -405,7 +1721,10 @@ export const SEO_MIGRATION: MigrationBundle = {
     "leasehold-vs-freehold-property-in-bali-a-guide-for-foreign-investors": {
       "seoTitle": "Leasehold vs Freehold Property in Bali – A Guide for Foreign Investors",
       "metaDescription": "Bali’s real estate market is world-famous for its tropical villas, strong rental yields, and lifestyle appeal. But before investing, it’s crucial to understa…",
-      "canonical": "/journal/leasehold-vs-freehold-property-in-bali-a-guide-for-foreign-investors",
+      "canonical": "/leasehold-vs-freehold-property-in-bali-a-guide-for-foreign-investors",
+      "h1": "Leasehold vs Freehold Property in Bali – A Guide for Foreign Investors",
+      "ogTitle": "Leasehold vs Freehold Property in Bali – A Guide for Foreign Investors | 8 Degree",
+      "ogDescription": "Bali’s real estate market is world-famous for its tropical villas, strong rental yields, and lifestyle appeal. But before investing, it’s crucial to understa…",
       "ogImage": "https://8degree.co/wp-content/uploads/2025/08/3-e1755074113747.png",
       "slug": "leasehold-vs-freehold-property-in-bali-a-guide-for-foreign-investors",
       "oldPath": "/leasehold-vs-freehold-property-in-bali-a-guide-for-foreign-investors",
@@ -413,8 +1732,11 @@ export const SEO_MIGRATION: MigrationBundle = {
     },
     "expats-in-bali-can-now-access-indonesias-bpjs-healthcare": {
       "seoTitle": "Expats in Bali Can Now Access Indonesia’s BPJS Healthcare",
-      "metaDescription": "The card above—inscribed “Kartu Indonesia Sehat,” Indonesia’s Healthy Indonesia Card—symbolizes the country’s universal healthcare program. Now, Bali’s expat…",
-      "canonical": "/journal/expats-in-bali-can-now-access-indonesias-bpjs-healthcare",
+      "metaDescription": "The card above—inscribed “Kartu Indonesia Sehat,” Indonesia’s Healthy Indonesia Card—symbolizes the country’s universal healthcare program.",
+      "canonical": "/expats-in-bali-can-now-access-indonesias-bpjs-healthcare",
+      "h1": "Expats in Bali Can Now Access Indonesia’s BPJS Healthcare",
+      "ogTitle": "Expats in Bali Can Now Access Indonesia’s BPJS Healthcare | 8 Degree",
+      "ogDescription": "The card above—inscribed “Kartu Indonesia Sehat,” Indonesia’s Healthy Indonesia Card—symbolizes the country’s universal healthcare program.",
       "ogImage": "https://8degree.co/wp-content/uploads/2025/08/unnamed-11.png",
       "slug": "expats-in-bali-can-now-access-indonesias-bpjs-healthcare",
       "oldPath": "/expats-in-bali-can-now-access-indonesias-bpjs-healthcare",
@@ -422,9 +1744,12 @@ export const SEO_MIGRATION: MigrationBundle = {
     },
     "get-to-know-the-property-zoning-in-bali-a-2025-investors-guide-to-real-estate": {
       "seoTitle": "Get to Know the Property Zoning in Bali: A 2025 Investor’s Guide to Real Estate",
-      "metaDescription": "Bali Real Estate 2025: Lessons from Bingin The demolition of several villas in Bingin earlier this year captured headlines across Indonesia and beyond. Inves…",
-      "canonical": "/journal/get-to-know-the-property-zoning-in-bali-a-2025-investors-guide-to-real-estate",
-      "ogImage": "https://8degree.co/wp-content/uploads/2025/09/unnamed-13-e1756876415340.png",
+      "metaDescription": "The demolition of several villas in Bingin earlier this year captured headlines across Indonesia and beyond.",
+      "canonical": "/get-to-know-the-property-zoning-in-bali-a-2025-investors-guide-to-real-estate",
+      "h1": "Get to Know the Property Zoning in Bali: A 2025 Investor’s Guide to Real Estate",
+      "ogTitle": "Get to Know the Property Zoning in Bali: A 2025 Investor’s Guide to Real Estate | 8 Degree",
+      "ogDescription": "The demolition of several villas in Bingin earlier this year captured headlines across Indonesia and beyond.",
+      "ogImage": "https://8degree.co/wp-content/uploads/2025/09/unnamed-13-e1756876415340-1024x685.png",
       "slug": "get-to-know-the-property-zoning-in-bali-a-2025-investors-guide-to-real-estate",
       "oldPath": "/get-to-know-the-property-zoning-in-bali-a-2025-investors-guide-to-real-estate",
       "publishedAt": "2025-09-02T10:35:00"
@@ -432,7 +1757,10 @@ export const SEO_MIGRATION: MigrationBundle = {
     "must-visit-places-in-lombok-famous-beaches-and-cafes-you-shouldnt-miss": {
       "seoTitle": "Must-Visit Places in Lombok: Famous Beaches and Cafés You Shouldn’t Miss",
       "metaDescription": "Lombok is quickly emerging as one of Indonesia’s most attractive destinations, drawing travelers who want the beauty of Bali without the overwhelming crowds.…",
-      "canonical": "/journal/must-visit-places-in-lombok-famous-beaches-and-cafes-you-shouldnt-miss",
+      "canonical": "/must-visit-places-in-lombok-famous-beaches-and-cafes-you-shouldnt-miss",
+      "h1": "Must-Visit Places in Lombok: Famous Beaches and Cafés You Shouldn’t Miss",
+      "ogTitle": "Must-Visit Places in Lombok: Famous Beaches and Cafés You Shouldn’t Miss | 8 Degree",
+      "ogDescription": "Lombok is quickly emerging as one of Indonesia’s most attractive destinations, drawing travelers who want the beauty of Bali without the overwhelming crowds.…",
       "ogImage": "https://8degree.co/wp-content/uploads/2025/09/unnamed-24.png",
       "slug": "must-visit-places-in-lombok-famous-beaches-and-cafes-you-shouldnt-miss",
       "oldPath": "/must-visit-places-in-lombok-famous-beaches-and-cafes-you-shouldnt-miss",
@@ -440,8 +1768,11 @@ export const SEO_MIGRATION: MigrationBundle = {
     },
     "new-entry-rules-for-bali-in-2025-what-travelers-need-to-know-about-the-all-indonesia-arrival-card": {
       "seoTitle": "New Entry Rules for Bali in 2025: What Travelers Need to Know About the All-Indonesia Arrival Card",
-      "metaDescription": "Starting September 1, 2025, visitors entering Bali—and eventually all of Indonesia—will face a new but simplified requirement: the All-Indonesia Digital Arri…",
-      "canonical": "/journal/new-entry-rules-for-bali-in-2025-what-travelers-need-to-know-about-the-all-indonesia-arrival-card",
+      "metaDescription": "visitors entering Bali—and eventually all of Indonesia—will face a new but simplified requirement: the All-Indonesia Digital Arrival Card.",
+      "canonical": "/new-entry-rules-for-bali-in-2025-what-travelers-need-to-know-about-the-all-indonesia-arrival-card",
+      "h1": "New Entry Rules for Bali in 2025: What Travelers Need to Know About the All-Indonesia Arrival Card",
+      "ogTitle": "New Entry Rules for Bali in 2025: What Travelers Need to Know About the All-Indonesia Arrival Card | 8 Degree",
+      "ogDescription": "visitors entering Bali—and eventually all of Indonesia—will face a new but simplified requirement: the All-Indonesia Digital Arrival Card.",
       "ogImage": "https://8degree.co/wp-content/uploads/2025/09/unnamed-6-e1757569803741.jpg",
       "slug": "new-entry-rules-for-bali-in-2025-what-travelers-need-to-know-about-the-all-indonesia-arrival-card",
       "oldPath": "/new-entry-rules-for-bali-in-2025-what-travelers-need-to-know-about-the-all-indonesia-arrival-card",
@@ -449,8 +1780,11 @@ export const SEO_MIGRATION: MigrationBundle = {
     },
     "hows-the-buying-process-of-property-in-bali": {
       "seoTitle": "How’s the Buying Process of Property in Bali?",
-      "metaDescription": "Why Investors Choose Bali Bali is more than a tropical paradise; it has become one of the most profitable real estate markets in Asia. With international tou…",
-      "canonical": "/journal/hows-the-buying-process-of-property-in-bali",
+      "metaDescription": "Bali is more than a tropical paradise; it has become one of the most profitable real estate markets in Asia",
+      "canonical": "/hows-the-buying-process-of-property-in-bali",
+      "h1": "How’s the Buying Process of Property in Bali?",
+      "ogTitle": "How’s the Buying Process of Property in Bali? | 8 Degree",
+      "ogDescription": "Bali is more than a tropical paradise; it has become one of the most profitable real estate markets in Asia",
       "ogImage": "https://8degree.co/wp-content/uploads/2025/09/unnamed-30-e1758096844158.png",
       "slug": "hows-the-buying-process-of-property-in-bali",
       "oldPath": "/hows-the-buying-process-of-property-in-bali",
@@ -458,8 +1792,11 @@ export const SEO_MIGRATION: MigrationBundle = {
     },
     "things-to-avoid-when-visiting-bali-essential-travel-etiquette-and-safety-tips": {
       "seoTitle": "Things to Avoid When Visiting Bali: Essential Travel Etiquette and Safety Tips",
-      "metaDescription": "Every year, millions of travelers are drawn to Bali for its breathtaking beaches, lush rice terraces, and rich cultural heritage. Yet, many visitors unintent…",
-      "canonical": "/journal/things-to-avoid-when-visiting-bali-essential-travel-etiquette-and-safety-tips",
+      "metaDescription": "the key things tourists should avoid when visiting Bali—and why it matters for both cultural respect and personal safety.",
+      "canonical": "/things-to-avoid-when-visiting-bali-essential-travel-etiquette-and-safety-tips",
+      "h1": "Things to Avoid When Visiting Bali: Essential Travel Etiquette and Safety Tips",
+      "ogTitle": "Things to Avoid When Visiting Bali: Essential Travel Etiquette and Safety Tips | 8 Degree",
+      "ogDescription": "the key things tourists should avoid when visiting Bali—and why it matters for both cultural respect and personal safety.",
       "ogImage": "https://8degree.co/wp-content/uploads/2025/09/unnamed-4.png",
       "slug": "things-to-avoid-when-visiting-bali-essential-travel-etiquette-and-safety-tips",
       "oldPath": "/things-to-avoid-when-visiting-bali-essential-travel-etiquette-and-safety-tips",
@@ -467,8 +1804,11 @@ export const SEO_MIGRATION: MigrationBundle = {
     },
     "the-95m-bet-on-balis-future-how-2026-infrastructure-projects-will-shape-the-islands-growth": {
       "seoTitle": "The $95M Bet on Bali’s Future: How 2026 Infrastructure Projects Will Shape the Island’s Growth",
-      "metaDescription": "Bali has always been more than a holiday destination. For decades, the island has captured global attention with its natural beauty, cultural richness, and t…",
-      "canonical": "/journal/the-95m-bet-on-balis-future-how-2026-infrastructure-projects-will-shape-the-islands-growth",
+      "metaDescription": "Indonesia’s Ministry of Public Works is making a $95 million commitment (1.549 trillion IDR) to upgrade key infrastructure by 2026",
+      "canonical": "/the-95m-bet-on-balis-future-how-2026-infrastructure-projects-will-shape-the-islands-growth",
+      "h1": "The $95M Bet on Bali’s Future: How 2026 Infrastructure Projects Will Shape the Island’s Growth",
+      "ogTitle": "The $95M Bet on Bali’s Future: How 2026 Infrastructure Projects Will Shape the Island’s Growth | 8 Degree",
+      "ogDescription": "Indonesia’s Ministry of Public Works is making a $95 million commitment (1.549 trillion IDR) to upgrade key infrastructure by 2026",
       "ogImage": "https://8degree.co/wp-content/uploads/2025/09/unnamed-5.png",
       "slug": "the-95m-bet-on-balis-future-how-2026-infrastructure-projects-will-shape-the-islands-growth",
       "oldPath": "/the-95m-bet-on-balis-future-how-2026-infrastructure-projects-will-shape-the-islands-growth",
@@ -476,8 +1816,11 @@ export const SEO_MIGRATION: MigrationBundle = {
     },
     "foreign-ownership-in-bali-a-legal-guide-for-discerning-investors": {
       "seoTitle": "Foreign Ownership in Bali: A Legal Guide for Discerning Investors",
-      "metaDescription": "In 2025, Indonesia’s real estate landscape continues to evolve, and for international investors, expats, and high-net-worth individuals, understanding Bali’s…",
-      "canonical": "/journal/foreign-ownership-in-bali-a-legal-guide-for-discerning-investors",
+      "metaDescription": "While foreigners cannot hold freehold titles outright, Indonesia provides structured, lawful alternatives—if approached carefully.",
+      "canonical": "/foreign-ownership-in-bali-a-legal-guide-for-discerning-investors",
+      "h1": "Foreign Ownership in Bali: A Legal Guide for Discerning Investors",
+      "ogTitle": "Foreign Ownership in Bali: A Legal Guide for Discerning Investors | 8 Degree",
+      "ogDescription": "While foreigners cannot hold freehold titles outright, Indonesia provides structured, lawful alternatives—if approached carefully.",
       "ogImage": "https://8degree.co/wp-content/uploads/2025/10/unnamed-5kjkj.jpg",
       "slug": "foreign-ownership-in-bali-a-legal-guide-for-discerning-investors",
       "oldPath": "/foreign-ownership-in-bali-a-legal-guide-for-discerning-investors",
@@ -485,17 +1828,23 @@ export const SEO_MIGRATION: MigrationBundle = {
     },
     "the-digital-nomad-economy-why-bali-became-the-top-digital-nomad-destination-in-southeast-asia-in-2025": {
       "seoTitle": "The Digital Nomad Economy: Why Bali Became the Top Digital Nomad Destination in Southeast Asia in 2025",
-      "metaDescription": "Often called the “Island of the Gods,” Bali has long captivated visitors with its lush landscapes, sacred temples, and deeply rooted culture. Known for its n…",
-      "canonical": "/journal/the-digital-nomad-economy-why-bali-became-the-top-digital-nomad-destination-in-southeast-asia-in-2025",
-      "ogImage": "https://8degree.co/wp-content/uploads/2025/10/unnamed-11.png",
+      "metaDescription": "Often called the “Island of the Gods,” Bali has long captivated visitors with its lush landscapes, sacred temples, and deeply rooted culture.",
+      "canonical": "/the-digital-nomad-economy-why-bali-became-the-top-digital-nomad-destination-in-southeast-asia-in-2025",
+      "h1": "The Digital Nomad Economy: Why Bali Became the Top Digital Nomad Destination in Southeast Asia in 2025",
+      "ogTitle": "The Digital Nomad Economy: Why Bali Became the Top Digital Nomad Destination in Southeast Asia in 2025 | 8 Degree",
+      "ogDescription": "Often called the “Island of the Gods,” Bali has long captivated visitors with its lush landscapes, sacred temples, and deeply rooted culture.",
+      "ogImage": "https://8degree.co/wp-content/uploads/2025/10/unnamed-11-1024x683.png",
       "slug": "the-digital-nomad-economy-why-bali-became-the-top-digital-nomad-destination-in-southeast-asia-in-2025",
       "oldPath": "/the-digital-nomad-economy-why-bali-became-the-top-digital-nomad-destination-in-southeast-asia-in-2025",
       "publishedAt": "2025-10-14T01:37:42"
     },
     "bali-tightens-rules-for-foreign-business-investment-property-and-msmes-2025": {
-      "seoTitle": "Bali Tightens Rules For Foreign Business, Investment, Property, and MSMEs – 2025",
-      "metaDescription": "Bali is reshaping its economic rhythm in 2025 — tightening rules around foreign investment, property, and small enterprise. The aim: to protect local livelih…",
-      "canonical": "/journal/bali-tightens-rules-for-foreign-business-investment-property-and-msmes-2025",
+      "seoTitle": "Bali Tightens Rules For Foreign Business, Investment, Property, and MSMEs - 2025",
+      "metaDescription": "The aim: to protect local livelihoods, close legal loopholes, and keep the Island of the Gods in local hands",
+      "canonical": "/bali-tightens-rules-for-foreign-business-investment-property-and-msmes-2025",
+      "h1": "Bali Tightens Rules For Foreign Business, Investment, Property, and MSMEs – 2025",
+      "ogTitle": "Bali Tightens Rules For Foreign Business, Investment, Property, and MSMEs - 2025 | 8 Degree",
+      "ogDescription": "The aim: to protect local livelihoods, close legal loopholes, and keep the Island of the Gods in local hands",
       "ogImage": "https://8degree.co/wp-content/uploads/2025/10/unnamed-14.png",
       "slug": "bali-tightens-rules-for-foreign-business-investment-property-and-msmes-2025",
       "oldPath": "/bali-tightens-rules-for-foreign-business-investment-property-and-msmes-2025",
@@ -503,35 +1852,47 @@ export const SEO_MIGRATION: MigrationBundle = {
     },
     "balinese-houses-architecture-harmony-between-nature-spirit-and-design": {
       "seoTitle": "Balinese Houses Architecture: Harmony Between Nature, Spirit, and Design",
-      "metaDescription": "When you visit Bali, its distinctive architecture and art immediately reveal the island’s deep cultural roots. Traditional family compounds, with temples and…",
-      "canonical": "/journal/balinese-houses-architecture-harmony-between-nature-spirit-and-design",
-      "ogImage": "https://8degree.co/wp-content/uploads/2025/10/unnamed-18.png",
+      "metaDescription": "When you visit Bali, its distinctive architecture and art immediately reveal the island’s deep cultural roots.",
+      "canonical": "/balinese-houses-architecture-harmony-between-nature-spirit-and-design",
+      "h1": "Balinese Houses Architecture: Harmony Between Nature, Spirit, and Design",
+      "ogTitle": "Balinese Houses Architecture: Harmony Between Nature, Spirit, and Design | 8 Degree",
+      "ogDescription": "When you visit Bali, its distinctive architecture and art immediately reveal the island’s deep cultural roots.",
+      "ogImage": "https://8degree.co/wp-content/uploads/2025/10/unnamed-18-1024x683.png",
       "slug": "balinese-houses-architecture-harmony-between-nature-spirit-and-design",
       "oldPath": "/balinese-houses-architecture-harmony-between-nature-spirit-and-design",
       "publishedAt": "2025-10-24T01:32:14"
     },
     "why-tap-water-in-bali-isnt-reliably-safe": {
       "seoTitle": "Why Tap Water in Bali Isn’t Reliably Safe",
-      "metaDescription": "Bali’s tap water isn’t always safe to drink. Aging infrastructure, polluted rivers, and inconsistent water treatment make quality unpredictable. Even treated…",
-      "canonical": "/journal/why-tap-water-in-bali-isnt-reliably-safe",
-      "ogImage": "https://8degree.co/wp-content/uploads/2025/10/w5.png",
+      "metaDescription": "Many treatment plants draw water from rivers that are already heavily polluted, while pipelines can leak or reintroduce contaminants.",
+      "canonical": "/why-tap-water-in-bali-isnt-reliably-safe",
+      "h1": "Why Tap Water in Bali Isn’t Reliably Safe",
+      "ogTitle": "Why Tap Water in Bali Isn’t Reliably Safe | 8 Degree",
+      "ogDescription": "Many treatment plants draw water from rivers that are already heavily polluted, while pipelines can leak or reintroduce contaminants.",
+      "ogImage": "https://8degree.co/wp-content/uploads/2025/10/w5-1024x683.png",
       "slug": "why-tap-water-in-bali-isnt-reliably-safe",
       "oldPath": "/why-tap-water-in-bali-isnt-reliably-safe",
       "publishedAt": "2025-10-29T05:49:58"
     },
     "where-to-live-in-bali-the-best-areas-for-families-couples-and-retirees": {
       "seoTitle": "Where to Live in Bali: The Best Areas for Families, Couples, and Retirees",
-      "metaDescription": "Bali is more than just a tropical vacation spot, it’s a lifestyle destination. With lush rice terraces, world-class dining, and a warm local culture, it’s no…",
-      "canonical": "/journal/where-to-live-in-bali-the-best-areas-for-families-couples-and-retirees",
-      "ogImage": "https://8degree.co/wp-content/uploads/2025/11/envato-labs-image-edit-1.png",
+      "metaDescription": "With lush rice terraces, world-class dining, and a warm local culture, it’s no wonder thousands of people move here each year.",
+      "canonical": "/where-to-live-in-bali-the-best-areas-for-families-couples-and-retirees",
+      "h1": "Where to Live in Bali: The Best Areas for Families, Couples, and Retirees",
+      "ogTitle": "Where to Live in Bali: The Best Areas for Families, Couples, and Retirees | 8 Degree",
+      "ogDescription": "With lush rice terraces, world-class dining, and a warm local culture, it’s no wonder thousands of people move here each year.",
+      "ogImage": "https://8degree.co/wp-content/uploads/2025/11/envato-labs-image-edit-1-1024x682.png",
       "slug": "where-to-live-in-bali-the-best-areas-for-families-couples-and-retirees",
       "oldPath": "/where-to-live-in-bali-the-best-areas-for-families-couples-and-retirees",
       "publishedAt": "2025-11-07T01:52:39"
     },
     "what-to-avoid-during-rainy-season-in-bali-important-travel-tips-for-november-march": {
       "seoTitle": "What to Avoid During Rainy Season in Bali (Important Travel Tips for November–March)",
-      "metaDescription": "Bali’s rainy season—from November to March—turns the island vibrant and green, but it also brings heavy humidity, scattered showers, and occasional flooding.…",
-      "canonical": "/journal/what-to-avoid-during-rainy-season-in-bali-important-travel-tips-for-november-march",
+      "metaDescription": "If you’re visiting Bali during wet season, knowing what to avoid can help you stay dry, safe, and make the most of your trip.",
+      "canonical": "/what-to-avoid-during-rainy-season-in-bali-important-travel-tips-for-november-march",
+      "h1": "What to Avoid During Rainy Season in Bali (Important Travel Tips for November–March)",
+      "ogTitle": "What to Avoid During Rainy Season in Bali (Important Travel Tips for November–March) | 8 Degree",
+      "ogDescription": "If you’re visiting Bali during wet season, knowing what to avoid can help you stay dry, safe, and make the most of your trip.",
       "ogImage": "https://8degree.co/wp-content/uploads/2025/11/unnamed-40-1.png",
       "slug": "what-to-avoid-during-rainy-season-in-bali-important-travel-tips-for-november-march",
       "oldPath": "/what-to-avoid-during-rainy-season-in-bali-important-travel-tips-for-november-march",
@@ -539,8 +1900,11 @@ export const SEO_MIGRATION: MigrationBundle = {
     },
     "10-best-co-working-cafes-in-canggu-2025": {
       "seoTitle": "10 Best Co-Working Cafes in Canggu 2025",
-      "metaDescription": "Canggu has become one of the world’s most dynamic hubs for digital nomads, entrepreneurs, and creatives. With its tropical charm, buzzing café scene, and glo…",
-      "canonical": "/journal/10-best-co-working-cafes-in-canggu-2025",
+      "metaDescription": "Discover why Canggu is a top hub for digital nomads—tropical charm, vibrant cafés, and inspiring co-working spaces in the heart of Bali.",
+      "canonical": "/10-best-co-working-cafes-in-canggu-2025",
+      "h1": "10 Best Co-Working Cafes in Canggu 2025",
+      "ogTitle": "10 Best Co-Working Cafes in Canggu 2025 | 8 Degree",
+      "ogDescription": "Discover why Canggu is a top hub for digital nomads—tropical charm, vibrant cafés, and inspiring co-working spaces in the heart of Bali.",
       "ogImage": "https://8degree.co/wp-content/uploads/2025/11/unnamed-41-1.png",
       "slug": "10-best-co-working-cafes-in-canggu-2025",
       "oldPath": "/10-best-co-working-cafes-in-canggu-2025",
@@ -548,8 +1912,11 @@ export const SEO_MIGRATION: MigrationBundle = {
     },
     "what-to-do-for-nye-2025-in-bali": {
       "seoTitle": "What to Do for NYE 2025 in Bali",
-      "metaDescription": "New Year’s Eve in Bali is a vibrant mix of culture, celebration, beachfront glamour, and unforgettable island vibes. Whether you’re looking for an elegant di…",
-      "canonical": "/journal/what-to-do-for-nye-2025-in-bali",
+      "metaDescription": "New Year’s Eve in Bali is a vibrant mix of culture, celebration, beachfront glamour, and unforgettable island vibes.",
+      "canonical": "/what-to-do-for-nye-2025-in-bali",
+      "h1": "What to Do for NYE 2025 in Bali",
+      "ogTitle": "What to Do for NYE 2025 in Bali | 8 Degree",
+      "ogDescription": "New Year’s Eve in Bali is a vibrant mix of culture, celebration, beachfront glamour, and unforgettable island vibes.",
       "ogImage": "https://8degree.co/wp-content/uploads/2025/12/unnamed-53-1.png",
       "slug": "what-to-do-for-nye-2025-in-bali",
       "oldPath": "/what-to-do-for-nye-2025-in-bali",
@@ -558,7 +1925,10 @@ export const SEO_MIGRATION: MigrationBundle = {
     "why-uluwatu-is-balis-fastest-growing-lifestyle-destination-in-2025": {
       "seoTitle": "Why Uluwatu Is Bali’s Fastest-Growing Lifestyle Destination in 2025",
       "metaDescription": "Uluwatu has quickly become one of Bali’s top lifestyle destinations in 2025, transforming from a quiet surf village into a thriving hub for luxury travel, pr…",
-      "canonical": "/journal/why-uluwatu-is-balis-fastest-growing-lifestyle-destination-in-2025",
+      "canonical": "/why-uluwatu-is-balis-fastest-growing-lifestyle-destination-in-2025",
+      "h1": "Why Uluwatu Is Bali’s Fastest-Growing Lifestyle Destination in 2025",
+      "ogTitle": "Why Uluwatu Is Bali’s Fastest-Growing Lifestyle Destination in 2025 | 8 Degree",
+      "ogDescription": "Uluwatu has quickly become one of Bali’s top lifestyle destinations in 2025, transforming from a quiet surf village into a thriving hub for luxury travel, pr…",
       "ogImage": "https://8degree.co/wp-content/uploads/2025/12/unnamed-65-1.png",
       "slug": "why-uluwatu-is-balis-fastest-growing-lifestyle-destination-in-2025",
       "oldPath": "/why-uluwatu-is-balis-fastest-growing-lifestyle-destination-in-2025",
@@ -566,8 +1936,11 @@ export const SEO_MIGRATION: MigrationBundle = {
     },
     "pros-and-cons-of-owning-property-in-bali-a-short-investor-guide-2026": {
       "seoTitle": "Pros and Cons of Owning Property in Bali: A Short Investor Guide (2026)",
-      "metaDescription": "Owning property in Bali continues to attract international buyers seeking a balance of lifestyle enjoyment and investment performance. Supported by strong to…",
-      "canonical": "/journal/pros-and-cons-of-owning-property-in-bali-a-short-investor-guide-2026",
+      "metaDescription": "Owning property in Bali continues to attract international buyers seeking a balance of lifestyle enjoyment and investment performance.",
+      "canonical": "/pros-and-cons-of-owning-property-in-bali-a-short-investor-guide-2026",
+      "h1": "Pros and Cons of Owning Property in Bali: A Short Investor Guide (2026)",
+      "ogTitle": "Pros and Cons of Owning Property in Bali: A Short Investor Guide (2026) | 8 Degree",
+      "ogDescription": "Owning property in Bali continues to attract international buyers seeking a balance of lifestyle enjoyment and investment performance.",
       "ogImage": "https://8degree.co/wp-content/uploads/2025/12/unnamed-5-1.jpg",
       "slug": "pros-and-cons-of-owning-property-in-bali-a-short-investor-guide-2026",
       "oldPath": "/pros-and-cons-of-owning-property-in-bali-a-short-investor-guide-2026",
@@ -575,8 +1948,11 @@ export const SEO_MIGRATION: MigrationBundle = {
     },
     "why-bali-remains-one-of-the-worlds-most-desirable-real-estate-markets": {
       "seoTitle": "Why Bali Remains One of the World’s Most Desirable Real Estate Markets",
-      "metaDescription": "Bali has evolved far beyond a holiday destination. Today, it stands as a global lifestyle and property investment hub, attracting buyers who value both long-…",
-      "canonical": "/journal/why-bali-remains-one-of-the-worlds-most-desirable-real-estate-markets",
+      "metaDescription": "Today, it stands as a global lifestyle and property investment hub, attracting buyers who value both long-term potential and quality of life.",
+      "canonical": "/why-bali-remains-one-of-the-worlds-most-desirable-real-estate-markets",
+      "h1": "Why Bali Remains One of the World’s Most Desirable Real Estate Markets",
+      "ogTitle": "Why Bali Remains One of the World’s Most Desirable Real Estate Markets | 8 Degree",
+      "ogDescription": "Today, it stands as a global lifestyle and property investment hub, attracting buyers who value both long-term potential and quality of life.",
       "ogImage": "https://8degree.co/wp-content/uploads/2025/12/unnamed-68-1.png",
       "slug": "why-bali-remains-one-of-the-worlds-most-desirable-real-estate-markets",
       "oldPath": "/why-bali-remains-one-of-the-worlds-most-desirable-real-estate-markets",
@@ -584,53 +1960,71 @@ export const SEO_MIGRATION: MigrationBundle = {
     },
     "how-to-check-balis-weather-before-your-holiday": {
       "seoTitle": "How to Check Bali’s Weather Before Your Holiday",
-      "metaDescription": "Learn how to check accurate weather forecasts in Bali using the BMKG app and website, Indonesia’s official weather authority, plus simple travel tips for a m…",
-      "canonical": "/journal/how-to-check-balis-weather-before-your-holiday",
-      "ogImage": "https://8degree.co/wp-content/uploads/2026/01/1.-Hero-pict-scaled-e1767850862284.jpg",
+      "metaDescription": "BMKG offers daily forecasts and outlooks of up to 10 days ahead, making it a reliable resource when planning your stay in Bali.",
+      "canonical": "/how-to-check-balis-weather-before-your-holiday",
+      "h1": "How to Check Bali’s Weather Before Your Holiday",
+      "ogTitle": "How to Check Bali’s Weather Before Your Holiday | 8 Degree %",
+      "ogDescription": "BMKG offers daily forecasts and outlooks of up to 10 days ahead, making it a reliable resource when planning your stay in Bali.",
+      "ogImage": "https://8degree.co/wp-content/uploads/2026/01/1.-Hero-pict-scaled-e1767850862284-1024x686.jpg",
       "slug": "how-to-check-balis-weather-before-your-holiday",
       "oldPath": "/how-to-check-balis-weather-before-your-holiday",
       "publishedAt": "2026-01-08T05:38:39"
     },
     "living-at-lyvin-melasti-villas-what-you-can-do-in-uluwatu-bali": {
       "seoTitle": "Living at Lyvin Melasti Villas: What You Can Do in Uluwatu, Bali",
-      "metaDescription": "Living at Lyvin Melasti Villas: What You Can Do in Uluwatu, Bali",
-      "canonical": "/journal/living-at-lyvin-melasti-villas-what-you-can-do-in-uluwatu-bali",
-      "ogImage": "https://8degree.co/wp-content/uploads/2026/01/Pict-1-scaled-e1768715694931.jpg",
+      "metaDescription": "If you’re looking for a villa near the beach in Bali, away from the crowds of Seminyak and Canggu, Uluwatu has become one of the most attractive areas for lo…",
+      "canonical": "/living-at-lyvin-melasti-villas-what-you-can-do-in-uluwatu-bali",
+      "h1": "Living at Lyvin Melasti Villas: What You Can Do in Uluwatu, Bali",
+      "ogTitle": "Living at Lyvin Melasti Villas: What You Can Do in Uluwatu, Bali | 8 Degree",
+      "ogDescription": "If you’re looking for a villa near the beach in Bali, away from the crowds of Seminyak and Canggu, Uluwatu has become one of the most attractive areas for lo…",
+      "ogImage": "https://8degree.co/wp-content/uploads/2026/01/Pict-1-scaled-e1768715694931-1024x681.jpg",
       "slug": "living-at-lyvin-melasti-villas-what-you-can-do-in-uluwatu-bali",
       "oldPath": "/living-at-lyvin-melasti-villas-what-you-can-do-in-uluwatu-bali",
       "publishedAt": "2026-01-18T05:52:00"
     },
     "is-bali-still-a-worthwhile-real-estate-investment-in-2026": {
       "seoTitle": "Is Bali Still a Worthwhile Real Estate Investment in 2026?",
-      "metaDescription": "Bali’s property market has long been a magnet for both domestic and international investors. But in 2026, with shifting tourist dynamics, economic pressures…",
-      "canonical": "/journal/is-bali-still-a-worthwhile-real-estate-investment-in-2026",
-      "ogImage": "https://8degree.co/wp-content/uploads/2026/02/houses-models-and-hourglass-on-cash-and-coins-rea-2026-01-06-00-25-26-utc-scaled.jpg",
+      "metaDescription": "Is Bali still a good investment? The short answer: Yes, but only with informed strategy and due diligence.",
+      "canonical": "/is-bali-still-a-worthwhile-real-estate-investment-in-2026",
+      "h1": "Is Bali Still a Worthwhile Real Estate Investment in 2026?",
+      "ogTitle": "Is Bali Still a Worthwhile Real Estate Investment in 2026? | 8 Degree",
+      "ogDescription": "Is Bali still a good investment? The short answer: Yes, but only with informed strategy and due diligence.",
+      "ogImage": "https://8degree.co/wp-content/uploads/2026/02/houses-models-and-hourglass-on-cash-and-coins-rea-2026-01-06-00-25-26-utc-1024x683.jpg",
       "slug": "is-bali-still-a-worthwhile-real-estate-investment-in-2026",
       "oldPath": "/is-bali-still-a-worthwhile-real-estate-investment-in-2026",
       "publishedAt": "2026-02-13T05:39:49"
     },
     "canggu-is-maturing-where-smart-investors-are-moving-next": {
       "seoTitle": "Canggu Is Maturing. Where Smart Investors Are Moving Next?",
-      "metaDescription": "For years, Canggu was the obvious move. If you wanted growth, rental demand, and international appeal, you bought in Canggu, and it worked. However, markets…",
-      "canonical": "/journal/canggu-is-maturing-where-smart-investors-are-moving-next",
-      "ogImage": "https://8degree.co/wp-content/uploads/2026/02/ChatGPT-Image-Feb-24-2026-10_58_30-AM.png",
+      "metaDescription": "in 2026, Canggu isn’t the “early opportunity” anymore. It’s established. It’s recognised. It’s priced accordingly",
+      "canonical": "/canggu-is-maturing-where-smart-investors-are-moving-next",
+      "h1": "Canggu Is Maturing. Where Smart Investors Are Moving Next?",
+      "ogTitle": "Canggu Is Maturing. Where Smart Investors Are Moving Next? | 8 Degree",
+      "ogDescription": "in 2026, Canggu isn’t the “early opportunity” anymore. It’s established. It’s recognised. It’s priced accordingly",
+      "ogImage": "https://8degree.co/wp-content/uploads/2026/02/ChatGPT-Image-Feb-24-2026-10_58_30-AM-1024x683.png",
       "slug": "canggu-is-maturing-where-smart-investors-are-moving-next",
       "oldPath": "/canggu-is-maturing-where-smart-investors-are-moving-next",
       "publishedAt": "2026-02-25T07:11:20"
     },
     "what-foreigners-need-to-know-before-renting-a-motorbike-in-bali": {
       "seoTitle": "What Foreigners Need to Know Before Renting a Motorbike in Bali",
-      "metaDescription": "What Foreigners Need to Know Before Renting a Motorbike in Bali",
-      "canonical": "/journal/what-foreigners-need-to-know-before-renting-a-motorbike-in-bali",
-      "ogImage": "https://8degree.co/wp-content/uploads/2026/03/young-woman-riding-pillion-on-moped-with-arms-open-2026-01-09-10-43-58-utc-scaled.jpg",
+      "metaDescription": "Bali offers freedom. For many visitors, renting a motorbike feels like the obvious choice. Here is what you need to know before you rent.",
+      "canonical": "/what-foreigners-need-to-know-before-renting-a-motorbike-in-bali",
+      "h1": "What Foreigners Need to Know Before Renting a Motorbike in Bali",
+      "ogTitle": "What Foreigners Need to Know Before Renting a Motorbike in Bali | 8 Degree",
+      "ogDescription": "Bali offers freedom. For many visitors, renting a motorbike feels like the obvious choice. Here is what you need to know before you rent.",
+      "ogImage": "https://8degree.co/wp-content/uploads/2026/03/young-woman-riding-pillion-on-moped-with-arms-open-2026-01-09-10-43-58-utc-1024x683.jpg",
       "slug": "what-foreigners-need-to-know-before-renting-a-motorbike-in-bali",
       "oldPath": "/what-foreigners-need-to-know-before-renting-a-motorbike-in-bali",
       "publishedAt": "2026-03-04T02:32:09"
     },
     "entering-bali-in-2026-do-travelers-really-need-to-show-bank-statements": {
       "seoTitle": "Entering Bali in 2026: Do Travelers Really Need to Show Bank Statements?",
-      "metaDescription": "Over the past few months, a new narrative has been circulating online: travelers entering Bali may soon be required to show bank statements at immigration. T…",
-      "canonical": "/journal/entering-bali-in-2026-do-travelers-really-need-to-show-bank-statements",
+      "metaDescription": "New narrative has been circulating online: travelers entering Bali may soon be required to show bank statements at immigration.",
+      "canonical": "/entering-bali-in-2026-do-travelers-really-need-to-show-bank-statements",
+      "h1": "Entering Bali in 2026: Do Travelers Really Need to Show Bank Statements?",
+      "ogTitle": "Entering Bali in 2026: Do Travelers Really Need to Show Bank Statements? | 8 Degree",
+      "ogDescription": "New narrative has been circulating online: travelers entering Bali may soon be required to show bank statements at immigration.",
       "ogImage": "https://8degree.co/wp-content/uploads/2026/03/airport-at-colorful-sunrise-2026-01-08-01-38-32-utc-scaled.jpg",
       "slug": "entering-bali-in-2026-do-travelers-really-need-to-show-bank-statements",
       "oldPath": "/entering-bali-in-2026-do-travelers-really-need-to-show-bank-statements",
@@ -639,44 +2033,59 @@ export const SEO_MIGRATION: MigrationBundle = {
     "nyepi-in-bali-2026-full-ceremony-sequence-and-what-it-means-for-property-owners": {
       "seoTitle": "Nyepi in Bali 2026: Full Ceremony Sequence and What It Means for Property Owners",
       "metaDescription": "Nyepi, the Balinese Day of Silence, is often misunderstood as a single-day event. In reality, it is a multi-stage ceremonial cycle observed across Bali. Begi…",
-      "canonical": "/journal/nyepi-in-bali-2026-full-ceremony-sequence-and-what-it-means-for-property-owners",
-      "ogImage": "https://8degree.co/wp-content/uploads/2026/03/bali-temple-2026-01-11-09-10-33-utc-scaled.jpg",
+      "canonical": "/nyepi-in-bali-2026-full-ceremony-sequence-and-what-it-means-for-property-owners",
+      "h1": "Nyepi in Bali 2026: Full Ceremony Sequence and What It Means for Property Owners",
+      "ogTitle": "Nyepi in Bali 2026: Full Ceremony Sequence and What It Means for Property Owners | 8 Degree",
+      "ogDescription": "Nyepi, the Balinese Day of Silence, is often misunderstood as a single-day event. In reality, it is a multi-stage ceremonial cycle observed across Bali. Begi…",
+      "ogImage": "https://8degree.co/wp-content/uploads/2026/03/bali-temple-2026-01-11-09-10-33-utc-1024x683.jpg",
       "slug": "nyepi-in-bali-2026-full-ceremony-sequence-and-what-it-means-for-property-owners",
       "oldPath": "/nyepi-in-bali-2026-full-ceremony-sequence-and-what-it-means-for-property-owners",
       "publishedAt": "2026-03-27T06:07:58"
     },
     "understanding-the-0-5-tax-for-pt-pma-in-indonesia": {
       "seoTitle": "Understanding the 0.5% Tax for PT PMA in Indonesia",
-      "metaDescription": "Setting Up a PT PMA in Bali – What You Need to Know About the 0.5% Tax If you’re planning to set up a company in Bali as a foreigner, you’ve probably heard a…",
-      "canonical": "/journal/understanding-the-0-5-tax-for-pt-pma-in-indonesia",
-      "ogImage": "https://8degree.co/wp-content/uploads/2026/04/cement-plant-with-high-factory-structure-and-tower-2026-03-16-00-42-15-utc-scaled.jpg",
+      "metaDescription": "If you’re planning to set up a company in Bali as a foreigner, you’ve probably heard about the PT PMA (Foreign Investment Company) structure",
+      "canonical": "/understanding-the-0-5-tax-for-pt-pma-in-indonesia",
+      "h1": "Understanding the 0.5% Tax for PT PMA in Indonesia",
+      "ogTitle": "Understanding the 0.5% Tax for PT PMA in Indonesia | 8 Degree",
+      "ogDescription": "If you’re planning to set up a company in Bali as a foreigner, you’ve probably heard about the PT PMA (Foreign Investment Company) structure",
+      "ogImage": "https://8degree.co/wp-content/uploads/2026/04/cement-plant-with-high-factory-structure-and-tower-2026-03-16-00-42-15-utc-1024x683.jpg",
       "slug": "understanding-the-0-5-tax-for-pt-pma-in-indonesia",
       "oldPath": "/understanding-the-0-5-tax-for-pt-pma-in-indonesia",
       "publishedAt": "2026-04-09T05:59:02"
     },
     "new-tourism-laws-enforcement-in-2026-what-bali-property-investors-must-know": {
       "seoTitle": "New Tourism Laws Enforcement in 2026: What Bali Property Investors Must Know",
-      "metaDescription": "Indonesia is entering a new phase of tourism regulation in 2026, and if you’re investing in Bali property, this directly impacts your strategy. Here’s the ke…",
-      "canonical": "/journal/new-tourism-laws-enforcement-in-2026-what-bali-property-investors-must-know",
-      "ogImage": "https://8degree.co/wp-content/uploads/2026/04/aerial-view-of-a-luxurious-coastal-resort-located-2026-01-07-23-10-10-utc-scaled.jpg",
+      "metaDescription": "Indonesia is entering a new phase of tourism regulation in 2026, and if you're investing in Bali property, this directly impacts your strategy.",
+      "canonical": "/new-tourism-laws-enforcement-in-2026-what-bali-property-investors-must-know",
+      "h1": "New Tourism Laws Enforcement in 2026: What Bali Property Investors Must Know",
+      "ogTitle": "New Tourism Laws Enforcement in 2026: What Bali Property Investors Must Know | 8 Degree",
+      "ogDescription": "Indonesia is entering a new phase of tourism regulation in 2026, and if you're investing in Bali property, this directly impacts your strategy.",
+      "ogImage": "https://8degree.co/wp-content/uploads/2026/04/aerial-view-of-a-luxurious-coastal-resort-located-2026-01-07-23-10-10-utc-1024x682.jpg",
       "slug": "new-tourism-laws-enforcement-in-2026-what-bali-property-investors-must-know",
       "oldPath": "/new-tourism-laws-enforcement-in-2026-what-bali-property-investors-must-know",
       "publishedAt": "2026-04-17T05:28:50"
     },
     "paid-up-capital-for-pt-pma-in-bali-the-2026-investors-guide": {
-      "seoTitle": "Paid-Up Capital for PT PMA in Bali: The 2026 Investor’s Guide",
-      "metaDescription": "If you are a foreign investor looking to own property in Bali — whether a villa, a boutique resort, or a development site — understanding paid-up capital for…",
-      "canonical": "/journal/paid-up-capital-for-pt-pma-in-bali-the-2026-investors-guide",
-      "ogImage": "https://8degree.co/wp-content/uploads/2026/04/CasaRocoso_revise-240-scaled.jpg",
+      "seoTitle": "Paid-Up Capital for PT PMA in Bali: The 2026 Investor's Guide",
+      "metaDescription": "Understanding paid-up capital for PT PMA is not optional. It is the foundation upon which your entire investment structure rests.",
+      "canonical": "/paid-up-capital-for-pt-pma-in-bali-the-2026-investors-guide",
+      "h1": "Paid-Up Capital for PT PMA in Bali: The 2026 Investor’s Guide",
+      "ogTitle": "Paid-Up Capital for PT PMA in Bali: The 2026 Investor's Guide | 8 Degree",
+      "ogDescription": "Understanding paid-up capital for PT PMA is not optional. It is the foundation upon which your entire investment structure rests.",
+      "ogImage": "https://8degree.co/wp-content/uploads/2026/04/CasaRocoso_revise-240-1024x683.jpg",
       "slug": "paid-up-capital-for-pt-pma-in-bali-the-2026-investors-guide",
       "oldPath": "/paid-up-capital-for-pt-pma-in-bali-the-2026-investors-guide",
       "publishedAt": "2026-04-25T02:02:32"
     },
     "bali-flooding-2026-what-the-alerts-mean-for-property-investors": {
       "seoTitle": "Bali Flooding 2026: What the Alerts Mean for Property Investors",
-      "metaDescription": "If you’ve been following the news this past month, you’ve probably seen the footage. Streets turned into rivers. Tourists being ferried out of Legian hotels…",
-      "canonical": "/journal/bali-flooding-2026-what-the-alerts-mean-for-property-investors",
-      "ogImage": "https://8degree.co/wp-content/uploads/2026/05/hf_20260428_072103_6102c9c5-3352-4e20-a782-d45df4b89322.png",
+      "metaDescription": "If you've been following the news this past month, you've probably seen the footage. Streets turned into rivers.",
+      "canonical": "/bali-flooding-2026-what-the-alerts-mean-for-property-investors",
+      "h1": "Bali Flooding 2026: What the Alerts Mean for Property Investors",
+      "ogTitle": "Bali Flooding 2026: What the Alerts Mean for Property Investors | 8 Degree",
+      "ogDescription": "If you've been following the news this past month, you've probably seen the footage. Streets turned into rivers.",
+      "ogImage": "https://8degree.co/wp-content/uploads/2026/05/hf_20260428_072103_6102c9c5-3352-4e20-a782-d45df4b89322-1024x687.png",
       "slug": "bali-flooding-2026-what-the-alerts-mean-for-property-investors",
       "oldPath": "/bali-flooding-2026-what-the-alerts-mean-for-property-investors",
       "publishedAt": "2026-05-17T03:41:37"

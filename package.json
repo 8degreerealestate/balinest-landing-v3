@@ -17,6 +17,8 @@
     "seo:crawl": "pnpm --filter @workspace/scripts run seo:crawl",
     "seo:build": "pnpm --filter @workspace/scripts run seo:build",
     "seo:compare": "pnpm --filter @workspace/scripts run seo:compare",
+    "build:production": "VITE_PUBLIC_SITE_URL=https://8degree.co pnpm --filter @workspace/8degree run build",
+    "cutover:preflight": "pnpm seo:crawl && pnpm seo:build && pnpm seo:compare -- --staging=https://balinest-landing-v3.vercel.app",
     "build": "pnpm run typecheck && pnpm -r --if-present run build",
     "typecheck:libs": "tsc --build",
     "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --filter \"./scripts\" --if-present run typecheck"

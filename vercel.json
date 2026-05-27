@@ -50,9 +50,15 @@
   ],
   "redirects": [
     {
-      "source": "/journal/",
-      "destination": "/journal",
-      "permanent": false
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.8degree.co"
+        }
+      ],
+      "destination": "https://8degree.co/:path*",
+      "permanent": true
     },
     {
       "source": "/property/:code",
@@ -62,6 +68,16 @@
     {
       "source": "/blog/:slug",
       "destination": "/journal/:slug",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "destination": "/journal",
+      "permanent": true
+    },
+    {
+      "source": "/property",
+      "destination": "/projects",
       "permanent": true
     },
     {
@@ -102,11 +118,6 @@
     {
       "source": "/balis-bingin-beach-demolitions-the-shocking-turn-of-events-every-investor-needs-to-understand",
       "destination": "/journal/balis-bingin-beach-demolitions-the-shocking-turn-of-events-every-investor-needs-to-understand",
-      "permanent": true
-    },
-    {
-      "source": "/blog",
-      "destination": "/journal",
       "permanent": true
     },
     {
@@ -215,8 +226,1008 @@
       "permanent": true
     },
     {
-      "source": "/property",
-      "destination": "/projects",
+      "source": "/property/8d2501",
+      "destination": "/properties/8D2501",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2505",
+      "destination": "/properties/8D2505",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2506",
+      "destination": "/properties/8D2506",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2507",
+      "destination": "/properties/8D2507",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25100",
+      "destination": "/properties/8D25100",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25102",
+      "destination": "/properties/8D25102",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25103",
+      "destination": "/properties/8D25103",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25104",
+      "destination": "/properties/8D25104",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25105",
+      "destination": "/properties/8D25105",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25106a",
+      "destination": "/properties/8D25106A",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25106b",
+      "destination": "/properties/8D25106B",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25107",
+      "destination": "/properties/8D25107",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25108",
+      "destination": "/properties/8D25108",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25109",
+      "destination": "/properties/8D25109",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25110",
+      "destination": "/properties/8D25110",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25111",
+      "destination": "/properties/8D25111",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25112",
+      "destination": "/properties/8D25112",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25113",
+      "destination": "/properties/8D25113",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25114",
+      "destination": "/properties/8D25114",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25115",
+      "destination": "/properties/8D25115",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25116",
+      "destination": "/properties/8D25116",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25117",
+      "destination": "/properties/8D25117",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25118",
+      "destination": "/properties/8D25118",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25119",
+      "destination": "/properties/8D25119",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25120",
+      "destination": "/properties/8D25120",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25121",
+      "destination": "/properties/8D25121",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25122",
+      "destination": "/properties/8D25122",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25124",
+      "destination": "/properties/8D25124",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25125",
+      "destination": "/properties/8D25125",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25125a",
+      "destination": "/properties/8D25125A",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25125b",
+      "destination": "/properties/8D25125B",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25126",
+      "destination": "/properties/8D25126",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25127",
+      "destination": "/properties/8D25127",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25128",
+      "destination": "/properties/8D25128",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25129",
+      "destination": "/properties/8D25129",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25130",
+      "destination": "/properties/8D25130",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25131",
+      "destination": "/properties/8D25131",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25132",
+      "destination": "/properties/8D25132",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25133",
+      "destination": "/properties/8D25133",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25133a",
+      "destination": "/properties/8D25133A",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25133b",
+      "destination": "/properties/8D25133B",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25134a",
+      "destination": "/properties/8D25134A",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25134b",
+      "destination": "/properties/8D25134B",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25135",
+      "destination": "/properties/8D25135",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25136",
+      "destination": "/properties/8D25136",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25137",
+      "destination": "/properties/8D25137",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25138",
+      "destination": "/properties/8D25138",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25139",
+      "destination": "/properties/8D25139",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25141a",
+      "destination": "/properties/8D25141A",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25141b",
+      "destination": "/properties/8D25141B",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25142",
+      "destination": "/properties/8D25142",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25144",
+      "destination": "/properties/8D25144",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25145",
+      "destination": "/properties/8D25145",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25145-2",
+      "destination": "/properties/8D25145-2",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25146a",
+      "destination": "/properties/8D25146A",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25146b",
+      "destination": "/properties/8D25146B",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25147",
+      "destination": "/properties/8D25147",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25148",
+      "destination": "/properties/8D25148",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25149",
+      "destination": "/properties/8D25149",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25150",
+      "destination": "/properties/8D25150",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25151",
+      "destination": "/properties/8D25151",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25152",
+      "destination": "/properties/8D25152",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25153",
+      "destination": "/properties/8D25153",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25154",
+      "destination": "/properties/8D25154",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25155",
+      "destination": "/properties/8D25155",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25156",
+      "destination": "/properties/8D25156",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25157a",
+      "destination": "/properties/8D25157A",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25157b",
+      "destination": "/properties/8D25157B",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25158",
+      "destination": "/properties/8D25158",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25159",
+      "destination": "/properties/8D25159",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25160",
+      "destination": "/properties/8D25160",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25161",
+      "destination": "/properties/8D25161",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25162",
+      "destination": "/properties/8D25162",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25163",
+      "destination": "/properties/8D25163",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25164",
+      "destination": "/properties/8D25164",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25167",
+      "destination": "/properties/8D25167",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25168",
+      "destination": "/properties/8D25168",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25169",
+      "destination": "/properties/8D25169",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25171",
+      "destination": "/properties/8D25171",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25172",
+      "destination": "/properties/8D25172",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25173",
+      "destination": "/properties/8D25173",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25174a",
+      "destination": "/properties/8D25174A",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25174b",
+      "destination": "/properties/8D25174B",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25179",
+      "destination": "/properties/8D25179",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2518",
+      "destination": "/properties/8D2518",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25180",
+      "destination": "/properties/8D25180",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25181",
+      "destination": "/properties/8D25181",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25182",
+      "destination": "/properties/8D25182",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25183",
+      "destination": "/properties/8D25183",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25185",
+      "destination": "/properties/8D25185",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25190",
+      "destination": "/properties/8D25190",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25192",
+      "destination": "/properties/8D25192",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25195",
+      "destination": "/properties/8D25195",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25196",
+      "destination": "/properties/8D25196",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d25199",
+      "destination": "/properties/8D25199",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2521",
+      "destination": "/properties/8D2521",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2525",
+      "destination": "/properties/8D2525",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2528",
+      "destination": "/properties/8D2528",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2530",
+      "destination": "/properties/8D2530",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2531",
+      "destination": "/properties/8D2531",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2534",
+      "destination": "/properties/8D2534",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2535",
+      "destination": "/properties/8D2535",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2536a",
+      "destination": "/properties/8D2536A",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2536b-2",
+      "destination": "/properties/8D2536B-2",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2538",
+      "destination": "/properties/8D2538",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2539",
+      "destination": "/properties/8D2539",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2541a",
+      "destination": "/properties/8D2541A",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2541b",
+      "destination": "/properties/8D2541B",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2542",
+      "destination": "/properties/8D2542",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2544",
+      "destination": "/properties/8D2544",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2545",
+      "destination": "/properties/8D2545",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2548b",
+      "destination": "/properties/8D2548B",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2549",
+      "destination": "/properties/8D2549",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2550",
+      "destination": "/properties/8D2550",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2551",
+      "destination": "/properties/8D2551",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2552",
+      "destination": "/properties/8D2552",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2553",
+      "destination": "/properties/8D2553",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2554",
+      "destination": "/properties/8D2554",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2555",
+      "destination": "/properties/8D2555",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2556",
+      "destination": "/properties/8D2556",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2557",
+      "destination": "/properties/8D2557",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2559",
+      "destination": "/properties/8D2559",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2560",
+      "destination": "/properties/8D2560",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2561",
+      "destination": "/properties/8D2561",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2562",
+      "destination": "/properties/8D2562",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2563",
+      "destination": "/properties/8D2563",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2564",
+      "destination": "/properties/8D2564",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2565",
+      "destination": "/properties/8D2565",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2568a",
+      "destination": "/properties/8D2568A",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2569",
+      "destination": "/properties/8D2569",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2571",
+      "destination": "/properties/8D2571",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2572",
+      "destination": "/properties/8D2572",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2574",
+      "destination": "/properties/8D2574",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2575",
+      "destination": "/properties/8D2575",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2576",
+      "destination": "/properties/8D2576",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2576b",
+      "destination": "/properties/8D2576B",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2577",
+      "destination": "/properties/8D2577",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2578",
+      "destination": "/properties/8D2578",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2579",
+      "destination": "/properties/8D2579",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2580",
+      "destination": "/properties/8D2580",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2581",
+      "destination": "/properties/8D2581",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2582a",
+      "destination": "/properties/8D2582A",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2582b",
+      "destination": "/properties/8D2582B",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2583",
+      "destination": "/properties/8D2583",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2584",
+      "destination": "/properties/8D2584",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2585",
+      "destination": "/properties/8D2585",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2586",
+      "destination": "/properties/8D2586",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2587",
+      "destination": "/properties/8D2587",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2588",
+      "destination": "/properties/8D2588",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2590",
+      "destination": "/properties/8D2590",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2591",
+      "destination": "/properties/8D2591",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2592",
+      "destination": "/properties/8D2592",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2594",
+      "destination": "/properties/8D2594",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2595",
+      "destination": "/properties/8D2595",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2596",
+      "destination": "/properties/8D2596",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2597",
+      "destination": "/properties/8D2597",
+      "permanent": true
+    },
+    {
+      "source": "/property/8d2599",
+      "destination": "/properties/8D2599",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl04",
+      "destination": "/properties/8DL04",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl05",
+      "destination": "/properties/8DL05",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl06",
+      "destination": "/properties/8DL06",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl07",
+      "destination": "/properties/8DL07",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl08",
+      "destination": "/properties/8DL08",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl09",
+      "destination": "/properties/8DL09",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl10",
+      "destination": "/properties/8DL10",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl11",
+      "destination": "/properties/8DL11",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl12",
+      "destination": "/properties/8DL12",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl13",
+      "destination": "/properties/8DL13",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl14",
+      "destination": "/properties/8DL14",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl15",
+      "destination": "/properties/8DL15",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl16",
+      "destination": "/properties/8DL16",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl17",
+      "destination": "/properties/8DL17",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl18",
+      "destination": "/properties/8DL18",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl20",
+      "destination": "/properties/8DL20",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl21",
+      "destination": "/properties/8DL21",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl22",
+      "destination": "/properties/8DL22",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl23",
+      "destination": "/properties/8DL23",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dl24",
+      "destination": "/properties/8DL24",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dr01",
+      "destination": "/properties/8DR01",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dr02",
+      "destination": "/properties/8DR02",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dr03",
+      "destination": "/properties/8DR03",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dr04",
+      "destination": "/properties/8DR04",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dr05",
+      "destination": "/properties/8DR05",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dv105",
+      "destination": "/properties/8DV105",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dv106a",
+      "destination": "/properties/8DV106A",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dv106b",
+      "destination": "/properties/8DV106B",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dv106c",
+      "destination": "/properties/8DV106C",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dv28",
+      "destination": "/properties/8DV28",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dv33",
+      "destination": "/properties/8DV33",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dv35b",
+      "destination": "/properties/8DV35B",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dv36a",
+      "destination": "/properties/8DV36A",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dv37",
+      "destination": "/properties/8DV37",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dv45",
+      "destination": "/properties/8DV45",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dv54",
+      "destination": "/properties/8DV54",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dv56",
+      "destination": "/properties/8DV56",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dv57",
+      "destination": "/properties/8DV57",
+      "permanent": true
+    },
+    {
+      "source": "/property/8dv92",
+      "destination": "/properties/8DV92",
+      "permanent": true
+    },
+    {
+      "source": "/property/lily-villas-townhouses-luxury-living-in-pererenan-bali-8dv35a",
+      "destination": "/properties/LILY-VILLAS-TOWNHOUSES-LUXURY-LIVING-IN-PERERENAN-BALI-8DV35A",
+      "permanent": true
+    },
+    {
+      "source": "/property/lily-villas-townhouses-stylish-2br-eco-villas-in-pererenan-bali-8dv35c",
+      "destination": "/properties/LILY-VILLAS-TOWNHOUSES-STYLISH-2BR-ECO-VILLAS-IN-PERERENAN-BALI-8DV35C",
+      "permanent": true
+    },
+    {
+      "source": "/property/luxury-3br-rice-field-view-villa-near-mengening-beach-8d2502",
+      "destination": "/properties/LUXURY-3BR-RICE-FIELD-VIEW-VILLA-NEAR-MENGENING-BEACH-8D2502",
+      "permanent": true
+    },
+    {
+      "source": "/property/luxury-6br-japandi-villa-in-pererenan-bali-8d25206",
+      "destination": "/properties/LUXURY-6BR-JAPANDI-VILLA-IN-PERERENAN-BALI-8D25206",
+      "permanent": true
+    },
+    {
+      "source": "/property/riverside-designer-4br-villa-in-pererenan-bali-8d25205",
+      "destination": "/properties/RIVERSIDE-DESIGNER-4BR-VILLA-IN-PERERENAN-BALI-8D25205",
       "permanent": true
     },
     {
