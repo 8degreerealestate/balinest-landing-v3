@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
-import { ArrowRight, ChevronDown, Menu, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, ChevronDown, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { SITE_MEDIA } from "@/lib/site-assets";
@@ -172,16 +172,30 @@ export function Navbar() {
       )}
     >
       <div className="flex w-full min-w-0 items-center justify-between gap-3 pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] sm:pl-6 sm:pr-6 lg:pl-8 lg:pr-8">
-        <Link href="/">
-          <div className="shrink-0 cursor-pointer text-white">
-            <img
-              src="/brand/8degree-logotype-white-transparent.png"
-              alt="8 Degree Real Estate"
-              className="h-7 w-auto max-w-[190px] object-contain"
-              data-testid="navbar-logo-img"
-            />
-          </div>
-        </Link>
+        <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+          {isPropertySectionActive ? (
+            <Link
+              href="/"
+              className="flex min-h-11 shrink-0 items-center gap-1.5 text-white transition-colors hover:text-white/90 lg:hidden"
+              aria-label={copy.backHome}
+              onClick={() => setIsOpen(false)}
+              data-testid="navbar-back-home"
+            >
+              <ArrowLeft size={22} strokeWidth={1.5} aria-hidden />
+              <span className="text-xs font-medium uppercase tracking-wider">{copy.backHome}</span>
+            </Link>
+          ) : null}
+          <Link href="/">
+            <div className="shrink-0 cursor-pointer text-white">
+              <img
+                src="/brand/8degree-logotype-white-transparent.png"
+                alt="8 Degree Real Estate"
+                className="h-7 w-auto max-w-[min(190px,42vw)] object-contain"
+                data-testid="navbar-logo-img"
+              />
+            </div>
+          </Link>
+        </div>
 
         {/* Desktop Nav */}
         <div className="ml-auto hidden min-w-0 flex-nowrap items-center gap-4 lg:flex lg:gap-6 xl:gap-8">
@@ -373,12 +387,12 @@ export function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Toggle */}
+        {/* Mobile menu toggle */}
         <button
           type="button"
           className="flex min-h-11 min-w-11 shrink-0 items-center justify-center text-white lg:hidden"
           aria-expanded={isOpen}
-          aria-label={isOpen ? "Close menu" : "Open menu"}
+          aria-label={isOpen ? copy.closeMenu : copy.openMenu}
           onClick={() => setIsOpen(!isOpen)}
         >
           {isOpen ? <X size={24} /> : <Menu size={24} />}

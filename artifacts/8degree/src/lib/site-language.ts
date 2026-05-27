@@ -28,6 +28,7 @@ export const UI_COPY: Record<
     currency: string;
     openMenu: string;
     closeMenu: string;
+    backHome: string;
     propertySection: string;
     companySection: string;
     realEstateForSale: string;
@@ -60,6 +61,7 @@ export const UI_COPY: Record<
     currency: "Currency",
     openMenu: "Open menu",
     closeMenu: "Close menu",
+    backHome: "Home",
     propertySection: "Property",
     realEstateForSale: "Real estate for sale",
     realEstateForSaleDesc:
@@ -97,6 +99,7 @@ export const UI_COPY: Record<
     currency: "Mata Uang",
     openMenu: "Buka menu",
     closeMenu: "Tutup menu",
+    backHome: "Beranda",
     propertySection: "Properti",
     companySection: "Perusahaan",
     realEstateForSale: "Properti dijual",
@@ -135,6 +138,7 @@ export const UI_COPY: Record<
     currency: "Devise",
     openMenu: "Ouvrir le menu",
     closeMenu: "Fermer le menu",
+    backHome: "Accueil",
     propertySection: "Propriete",
     companySection: "Entreprise",
     realEstateForSale: "Immobilier a vendre",
@@ -173,6 +177,7 @@ export const UI_COPY: Record<
     currency: "货币",
     openMenu: "打开菜单",
     closeMenu: "关闭菜单",
+    backHome: "首页",
     propertySection: "房产",
     companySection: "公司",
     realEstateForSale: "在售房产",
@@ -204,6 +209,7 @@ export const UI_COPY: Record<
     currency: "Para birimi",
     openMenu: "Menüyü aç",
     closeMenu: "Menüyü kapat",
+    backHome: "Ana sayfa",
     propertySection: "Mülk",
     companySection: "Şirket",
     realEstateForSale: "Satılık gayrimenkul",
