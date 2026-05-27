@@ -1,8 +1,8 @@
 /** Public contact channels — set via Vite env at build time (see root `.env.example`). */
 
-const DEFAULT_WHATSAPP_E164 = "6281234567890";
+const DEFAULT_WHATSAPP_E164 = "6287787169089";
 const DEFAULT_CONTACT_EMAIL = "hello@8degree.com";
-const DEFAULT_CONTACT_PHONE_DISPLAY = "+62 812 3456 7890";
+const DEFAULT_CONTACT_PHONE_DISPLAY = "+62 877 8716 9089";
 
 /** Digits only, suitable for `https://wa.me/{e164}` (no +). */
 export function getWhatsappE164(): string {
