@@ -29,7 +29,7 @@ const body = {
   firstName: "CRM",
   lastName: "Test",
   email,
-  phone: "+6287852423232",
+  phone: "+6287787169089",
   country: "Indonesia",
   source: "8degree.co",
   tags: ["8degree-website", "website-lead", "source-contact-page"],
