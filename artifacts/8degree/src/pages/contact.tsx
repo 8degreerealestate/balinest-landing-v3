@@ -8,7 +8,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { useForm } from "react-hook-form";
+import { PhoneCountryNumberField } from "@/components/site/PhoneCountryNumberField";
 import { Seo } from "@/components/site/Seo";
+import {
+  buildInternationalPhone,
+  DEFAULT_PHONE_COUNTRY_ID,
+  findPhoneCountry,
+} from "@/lib/phone-countries";
 import { SITE_MEDIA } from "@/lib/site-assets";
 import { truncateForMeta } from "@/lib/site-seo";
 import { type SiteLanguage, useSiteLanguage } from "@/lib/site-language";
@@ -47,17 +53,22 @@ export default function Contact() {
   const createEnquiry = useCreateEnquiry();
   const { toast } = useToast();
 
+  const [phoneCountryId, setPhoneCountryId] = useState(DEFAULT_PHONE_COUNTRY_ID);
+  const [phoneNational, setPhoneNational] = useState("");
+
   const form = useForm({
-    defaultValues: { name: "", email: "", phone: "", country: "", budgetRange: "", message: "" },
+    defaultValues: { name: "", email: "", country: "", budgetRange: "", message: "" },
   });
 
   const onSubmit = form.handleSubmit(async (values) => {
+    const dial = findPhoneCountry(phoneCountryId).dial;
+    const fullPhone = buildInternationalPhone(dial, phoneNational).trim();
     try {
       await createEnquiry.mutateAsync({
         data: {
           name: values.name,
           email: values.email,
-          phone: values.phone || null,
+          phone: fullPhone || null,
           country: values.country || null,
           budgetRange: values.budgetRange || null,
           message: values.message || null,
@@ -66,6 +77,8 @@ export default function Contact() {
       });
       toast({ title: "Message received", description: "We will be in touch within 24 hours." });
       form.reset();
+      setPhoneCountryId(DEFAULT_PHONE_COUNTRY_ID);
+      setPhoneNational("");
     } catch {
       toast({ title: "Error", description: "Please try again.", variant: "destructive" });
     }
@@ -180,12 +193,20 @@ export default function Contact() {
                 />
               </div>
               <div className="grid sm:grid-cols-2 gap-4">
-                <Input
-                  placeholder="Phone / WhatsApp"
-                  {...form.register("phone")}
-                  className="rounded-none"
-                  data-testid="input-phone"
-                />
+                <div data-testid="input-phone">
+                  <span id="contact-phone-label" className="sr-only">
+                    Phone / WhatsApp
+                  </span>
+                  <PhoneCountryNumberField
+                    inputId="contact-phone"
+                    groupAriaLabelledBy="contact-phone-label"
+                    countryId={phoneCountryId}
+                    onCountryIdChange={setPhoneCountryId}
+                    national={phoneNational}
+                    onNationalChange={setPhoneNational}
+                    groupClassName="rounded-none border-border shadow-none focus-within:ring-1 focus-within:ring-ring"
+                  />
+                </div>
                 <Input
                   placeholder="Country"
                   {...form.register("country")}
