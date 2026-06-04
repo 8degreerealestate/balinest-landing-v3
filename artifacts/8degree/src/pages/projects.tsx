@@ -1,7 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { useListInventoryListings, useListProjects } from "@workspace/api-client-react";
-import { borrowInventoryImages, inferBedroomsBucket, inferListingArea } from "@/lib/portfolio-listing";
+import { borrowInventoryImages, inferListingArea } from "@/lib/portfolio-listing";
+import {
+  inventoryListingMatchesSearch,
+  searchFiltersAreActive,
+  type PropertySearchFilterState,
+} from "@/lib/property-search-filters";
+import {
+  filtersFromSearchPayload,
+  replaceProjectsSearchUrl,
+  searchPayloadFromLocationSearch,
+} from "@/lib/property-search-url";
 import { Seo } from "@/components/site/Seo";
 import { PropertySearchPanel, type PropertySearchApplyPayload } from "@/components/site/PropertySearchPanel";
 import { HOME_COPY } from "@/lib/i18n/home-copy";
@@ -83,10 +93,24 @@ export default function Projects() {
     };
     return map[language];
   }, [language]);
-  const [area, setArea] = useState<string>("all");
-  const [propertyType, setPropertyType] = useState<string>("all");
-  const [bedrooms, setBedrooms] = useState<string>("all");
-  const [search, setSearch] = useState("");
+  const [filters, setFilters] = useState<PropertySearchFilterState>(() => {
+    const fromUrl =
+      typeof window !== "undefined"
+        ? searchPayloadFromLocationSearch(window.location.search)
+        : null;
+    return fromUrl
+      ? filtersFromSearchPayload(fromUrl)
+      : {
+          area: "all",
+          propertyType: "all",
+          bedrooms: "all",
+          listingQuery: "",
+          ownership: "all",
+          devStatus: "all",
+          priceMinUsd: null,
+          priceMaxUsd: null,
+        };
+  });
   const [listingsPage, setListingsPage] = useState(0);
 
   const {
@@ -95,11 +119,11 @@ export default function Projects() {
     isError: projectsError,
     error: projectsErr,
   } = useListProjects({
-    area: area !== "all" ? area : undefined,
-    property_type: propertyType !== "all" ? propertyType : undefined,
+    area: filters.area !== "all" ? filters.area : undefined,
+    property_type: filters.propertyType !== "all" ? filters.propertyType : undefined,
     bedrooms:
-      bedrooms !== "all" && bedrooms !== "4" && bedrooms !== "6+"
-        ? Number(bedrooms)
+      filters.bedrooms !== "all" && filters.bedrooms !== "4" && filters.bedrooms !== "6+"
+        ? Number(filters.bedrooms)
         : undefined,
     limit: 200,
   });
@@ -133,28 +157,7 @@ export default function Projects() {
       return vis !== "draft" && sale !== "sold";
     });
 
-    const listingsFiltered = listingsPublic.filter((row) => {
-      if (area !== "all" && inferListingArea(row.title, row.description) !== area) return false;
-      if (bedrooms !== "all") {
-        const n = inferBedroomsBucket(row.title, row.description);
-        if (n !== null) {
-          if (bedrooms === "4") {
-            if (n < 4) return false;
-          } else if (bedrooms === "6+") {
-            if (n < 6) return false;
-          } else if (Number(bedrooms) !== n) {
-            return false;
-          }
-        }
-      }
-      if (propertyType !== "all") {
-        const blob = `${row.title} ${row.description}`.toLowerCase();
-        if (propertyType === "Villa" && !/\bvilla\b|\bvillas\b/i.test(blob)) return false;
-        if (propertyType === "Apartment" && !/\b(apartment|apt|penthouse|condo)\b/i.test(blob)) return false;
-        if (propertyType === "Land" && !/\b(land|plot|tanah)\b/i.test(blob)) return false;
-      }
-      return true;
-    });
+    const listingsFiltered = listingsPublic.filter((row) => inventoryListingMatchesSearch(row, filters));
 
     const listingsForCards = [...listingsFiltered].sort(
       (a, b) => Number(!!b.featured) - Number(!!a.featured),
@@ -169,8 +172,8 @@ export default function Projects() {
       ...listingsForCards.map((row) => ({ kind: "listing" as const, row })),
     ];
 
-    if (search.trim()) {
-      const q = search.toLowerCase();
+    if (filters.listingQuery.trim()) {
+      const q = filters.listingQuery.toLowerCase();
       mergedItems = mergedItems.filter((item) => {
         if (item.kind === "project") {
           const c = item.p;
@@ -178,7 +181,7 @@ export default function Projects() {
         }
         const row = item.row;
         const ar = inferListingArea(row.title, row.description);
-        return `${row.code} ${row.title} ${ar}`.toLowerCase().includes(q);
+        return `${row.code} ${row.title} ${ar} ${row.location ?? ""}`.toLowerCase().includes(q);
       });
     }
 
@@ -203,7 +206,7 @@ export default function Projects() {
           )
         : inventoryRowToFeaturedModel(borrowInventoryImages(item.row, listingsPublic), idx),
     );
-  }, [projects, listingsRaw, area, bedrooms, propertyType, search]);
+  }, [projects, listingsRaw, filters]);
 
   const listingsTotalPages = Math.max(1, Math.ceil(portfolioFeaturedModels.length / LISTINGS_PAGE_SIZE));
   const listingsPageSafe = Math.min(listingsPage, listingsTotalPages - 1);
@@ -214,11 +217,18 @@ export default function Projects() {
 
   useEffect(() => {
     setListingsPage(0);
-  }, [area, propertyType, bedrooms, search]);
+  }, [filters]);
 
   useEffect(() => {
     setListingsPage((p) => Math.min(p, listingsTotalPages - 1));
   }, [listingsTotalPages]);
+
+  useEffect(() => {
+    if (!searchPayloadFromLocationSearch(window.location.search)) return;
+    requestAnimationFrame(() =>
+      document.getElementById("portfolio-results")?.scrollIntoView({ behavior: "smooth", block: "start" }),
+    );
+  }, []);
 
   const homeCopy = HOME_COPY[language];
   const searchLabels = {
@@ -234,10 +244,9 @@ export default function Projects() {
   };
 
   function handleSearchApply(payload: PropertySearchApplyPayload) {
-    setArea(payload.area);
-    setPropertyType(payload.propertyType);
-    setBedrooms(payload.bedrooms);
-    setSearch(payload.listingQuery);
+    const next = filtersFromSearchPayload(payload);
+    setFilters(next);
+    replaceProjectsSearchUrl(payload);
     requestAnimationFrame(() =>
       document.getElementById("portfolio-results")?.scrollIntoView({ behavior: "smooth", block: "start" }),
     );
@@ -346,9 +355,7 @@ export default function Projects() {
                 </div>
               ) : portfolioFeaturedModels.length === 0 ? (
                 <PortfolioEmptyState
-                  hasFilters={
-                    area !== "all" || propertyType !== "all" || bedrooms !== "all" || Boolean(search.trim())
-                  }
+                  hasFilters={searchFiltersAreActive(filters)}
                   projectCount={projectsError ? 0 : (projectData?.projects?.length ?? 0)}
                   websiteInventoryCount={inventoryError ? 0 : (inventoryData?.listings?.length ?? 0)}
                   projectsUnavailable={projectsError}

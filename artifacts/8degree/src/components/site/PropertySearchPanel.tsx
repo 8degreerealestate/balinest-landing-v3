@@ -74,6 +74,10 @@ export type PropertySearchApplyPayload = {
   propertyType: string;
   bedrooms: string;
   listingQuery: string;
+  ownership: string;
+  devStatus: string;
+  priceMinUsd: number | null;
+  priceMaxUsd: number | null;
 };
 
 function mapPropertyTypeChoice(raw: string | undefined): string {
@@ -89,6 +93,18 @@ function mapBedroomsChoice(raw: string | undefined): string {
 function mapAreaChoice(selectedArea: string): string {
   if (!selectedArea || selectedArea === "Area") return "all";
   return selectedArea;
+}
+
+function mapOwnershipChoice(raw: string | undefined): string {
+  if (!raw) return "all";
+  if (raw === "freehold") return "Freehold";
+  if (raw === "leasehold") return "Leasehold";
+  return "all";
+}
+
+function mapDevStatusChoice(raw: string | undefined): string {
+  if (!raw) return "all";
+  return raw;
 }
 
 type PropertySearchPanelProps = {
@@ -150,11 +166,19 @@ export function PropertySearchPanel({
   }, []);
 
   function emitApply() {
+    const parsedMin = parseNumericInput(minPrice);
+    const parsedMax = parseNumericInput(maxPrice);
+    const priceFilterActive =
+      Boolean(selectedPriceLabel) || minSlider > 0 || maxSlider < 100;
     onApply?.({
       area: mapAreaChoice(selectedArea),
       propertyType: mapPropertyTypeChoice(propertyTypeChoice),
       bedrooms: mapBedroomsChoice(bedroomsChoice),
       listingQuery: propertyCode.trim(),
+      ownership: mapOwnershipChoice(ownershipChoice),
+      devStatus: mapDevStatusChoice(devStatusChoice),
+      priceMinUsd: priceFilterActive ? (parsedMin ?? 0) : null,
+      priceMaxUsd: priceFilterActive ? (parsedMax ?? effectivePriceMax) : null,
     });
   }
 
@@ -623,6 +647,12 @@ export function PropertySearchPanel({
                   type="text"
                   value={propertyCode}
                   onChange={(e) => setPropertyCode(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      emitApply();
+                    }
+                  }}
                   placeholder="e.g: 8DV35A"
                   className="mt-1 h-10 w-full border-0 border-b border-[#1f1d1b]/35 bg-transparent px-0 text-base text-[#1f1d1b] placeholder:text-[#1f1d1b]/55 focus:border-[#01514E] focus:outline-none"
                 />

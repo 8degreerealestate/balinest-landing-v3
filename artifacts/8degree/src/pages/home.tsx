@@ -1,12 +1,13 @@
 import { motion } from "framer-motion";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { useEffect, useMemo, useState } from "react";
 import { ChevronDown, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HeroMedia } from "@/components/site/HeroMedia";
 import { PortfolioShowcase } from "@/components/site/PortfolioShowcase";
 import { FeaturedInventoryStrip } from "@/components/site/FeaturedInventoryStrip";
-import { PropertySearchPanel } from "@/components/site/PropertySearchPanel";
+import { PropertySearchPanel, type PropertySearchApplyPayload } from "@/components/site/PropertySearchPanel";
+import { projectsUrlFromSearchPayload } from "@/lib/property-search-url";
 import { TopAreaImage } from "@/components/site/TopAreaImage";
 import { useGetFeaturedProjects, useListBlogPosts } from "@workspace/api-client-react";
 import { loadLatestJournalPosts } from "@/lib/journal-static-fallback";
@@ -270,6 +271,7 @@ const FAQ_ITEMS: Record<SiteLanguage, FaqItem[]> = {
 };
 
 export default function Home() {
+  const [, navigate] = useLocation();
   const language = useSiteLanguage();
   const t = HOME_COPY[language];
   const { data: featuredProjectsData } = useGetFeaturedProjects();
@@ -353,6 +355,10 @@ export default function Home() {
     search: t.search,
   };
 
+  function handleHomeSearchApply(payload: PropertySearchApplyPayload) {
+    navigate(projectsUrlFromSearchPayload(payload));
+  }
+
   return (
     <div className="w-full min-w-0">
       <Seo
@@ -401,7 +407,7 @@ export default function Home() {
         </div>
       </section>
 
-      <PropertySearchPanel labels={searchLabels} />
+      <PropertySearchPanel labels={searchLabels} onApply={handleHomeSearchApply} />
 
       {featuredProjectsData?.projects && featuredProjectsData.projects.length > 0 ? (
         <PortfolioShowcase projects={featuredProjectsData.projects} />

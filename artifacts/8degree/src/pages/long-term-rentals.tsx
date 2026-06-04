@@ -3,7 +3,13 @@ import { Link } from "wouter";
 import { motion } from "framer-motion";
 import { useListInventoryListings } from "@workspace/api-client-react";
 import type { PropertyInventoryListing } from "@workspace/api-client-react";
-import { borrowInventoryImages, inferBedroomsBucket, inferListingArea } from "@/lib/portfolio-listing";
+import { borrowInventoryImages } from "@/lib/portfolio-listing";
+import {
+  filtersFromSearchPayload,
+  inventoryListingMatchesSearch,
+  searchFiltersAreActive,
+  type PropertySearchFilterState,
+} from "@/lib/property-search-filters";
 import { Seo } from "@/components/site/Seo";
 import {
   PropertySearchPanel,
@@ -130,10 +136,16 @@ export default function LongTermRentalsPage() {
     return map[language];
   }, [language]);
 
-  const [area, setArea] = useState<string>("all");
-  const [propertyType, setPropertyType] = useState<string>("all");
-  const [bedrooms, setBedrooms] = useState<string>("all");
-  const [search, setSearch] = useState("");
+  const [filters, setFilters] = useState<PropertySearchFilterState>({
+    area: "all",
+    propertyType: "all",
+    bedrooms: "all",
+    listingQuery: "",
+    ownership: "all",
+    devStatus: "all",
+    priceMinUsd: null,
+    priceMaxUsd: null,
+  });
   const [listingsPage, setListingsPage] = useState(0);
 
   const {
@@ -157,28 +169,7 @@ export default function LongTermRentalsPage() {
       return vis !== "draft" && sale !== "sold";
     });
 
-    const listingsBaseFiltered = listingsPublic.filter((row) => {
-      if (area !== "all" && inferListingArea(row.title, row.description) !== area) return false;
-      if (bedrooms !== "all") {
-        const n = inferBedroomsBucket(row.title, row.description);
-        if (n !== null) {
-          if (bedrooms === "4") {
-            if (n < 4) return false;
-          } else if (bedrooms === "6+") {
-            if (n < 6) return false;
-          } else if (Number(bedrooms) !== n) {
-            return false;
-          }
-        }
-      }
-      if (propertyType !== "all") {
-        const blob = `${row.title} ${row.description}`.toLowerCase();
-        if (propertyType === "Villa" && !/\bvilla\b|\bvillas\b/i.test(blob)) return false;
-        if (propertyType === "Apartment" && !/\b(apartment|apt|penthouse|condo)\b/i.test(blob)) return false;
-        if (propertyType === "Land" && !/\b(land|plot|tanah)\b/i.test(blob)) return false;
-      }
-      return true;
-    });
+    const listingsBaseFiltered = listingsPublic.filter((row) => inventoryListingMatchesSearch(row, filters));
 
     const rentalPreferred = listingsBaseFiltered.filter(listingLooksLikeRental);
     const useFallback = rentalPreferred.length === 0 && listingsBaseFiltered.length > 0;
@@ -186,20 +177,11 @@ export default function LongTermRentalsPage() {
 
     const sorted = [...pool].sort((a, b) => Number(!!b.featured) - Number(!!a.featured));
 
-    let rows = sorted;
-    if (search.trim()) {
-      const q = search.toLowerCase();
-      rows = sorted.filter((row) => {
-        const ar = inferListingArea(row.title, row.description);
-        return `${row.code} ${row.title} ${ar}`.toLowerCase().includes(q);
-      });
-    }
-
-    const models = rows.map((row, idx) =>
+    const models = sorted.map((row, idx) =>
       inventoryRowToFeaturedModel(borrowInventoryImages(row, listingsPublic), idx),
     );
-    return { portfolioFeaturedModels: models, showingRentalFallback: useFallback && rows.length > 0 };
-  }, [listingsRaw, area, bedrooms, propertyType, search]);
+    return { portfolioFeaturedModels: models, showingRentalFallback: useFallback && models.length > 0 };
+  }, [listingsRaw, filters]);
 
   const listingsTotalPages = Math.max(1, Math.ceil(portfolioFeaturedModels.length / LISTINGS_PAGE_SIZE));
   const listingsPageSafe = Math.min(listingsPage, listingsTotalPages - 1);
@@ -210,7 +192,7 @@ export default function LongTermRentalsPage() {
 
   useEffect(() => {
     setListingsPage(0);
-  }, [area, propertyType, bedrooms, search]);
+  }, [filters]);
 
   useEffect(() => {
     setListingsPage((p) => Math.min(p, listingsTotalPages - 1));
@@ -232,10 +214,7 @@ export default function LongTermRentalsPage() {
   }, [language]);
 
   function handleSearchApply(payload: PropertySearchApplyPayload) {
-    setArea(payload.area);
-    setPropertyType(payload.propertyType);
-    setBedrooms(payload.bedrooms);
-    setSearch(payload.listingQuery);
+    setFilters(filtersFromSearchPayload(payload));
     requestAnimationFrame(() =>
       document.getElementById("rental-results")?.scrollIntoView({ behavior: "smooth", block: "start" }),
     );
@@ -339,9 +318,7 @@ export default function LongTermRentalsPage() {
                 </div>
               ) : portfolioFeaturedModels.length === 0 ? (
                 <RentalsEmptyState
-                  hasFilters={
-                    area !== "all" || propertyType !== "all" || bedrooms !== "all" || Boolean(search.trim())
-                  }
+                  hasFilters={searchFiltersAreActive(filters)}
                   websiteInventoryCount={inventoryError ? 0 : (inventoryData?.listings?.length ?? 0)}
                   inventoryUnavailable={inventoryError}
                 />

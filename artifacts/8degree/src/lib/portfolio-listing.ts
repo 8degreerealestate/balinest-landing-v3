@@ -107,6 +107,7 @@ export function borrowInventoryImages<T extends { code: string; imageUrl?: strin
 const AREA_KEYWORDS: { area: string; keys: string[] }[] = [
   { area: "Seminyak", keys: ["Seminyak", "Oberoi", "Bidadari", "Gang Kahyangan", "Dewi Sri"] },
   { area: "Canggu", keys: ["Canggu", "Berawa", "Pererenan", "Batu Bolong", "Padonan", "Babakan", "Tumbak Bayuh", "Kayu Tulang", "Buduk", "Munggu", "Seseh", "Cemagi", "Mengening"] },
+  { area: "Umalas", keys: ["Umalas", "Kerobokan", "Petitenget"] },
   { area: "Uluwatu", keys: ["Uluwatu", "Bingin", "Pecatu", "Balangan", "Ungasan", "Melasti", "Dreamland", "Jimbaran", "Bukit"] },
   { area: "Ubud", keys: ["Ubud", "Tegallalang", "Gianyar", "Kemenuh", "Peliatan", "Mas "] },
   { area: "Sanur", keys: ["Sanur"] },
