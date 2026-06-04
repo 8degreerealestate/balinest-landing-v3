@@ -3,6 +3,7 @@ import path from "path";
 import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
+import { spaStaticConflictGuard } from "./src/lib/spa-static-conflict-guard";
 
 function loadSitemapPaths(): string[] {
   const generated = path.resolve(import.meta.dirname, "../../migration/sitemap-paths.json");
@@ -79,7 +80,12 @@ export default defineConfig({
   base: basePath,
   /** Monorepo root `.env` / `.env.local` (DATABASE_URL, VITE_*, API_URL, etc.) */
   envDir: path.resolve(import.meta.dirname, "..", ".."),
-  plugins: [react(), tailwindcss(), seoStaticPlugin(basePath)],
+  plugins: [
+    react(),
+    tailwindcss(),
+    spaStaticConflictGuard(path.resolve(import.meta.dirname, "public")),
+    seoStaticPlugin(basePath),
+  ],
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "src"),

@@ -16,6 +16,10 @@ import { getApiBaseUrl } from "@/lib/api-base";
 import { Seo } from "@/components/site/Seo";
 import { SITE_NAME } from "@/lib/site-seo";
 import {
+  INVEST_SUBPATH_REDIRECT,
+  LEGACY_PATH_REDIRECTS,
+} from "@/lib/legacy-path-redirects";
+import {
   ABOUT_PATH,
   isReservedRootSlug,
   journalPostPath,
@@ -78,6 +82,12 @@ function JournalPrefixedArticleRedirect() {
   const [, params] = useRoute("/journal/:slug");
   if (!params?.slug) return <Redirect to={JOURNAL_INDEX_PATH} />;
   return <Redirect to={journalPostPath(params.slug)} />;
+}
+
+function InvestSubpathRedirect() {
+  const [, params] = useRoute("/invest/:subpath+");
+  if (!params?.subpath) return <Redirect to={INVEST_SUBPATH_REDIRECT} />;
+  return <Redirect to={INVEST_SUBPATH_REDIRECT} />;
 }
 
 /** New-app URLs → legacy /property/{code} (lowercase). */
@@ -199,6 +209,10 @@ function Router() {
       <Route path="/about-us" component={wrapPublic(About)} />
       <Route path="/contact" component={wrapPublic(Contact)} />
       <Route path="/invest" component={wrapPublic(Invest)} />
+      <Route path="/invest/:subpath+" component={InvestSubpathRedirect} />
+      {Object.entries(LEGACY_PATH_REDIRECTS).map(([from, to]) => (
+        <Route key={from} path={from} component={() => <Redirect to={to} />} />
+      ))}
       <Route path="/investment-guide" component={wrapPublic(InvestmentGuide)} />
       <Route path="/sell" component={wrapPublic(Invest)} />
       <Route path="/buyer-agents" component={wrapPublic(BuyerAgent)} />

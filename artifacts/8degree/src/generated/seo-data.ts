@@ -3,7 +3,7 @@
 import type { MigrationBundle } from "../../../../migration/seo-types";
 
 export const SEO_MIGRATION: MigrationBundle = {
-  "generatedAt": "2026-06-04T01:54:19.587Z",
+  "generatedAt": "2026-06-04T02:13:46.407Z",
   "redirects": [
     {
       "source": "/about",
@@ -16,6 +16,11 @@ export const SEO_MIGRATION: MigrationBundle = {
       "permanent": true
     },
     {
+      "source": "/buy",
+      "destination": "/projects",
+      "permanent": true
+    },
+    {
       "source": "/completed-projects",
       "destination": "/projects/completed",
       "permanent": true
@@ -23,6 +28,11 @@ export const SEO_MIGRATION: MigrationBundle = {
     {
       "source": "/houzez_agent",
       "destination": "/about-us",
+      "permanent": true
+    },
+    {
+      "source": "/investment-consulting",
+      "destination": "/invest",
       "permanent": true
     },
     {
@@ -246,7 +256,32 @@ export const SEO_MIGRATION: MigrationBundle = {
       "permanent": true
     },
     {
+      "source": "/land-for-sale",
+      "destination": "/buy-land",
+      "permanent": true
+    },
+    {
+      "source": "/off-plan-projects",
+      "destination": "/projects",
+      "permanent": true
+    },
+    {
+      "source": "/our-story",
+      "destination": "/about-us",
+      "permanent": true
+    },
+    {
+      "source": "/our-story-2",
+      "destination": "/about-us",
+      "permanent": true
+    },
+    {
       "source": "/property",
+      "destination": "/projects",
+      "permanent": true
+    },
+    {
+      "source": "/ready-units",
       "destination": "/projects",
       "permanent": true
     },

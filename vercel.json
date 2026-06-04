@@ -123,6 +123,26 @@
       "permanent": true
     },
     {
+      "source": "/invest/:path*",
+      "destination": "/invest",
+      "permanent": true
+    },
+    {
+      "source": "/invest/index.html",
+      "destination": "/invest",
+      "permanent": true
+    },
+    {
+      "source": "/invest/",
+      "destination": "/invest",
+      "permanent": true
+    },
+    {
+      "source": "/buy",
+      "destination": "/projects",
+      "permanent": true
+    },
+    {
       "source": "/completed-projects",
       "destination": "/projects/completed",
       "permanent": true
@@ -130,6 +150,11 @@
     {
       "source": "/houzez_agent",
       "destination": "/about-us",
+      "permanent": true
+    },
+    {
+      "source": "/investment-consulting",
+      "destination": "/invest",
       "permanent": true
     },
     {
@@ -350,6 +375,31 @@
     {
       "source": "/journal/why-uluwatu-is-balis-fastest-growing-lifestyle-destination-in-2025",
       "destination": "/why-uluwatu-is-balis-fastest-growing-lifestyle-destination-in-2025",
+      "permanent": true
+    },
+    {
+      "source": "/land-for-sale",
+      "destination": "/buy-land",
+      "permanent": true
+    },
+    {
+      "source": "/off-plan-projects",
+      "destination": "/projects",
+      "permanent": true
+    },
+    {
+      "source": "/our-story",
+      "destination": "/about-us",
+      "permanent": true
+    },
+    {
+      "source": "/our-story-2",
+      "destination": "/about-us",
+      "permanent": true
+    },
+    {
+      "source": "/ready-units",
+      "destination": "/projects",
       "permanent": true
     },
     {

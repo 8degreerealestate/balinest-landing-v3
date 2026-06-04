@@ -203,6 +203,14 @@ export const WP_TO_NEW_PATH: Record<string, string> = {
   "/testimony": "/testimony",
   "/data-driven": "/data-driven",
   "/completed-projects": "/projects/completed",
+  "/real-estate-for-sale": "/projects",
+  "/investment-consulting": "/invest",
+  "/our-story": "/about-us",
+  "/our-story-2": "/about-us",
+  "/land-for-sale": "/buy-land",
+  "/ready-units": "/projects",
+  "/buy": "/projects",
+  "/off-plan-projects": "/projects",
 };
 
 export function resolveNewPath(oldPath: string, journalSlugs: Set<string>): string | null {
@@ -227,6 +235,8 @@ export function resolveNewPath(oldPath: string, journalSlugs: Set<string>): stri
 
   const blogSlug = p.match(/^\/blog\/([^/]+)$/);
   if (blogSlug) return `/${encodeURIComponent(blogSlug[1])}`;
+
+  if (/^\/invest\/[^/]+$/.test(p)) return "/invest";
 
   return null;
 }

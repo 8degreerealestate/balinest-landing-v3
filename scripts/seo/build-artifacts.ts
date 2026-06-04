@@ -13,6 +13,7 @@ import type {
   SeoAuditFile,
   SeoRedirect,
 } from "../../migration/seo-types.ts";
+import { LEGACY_PATH_REDIRECTS } from "../../artifacts/8degree/src/lib/legacy-path-redirects.ts";
 import {
   INDEXABLE_STATIC_PATHS,
   JOURNAL_IMPORT_PATH,
@@ -104,8 +105,7 @@ function buildRedirects(journalSlugs: Set<string>, audit?: SeoAuditFile): SeoRed
   }
 
   for (const [oldPath, newPath] of Object.entries({
-    "/completed-projects": "/projects/completed",
-    "/real-estate-for-sale": "/projects",
+    ...LEGACY_PATH_REDIRECTS,
     "/houzez_agent": "/about-us",
   })) {
     add(oldPath, newPath);
@@ -243,6 +243,9 @@ function syncVercelRedirects(redirects: SeoRedirect[]): void {
     { source: "/blog", destination: "/journal", permanent: true },
     { source: "/about", destination: "/about-us", permanent: true },
     { source: "/property", destination: "/projects", permanent: true },
+    { source: "/invest/:path*", destination: "/invest", permanent: true },
+    { source: "/invest/index.html", destination: "/invest", permanent: true },
+    { source: "/invest/", destination: "/invest", permanent: true },
   ];
   const manual = [
     ...paramRedirects,

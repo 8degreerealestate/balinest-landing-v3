@@ -34,6 +34,9 @@ export type SheetListingRow = {
   buildingSizeSqm: string | null;
   br: string | null;
   ba: string | null;
+  level: string | null;
+  zoning: string | null;
+  livingRoom: string | null;
   listingUrl: string | null;
   description: string;
   channel: "silent" | "website";
@@ -328,7 +331,7 @@ function enrichListingFieldsFromDescription(row: Omit<SheetListingRow, "id" | "s
   "id" | "sortOrder" | "createdAt" | "updatedAt"
 > {
   const d = row.description;
-  let { landSizeSqm, buildingSizeSqm, br, ba, ownership } = row;
+  let { landSizeSqm, buildingSizeSqm, br, ba, ownership, level, zoning, livingRoom } = row;
 
   if (!landSizeSqm) {
     const m = d.match(/Land\s*Size\s*:\s*([\d.,\s–-]+?)\s*m\s*²/i) ?? d.match(/Land\s*Size\s*:\s*([\d.,\s–-]+)/i);
@@ -354,7 +357,20 @@ function enrichListingFieldsFromDescription(row: Omit<SheetListingRow, "id" | "s
     ownership = `Leasehold (${leaseInDesc[1]} Years)`;
   }
 
-  return { ...row, landSizeSqm, buildingSizeSqm, br, ba, ownership };
+  if (!level) {
+    const m = d.match(/Level\s*:\s*([^\n\r]+)/i);
+    if (m?.[1]) level = m[1].trim();
+  }
+  if (!zoning) {
+    const m = d.match(/Zoning\s*:\s*([^\n\r]+)/i);
+    if (m?.[1]) zoning = m[1].trim();
+  }
+  if (!livingRoom) {
+    const m = d.match(/Living\s*Room\s*:\s*([^\n\r]+)/i);
+    if (m?.[1]) livingRoom = m[1].trim();
+  }
+
+  return { ...row, landSizeSqm, buildingSizeSqm, br, ba, ownership, level, zoning, livingRoom };
 }
 
 function listingTitleFromRow(name: string, assets: string, desc: string, code: string): string {
@@ -463,6 +479,16 @@ export function parsePropertyInventorySheetCsv(csvText: string): SheetListingRow
     const buildingSizeSqm = normalizedNullableCell(row, "BUILDING SIZE(Sqm)", "BUILDING SIZE (Sqm)", "Building Size (Sqm)");
     const br = normalizedNullableCell(row, "BR", "br", "Bedrooms", "bedrooms");
     const ba = normalizedNullableCell(row, "BA", "ba", "Bathrooms", "bathrooms");
+    const level = normalizedNullableCell(row, "LEVEL", "Level", "level", "Levels", "Floor", "Floors");
+    const zoning = normalizedNullableCell(row, "ZONING", "Zoning", "zoning", "Zone", "Zoning Type");
+    const livingRoom = normalizedNullableCell(
+      row,
+      "LIVING ROOM",
+      "Living Room",
+      "living room",
+      "LivingRoom",
+      "LIVING_ROOM",
+    );
 
     if (
       codeCell.toLowerCase().includes("silent listing") &&
@@ -506,6 +532,9 @@ export function parsePropertyInventorySheetCsv(csvText: string): SheetListingRow
       buildingSizeSqm,
       br,
       ba,
+      level,
+      zoning,
+      livingRoom,
       listingUrl,
       description: String(desc).slice(0, 100_000),
       channel,

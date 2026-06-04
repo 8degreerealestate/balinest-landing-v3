@@ -12,6 +12,11 @@
       "permanent": true
     },
     {
+      "source": "/buy",
+      "destination": "/projects",
+      "permanent": true
+    },
+    {
       "source": "/completed-projects",
       "destination": "/projects/completed",
       "permanent": true
@@ -19,6 +24,11 @@
     {
       "source": "/houzez_agent",
       "destination": "/about-us",
+      "permanent": true
+    },
+    {
+      "source": "/investment-consulting",
+      "destination": "/invest",
       "permanent": true
     },
     {
@@ -242,7 +252,32 @@
       "permanent": true
     },
     {
+      "source": "/land-for-sale",
+      "destination": "/buy-land",
+      "permanent": true
+    },
+    {
+      "source": "/off-plan-projects",
+      "destination": "/projects",
+      "permanent": true
+    },
+    {
+      "source": "/our-story",
+      "destination": "/about-us",
+      "permanent": true
+    },
+    {
+      "source": "/our-story-2",
+      "destination": "/about-us",
+      "permanent": true
+    },
+    {
       "source": "/property",
+      "destination": "/projects",
+      "permanent": true
+    },
+    {
+      "source": "/ready-units",
       "destination": "/projects",
       "permanent": true
     },

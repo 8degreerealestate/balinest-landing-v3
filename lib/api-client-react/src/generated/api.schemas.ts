@@ -248,6 +248,9 @@ export interface PropertyInventoryListing {
   buildingSizeSqm: string | null;
   br: string | null;
   ba: string | null;
+  level: string | null;
+  zoning: string | null;
+  livingRoom: string | null;
   listingUrl: string | null;
   description: string;
   channel: PropertyInventoryListingChannel;
