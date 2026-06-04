@@ -20,6 +20,9 @@
  *
  * Seller's Agent page (`public/site-media/`)
  *   seller-agent-hero.png
+ *
+ * Journal page (`/journal`)
+ *   journal-hero.jpg
  */
 
 export const SITE_MEDIA = {
@@ -29,8 +32,8 @@ export const SITE_MEDIA = {
   heroMobileVideo: "/site-media/hero-mobile.mp4",
   heroMobilePoster: "/site-media/hero-mobile-poster.jpg",
   heroStill: "/site-media/hero-still.jpg",
-  /** Journal listing hero (`/journal`) — same cinematic still as About / homepage desktop. */
-  journalHero: "/site-media/hero-poster.jpg",
+  /** Journal listing hero (`/journal`) — aerial coastal sunset resort. */
+  journalHero: "/site-media/journal-hero.jpg",
   journalHeroFallback: "/site-media/hero-still.jpg",
   topArea: "/site-media/area-canggu.jpg",
   /** Navbar Guides mega menu hero (left column). */
