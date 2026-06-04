@@ -123,17 +123,12 @@
       "permanent": true
     },
     {
-      "source": "/invest/:path*",
+      "source": "/invest/:path+",
       "destination": "/invest",
       "permanent": true
     },
     {
       "source": "/invest/index.html",
-      "destination": "/invest",
-      "permanent": true
-    },
-    {
-      "source": "/invest/",
       "destination": "/invest",
       "permanent": true
     },

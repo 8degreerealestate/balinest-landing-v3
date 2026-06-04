@@ -243,9 +243,8 @@ function syncVercelRedirects(redirects: SeoRedirect[]): void {
     { source: "/blog", destination: "/journal", permanent: true },
     { source: "/about", destination: "/about-us", permanent: true },
     { source: "/property", destination: "/projects", permanent: true },
-    { source: "/invest/:path*", destination: "/invest", permanent: true },
+    { source: "/invest/:path+", destination: "/invest", permanent: true },
     { source: "/invest/index.html", destination: "/invest", permanent: true },
-    { source: "/invest/", destination: "/invest", permanent: true },
   ];
   const manual = [
     ...paramRedirects,
