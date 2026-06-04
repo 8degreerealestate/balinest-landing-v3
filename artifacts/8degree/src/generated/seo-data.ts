@@ -3,7 +3,7 @@
 import type { MigrationBundle } from "../../../../migration/seo-types";
 
 export const SEO_MIGRATION: MigrationBundle = {
-  "generatedAt": "2026-06-04T02:13:46.407Z",
+  "generatedAt": "2026-06-04T02:27:54.041Z",
   "redirects": [
     {
       "source": "/about",

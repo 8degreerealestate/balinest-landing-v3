@@ -1,23 +1,14 @@
-import { useMemo, useState } from "react";
-import { Check } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useCreateEnquiry } from "@workspace/api-client-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectItemIndicatorPrimitive,
-  SelectItemPrimitive,
-  SelectItemTextPrimitive,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { buildInternationalPhone, PHONE_COUNTRIES } from "@/lib/phone-countries";
+import { PhoneCountryNumberField } from "@/components/site/PhoneCountryNumberField";
+import { buildInternationalPhone, DEFAULT_PHONE_COUNTRY_ID, findPhoneCountry } from "@/lib/phone-countries";
 import { cn } from "@/lib/utils";
 
 const INVEST_DARK = "#0d4542";
@@ -28,9 +19,6 @@ const CONTROL =
 
 const INVEST_SELECT_ITEM =
   "relative cursor-default select-none rounded-sm py-2 pl-8 pr-3 text-sm font-normal text-[#1c1917] outline-none data-[highlighted]:bg-[#E0FDAC] data-[highlighted]:text-[#1c1917] focus:bg-[#E0FDAC] focus:text-[#1c1917] data-[disabled]:pointer-events-none data-[disabled]:opacity-50";
-
-const INVEST_PHONE_SELECT_ITEM =
-  "relative flex w-full cursor-default select-none items-center gap-2 rounded-sm py-2 pl-2 pr-8 text-sm outline-none data-[highlighted]:bg-[#0d4542] data-[highlighted]:text-white focus:bg-[#0d4542] focus:text-white data-[disabled]:pointer-events-none data-[disabled]:opacity-50";
 
 const INVESTMENT_INTEREST_OPTIONS = ["Just exploring", "Considering", "Ready to discuss"] as const;
 
@@ -49,7 +37,7 @@ type InvestInvitationValues = {
 export function InvestInvitationForm() {
   const { toast } = useToast();
   const createEnquiry = useCreateEnquiry();
-  const [phoneCountryId, setPhoneCountryId] = useState<string>("id");
+  const [phoneCountryId, setPhoneCountryId] = useState(DEFAULT_PHONE_COUNTRY_ID);
   const [phoneNational, setPhoneNational] = useState("");
 
   const form = useForm<InvestInvitationValues>({
@@ -62,20 +50,8 @@ export function InvestInvitationForm() {
     },
   });
 
-  const selectedCountry = useMemo(
-    () => PHONE_COUNTRIES.find((c) => c.id === phoneCountryId) ?? PHONE_COUNTRIES[0],
-    [phoneCountryId],
-  );
-
-  const phonePlaceholder = useMemo(() => {
-    if (phoneCountryId === "other") return "+1 234 567 8900";
-    if (phoneCountryId === "id") return "0812-345-678";
-    if (phoneCountryId === "au") return "0412-345-678";
-    return "412 345 678";
-  }, [phoneCountryId]);
-
   const onSubmit = form.handleSubmit(async (values) => {
-    const dial = PHONE_COUNTRIES.find((c) => c.id === phoneCountryId)?.dial ?? "+62";
+    const dial = findPhoneCountry(phoneCountryId).dial;
     const fullPhone = buildInternationalPhone(dial, phoneNational);
 
     const interestLine = values.investmentInterest
@@ -101,7 +77,7 @@ export function InvestInvitationForm() {
         description: "We'll send the investor brief privately within 24 hours.",
       });
       form.reset();
-      setPhoneCountryId("id");
+      setPhoneCountryId(DEFAULT_PHONE_COUNTRY_ID);
       setPhoneNational("");
     } catch {
       toast({
@@ -149,63 +125,17 @@ export function InvestInvitationForm() {
           WhatsApp / phone
           {REQ}
         </Label>
-        <div
-          role="group"
-          aria-labelledby="inc-phone-label"
-          className={cn(
-            "flex h-11 w-full min-w-0 items-stretch overflow-hidden rounded-lg border border-[#1f1d1b]/18 bg-white shadow-sm",
-            "focus-within:border-[#0d4542] focus-within:ring-1 focus-within:ring-[#0d4542]/25",
-          )}
-        >
-          <Select value={phoneCountryId} onValueChange={setPhoneCountryId}>
-            <SelectTrigger
-              aria-label={`Country code, ${selectedCountry.label}`}
-              className={cn(
-                "h-11 min-h-11 w-[3.5rem] max-w-[3.5rem] shrink-0 rounded-none border-0 bg-transparent px-1.5 py-0 shadow-none",
-                "justify-between gap-0.5 focus:ring-0 focus:ring-offset-0 data-[state=open]:bg-[#f4f1ea]/80",
-                "[&_svg]:h-[15px] [&_svg]:w-[15px] [&_svg]:shrink-0 [&_svg]:text-[#1c1917]/45",
-                "[&>span]:text-[1.0625rem] [&>span]:leading-none",
-              )}
-            >
-              <SelectValue placeholder="🌐" />
-            </SelectTrigger>
-            <SelectContent className="z-[60] max-h-60 min-w-[min(100vw-2rem,18rem)] overflow-hidden rounded-xl border border-[#1f1d1b]/10 bg-[#eceae4] p-1 shadow-lg">
-              {PHONE_COUNTRIES.map((c) => (
-                <SelectItemPrimitive
-                  key={c.id}
-                  value={c.id}
-                  textValue={c.label}
-                  title={c.label}
-                  className={INVEST_PHONE_SELECT_ITEM}
-                >
-                  <SelectItemTextPrimitive className="inline-flex shrink-0 items-center text-[1.125rem] leading-none">
-                    {c.flag}
-                  </SelectItemTextPrimitive>
-                  <span className="min-w-0 flex-1 truncate text-left text-sm">{c.countryName}</span>
-                  <span className="absolute right-2 flex h-3.5 w-3.5 items-center justify-center">
-                    <SelectItemIndicatorPrimitive>
-                      <Check className="h-4 w-4" />
-                    </SelectItemIndicatorPrimitive>
-                  </span>
-                </SelectItemPrimitive>
-              ))}
-            </SelectContent>
-          </Select>
-          <div className="w-px shrink-0 self-stretch bg-[#1f1d1b]/18" aria-hidden />
-          <Input
-            id="inc-phone"
-            type="tel"
-            inputMode="tel"
-            value={phoneNational}
-            onChange={(e) => setPhoneNational(e.target.value)}
-            placeholder={phonePlaceholder}
-            autoComplete={phoneCountryId === "other" ? "tel" : "tel-national"}
-            className={cn(
-              "h-11 min-h-0 min-w-0 flex-1 rounded-none border-0 bg-transparent px-3 py-0 text-sm font-normal text-[#1c1917] shadow-none",
-              "placeholder:text-[#1c1917]/40 focus-visible:ring-0 focus-visible:ring-offset-0",
-            )}
-          />
-        </div>
+        <PhoneCountryNumberField
+          inputId="inc-phone"
+          groupAriaLabelledBy="inc-phone-label"
+          countryId={phoneCountryId}
+          onCountryIdChange={setPhoneCountryId}
+          national={phoneNational}
+          onNationalChange={setPhoneNational}
+          required
+          groupClassName="focus-within:border-[#0d4542] focus-within:ring-[#0d4542]/25"
+          selectContentClassName="overflow-hidden rounded-xl border border-[#1f1d1b]/10 bg-[#eceae4] p-1 shadow-lg"
+        />
       </div>
 
       <div className={field}>

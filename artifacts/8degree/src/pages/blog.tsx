@@ -10,6 +10,7 @@ import { type SiteLanguage, useSiteLanguage } from "@/lib/site-language";
 import { JOURNAL_PATH, journalPostPath } from "@/lib/journal-paths";
 import { loadStaticJournalPosts } from "@/lib/journal-static-fallback";
 import { onJournalImageError, resolveJournalImageUrl } from "@/lib/journal-image-url";
+import { SITE_MEDIA } from "@/lib/site-assets";
 import type { BlogPost } from "@workspace/api-client-react";
 
 export default function Blog() {
@@ -102,13 +103,19 @@ export default function Blog() {
       />
       <section className="relative w-full overflow-hidden">
         <div className="pointer-events-none absolute inset-0 min-h-[min(72dvh,720px)] overflow-hidden">
-          <div className="absolute inset-0 z-10 bg-black/45" aria-hidden />
+          <div className="absolute inset-0 z-10 bg-black/50" aria-hidden />
           <img
-            src="/site-media/hero-mobile-poster.jpg"
+            src={SITE_MEDIA.journalHero}
             alt=""
             className="hero-image-breathe h-full min-h-[min(72dvh,720px)] w-full object-cover object-center"
             loading="eager"
             decoding="async"
+            onError={(e) => {
+              const img = e.currentTarget;
+              if (img.dataset.journalHeroFallback === "1") return;
+              img.dataset.journalHeroFallback = "1";
+              img.src = SITE_MEDIA.journalHeroFallback;
+            }}
           />
         </div>
         <div className="relative z-20 mx-auto flex min-h-[min(72dvh,720px)] w-full max-w-6xl flex-col items-center justify-center px-6 py-24 text-center text-white md:py-28">

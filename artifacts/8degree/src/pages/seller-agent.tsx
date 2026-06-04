@@ -1,6 +1,5 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Check } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useCreateEnquiry } from "@workspace/api-client-react";
 import { Button } from "@/components/ui/button";
@@ -10,16 +9,14 @@ import {
   Select,
   SelectContent,
   SelectItem,
-  SelectItemIndicatorPrimitive,
-  SelectItemPrimitive,
-  SelectItemTextPrimitive,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { PhoneCountryNumberField } from "@/components/site/PhoneCountryNumberField";
 import { Seo } from "@/components/site/Seo";
-import { buildInternationalPhone, PHONE_COUNTRIES, PHONE_SELECT_ITEM_CLASS } from "@/lib/phone-countries";
+import { buildInternationalPhone, DEFAULT_PHONE_COUNTRY_ID, findPhoneCountry } from "@/lib/phone-countries";
 import { SITE_MEDIA } from "@/lib/site-assets";
 import { truncateForMeta } from "@/lib/site-seo";
 import { cn } from "@/lib/utils";
@@ -59,7 +56,7 @@ function SellerPartnershipForm({ formCopy }: { formCopy: SellerAgentCopy["form"]
   const common = useSiteCopy(COMMON_COPY);
   const { toast } = useToast();
   const createEnquiry = useCreateEnquiry();
-  const [phoneCountryId, setPhoneCountryId] = useState<string>("id");
+  const [phoneCountryId, setPhoneCountryId] = useState(DEFAULT_PHONE_COUNTRY_ID);
   const [phoneNational, setPhoneNational] = useState("");
 
   const form = useForm({
@@ -75,20 +72,8 @@ function SellerPartnershipForm({ formCopy }: { formCopy: SellerAgentCopy["form"]
     },
   });
 
-  const selectedCountry = useMemo(
-    () => PHONE_COUNTRIES.find((c) => c.id === phoneCountryId) ?? PHONE_COUNTRIES[0],
-    [phoneCountryId],
-  );
-
-  const phonePlaceholder = useMemo(() => {
-    if (phoneCountryId === "other") return "+1 234 567 8900";
-    if (phoneCountryId === "id") return "0812-345-678";
-    if (phoneCountryId === "au") return "0412-345-678";
-    return "412 345 678";
-  }, [phoneCountryId]);
-
   const onSubmit = form.handleSubmit(async (values) => {
-    const dial = PHONE_COUNTRIES.find((c) => c.id === phoneCountryId)?.dial ?? "+62";
+    const dial = findPhoneCountry(phoneCountryId).dial;
     const fullPhone = buildInternationalPhone(dial, phoneNational);
     const phoneDigits = fullPhone.replace(/\D/g, "");
     if (phoneDigits.length < 8) {
@@ -126,7 +111,7 @@ function SellerPartnershipForm({ formCopy }: { formCopy: SellerAgentCopy["form"]
         description: common.enquirySentDesc,
       });
       form.reset();
-      setPhoneCountryId("id");
+      setPhoneCountryId(DEFAULT_PHONE_COUNTRY_ID);
       setPhoneNational("");
     } catch {
       toast({ title: common.enquiryFailedTitle, description: common.enquiryFailedDesc, variant: "destructive" });
@@ -186,63 +171,14 @@ function SellerPartnershipForm({ formCopy }: { formCopy: SellerAgentCopy["form"]
           {formCopy.phone}
           <span className="ml-1 inline-block translate-y-[-1px] text-[0.45rem] leading-none text-[#01514E]">◆</span>
         </Label>
-        <div
-          role="group"
-          aria-labelledby="seller-phone-label"
-          className={cn(
-            "flex h-11 w-full min-w-0 items-stretch overflow-hidden rounded-lg border border-[#1f1d1b]/18 bg-white shadow-sm",
-            "focus-within:border-[#01514E] focus-within:ring-1 focus-within:ring-[#01514E]/25",
-          )}
-        >
-          <Select value={phoneCountryId} onValueChange={setPhoneCountryId}>
-            <SelectTrigger
-              aria-label={`Country code, ${selectedCountry.label}`}
-              className={cn(
-                "h-11 min-h-11 w-[3.5rem] max-w-[3.5rem] shrink-0 rounded-none border-0 bg-transparent px-1.5 py-0 shadow-none",
-                "justify-between gap-0.5 focus:ring-0 focus:ring-offset-0 data-[state=open]:bg-[#f4f1ea]/80",
-                "[&_svg]:h-[15px] [&_svg]:w-[15px] [&_svg]:shrink-0 [&_svg]:text-[#1c1917]/45",
-                "[&>span]:text-[1.0625rem] [&>span]:leading-none",
-              )}
-            >
-              <SelectValue placeholder="🌐" />
-            </SelectTrigger>
-            <SelectContent className="z-[60] max-h-60 min-w-[min(100vw-2rem,18rem)]">
-              {PHONE_COUNTRIES.map((c) => (
-                <SelectItemPrimitive
-                  key={c.id}
-                  value={c.id}
-                  textValue={c.label}
-                  title={c.label}
-                  className={cn(PHONE_SELECT_ITEM_CLASS, "font-normal")}
-                >
-                  <SelectItemTextPrimitive className="inline-flex shrink-0 items-center text-[1.125rem] leading-none">
-                    {c.flag}
-                  </SelectItemTextPrimitive>
-                  <span className="min-w-0 flex-1 truncate text-left text-sm text-[#1c1917]">{c.countryName}</span>
-                  <span className="absolute right-2 flex h-3.5 w-3.5 items-center justify-center">
-                    <SelectItemIndicatorPrimitive>
-                      <Check className="h-4 w-4" />
-                    </SelectItemIndicatorPrimitive>
-                  </span>
-                </SelectItemPrimitive>
-              ))}
-            </SelectContent>
-          </Select>
-          <div className="w-px shrink-0 self-stretch bg-[#1f1d1b]/18" aria-hidden />
-          <Input
-            id="seller-phone"
-            type="tel"
-            inputMode="tel"
-            value={phoneNational}
-            onChange={(e) => setPhoneNational(e.target.value)}
-            placeholder={phonePlaceholder}
-            autoComplete={phoneCountryId === "other" ? "tel" : "tel-national"}
-            className={cn(
-              "h-11 min-h-0 min-w-0 flex-1 rounded-none border-0 bg-transparent px-3 py-0 text-sm font-normal text-[#1c1917] shadow-none",
-              "placeholder:text-[#1c1917]/40 focus-visible:ring-0 focus-visible:ring-offset-0",
-            )}
-          />
-        </div>
+        <PhoneCountryNumberField
+          inputId="seller-phone"
+          groupAriaLabelledBy="seller-phone-label"
+          countryId={phoneCountryId}
+          onCountryIdChange={setPhoneCountryId}
+          national={phoneNational}
+          onNationalChange={setPhoneNational}
+        />
       </div>
 
       <div className={field}>
