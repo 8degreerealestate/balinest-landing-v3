@@ -35,7 +35,12 @@ export function AreaSearchMenuDropdown({
     if (left + width > window.innerWidth - 8) {
       left = Math.max(8, window.innerWidth - width - 8);
     }
-    setPosition({ top: rect.bottom + 8, left, width });
+    const gap = 10;
+    const estimatedHeight = 320;
+    const spaceBelow = window.innerHeight - rect.bottom - gap;
+    const openAbove = spaceBelow < estimatedHeight && rect.top > estimatedHeight;
+    const top = openAbove ? Math.max(8, rect.top - gap - estimatedHeight) : rect.bottom + gap;
+    setPosition({ top, left, width });
   };
 
   useLayoutEffect(() => {
@@ -74,7 +79,7 @@ export function AreaSearchMenuDropdown({
   return createPortal(
     <div
       ref={panelRef}
-      className="fixed"
+      className="fixed z-[350]"
       style={{ top: position.top, left: position.left, width: position.width }}
     >
       <AreaSearchMenuPanel

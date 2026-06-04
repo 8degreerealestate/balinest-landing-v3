@@ -385,7 +385,7 @@ export function PropertySearchPanel({
           ? "relative z-20 mt-6 w-full min-w-0 md:mt-8"
           : cn(
               "relative z-30 mt-4 w-full min-w-0 pb-2 sm:-mt-14 md:-mt-20 md:pb-3",
-              isAreaMenuOpen ? "overflow-visible" : "overflow-x-clip",
+              isAreaMenuOpen ? "overflow-visible" : "overflow-x-clip overflow-y-visible",
             )
       }
       style={embedded ? undefined : { backgroundColor: HOME_LISTINGS_BAND }}
@@ -398,11 +398,12 @@ export function PropertySearchPanel({
         }
       >
         <div
-          className={
+          className={cn(
             embedded
               ? "w-full min-w-0 max-w-full rounded-[18px] bg-[#f7f5f1] px-4 py-5 shadow-[0_14px_40px_rgba(0,0,0,0.22)] sm:px-5 sm:py-6 md:px-10 md:py-7"
-              : "w-full min-w-0 max-w-full rounded-[18px] bg-[#f7f5f1] px-4 py-5 shadow-[0_14px_40px_rgba(0,0,0,0.16)] sm:px-6 sm:py-6 md:px-10 md:py-7"
-          }
+              : "w-full min-w-0 max-w-full rounded-[18px] bg-[#f7f5f1] px-4 py-5 shadow-[0_14px_40px_rgba(0,0,0,0.16)] sm:px-6 sm:py-6 md:px-10 md:py-7",
+            isAreaMenuOpen && "overflow-visible",
+          )}
         >
           <div className="mb-5 flex w-full min-w-0 justify-center sm:mb-6">
             <h3 className="max-w-full min-w-0 text-balance text-center text-sm font-bold uppercase leading-snug tracking-[0.02em] text-primary sm:text-base sm:tracking-[0.04em] md:text-xl md:leading-tight md:tracking-[0.06em] lg:text-2xl">
@@ -413,7 +414,12 @@ export function PropertySearchPanel({
             {rentalMinimalGrid}
             {!minimalRental && (
               <>
-                <div className="grid min-w-0 grid-cols-1 gap-x-5 gap-y-5 md:grid-cols-4">
+                <div
+                  className={cn(
+                    "grid min-w-0 grid-cols-1 gap-x-5 gap-y-5 md:grid-cols-4",
+                    isAreaMenuOpen && "relative z-[1] overflow-visible",
+                  )}
+                >
                   <div className="block min-w-0">
                     <span className={SEARCH_FIELD_LABEL}>{t.propertyType}</span>
                     <Select value={propertyTypeChoice} onValueChange={setPropertyTypeChoice}>

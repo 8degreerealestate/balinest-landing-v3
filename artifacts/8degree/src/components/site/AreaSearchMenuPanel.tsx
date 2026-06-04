@@ -12,7 +12,7 @@ export function filterAreaNames(names: readonly string[], query: string): string
 }
 
 export const AREA_SEARCH_MENU_PANEL_CLASS =
-  "z-[200] grid w-[min(92vw,780px)] max-w-[calc(100vw-1rem)] grid-cols-1 gap-2 rounded border border-[#01514E]/25 bg-[#f7f5f1] p-2.5 shadow-xl sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1.45fr)]";
+  "grid w-full min-w-0 grid-cols-1 gap-2 overflow-visible rounded border border-[#01514E]/25 bg-[#f7f5f1] p-2.5 shadow-xl sm:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1.45fr)]";
 
 type AreaSearchMenuPanelProps = {
   selectedArea: string;
@@ -72,12 +72,12 @@ export function AreaSearchMenuPanel({
                 key={area}
                 type="button"
                 onClick={() => onSelectArea(area)}
-                className="flex w-full items-center gap-2 rounded px-1.5 py-1 text-left text-[#1f1d1b] hover:bg-[#01514E]/10"
+                className="flex w-full items-center gap-2 rounded px-1.5 py-1.5 text-left text-[#1f1d1b] hover:bg-[#01514E]/10"
               >
-                <span className="inline-flex h-5 w-5 items-center justify-center rounded bg-[#01514E] text-[10px] text-white">
+                <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded bg-[#01514E] text-[10px] text-white">
                   ●
                 </span>
-                {area}
+                <span className="min-w-0 whitespace-normal leading-snug">{area}</span>
               </button>
             ))
           )}
@@ -95,13 +95,13 @@ export function AreaSearchMenuPanel({
                 key={area}
                 type="button"
                 onClick={() => onSelectArea(area)}
-                className={`w-full rounded px-2 py-1.5 text-xs ${
+                className={`w-full rounded px-2 py-1.5 text-left text-xs leading-snug ${
                   selectedArea === area
                     ? "bg-[#01514E] text-white"
                     : "bg-[#e6efee] text-[#1f1d1b] hover:bg-[#d7e6e4]"
                 }`}
               >
-                {area}
+                <span className="block whitespace-normal">{area}</span>
               </button>
             ))
           )}
