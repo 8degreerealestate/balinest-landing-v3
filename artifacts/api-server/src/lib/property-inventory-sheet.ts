@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { parse } from "csv-parse/sync";
@@ -7,6 +7,8 @@ import { logger } from "./logger";
 
 /** Shipped CSV used when `NODE_ENV=development` and Google Sheet export is unreachable (DNS, offline, etc.). */
 const DEV_PROPERTY_INVENTORY_FALLBACK_CSV = "dev-property-inventory-fallback.csv";
+/** Level / zoning / living room extracted from pre-migration WordPress copy when sheet cells are blank. */
+const LEGACY_LISTING_SPECS_JSON = "inventory-listing-specs-legacy.json";
 
 /** Default workbook + tab (gid) for 8D property list. */
 export const DEFAULT_PROPERTY_INVENTORY_SPREADSHEET_ID =
@@ -325,6 +327,107 @@ function codeFromRow(row: Record<string, string>): string {
   return "";
 }
 
+type ListingSpecFields = Pick<SheetListingRow, "level" | "zoning" | "livingRoom">;
+
+function trimSpecValue(raw: string): string {
+  return raw.replace(/\s*✅\s*$/u, "").trim();
+}
+
+function labeledFieldFromDescription(desc: string, label: string): string | null {
+  const re = new RegExp(`(?:[•\\-*]\\s*)?${label}\\s*:\\s*([^\\n\\r•]+)`, "iu");
+  const m = desc.match(re);
+  return m?.[1] ? trimSpecValue(m[1]) : null;
+}
+
+function levelFromDescription(desc: string): string | null {
+  const labeled = labeledFieldFromDescription(desc, "Level");
+  if (labeled) return labeled;
+  const numeric = desc.match(/\b(\d+)\s*[-–]?\s*level\b/iu);
+  if (numeric?.[1]) return numeric[1];
+  const word = desc.match(/\b(single|two|three|four)[\s-]*level\b/iu);
+  if (word?.[1]) {
+    const map: Record<string, string> = { single: "1", two: "2", three: "3", four: "4" };
+    return map[word[1].toLowerCase()] ?? null;
+  }
+  return null;
+}
+
+function zoningFromDescription(desc: string): string | null {
+  const labeled = labeledFieldFromDescription(desc, "Zoning");
+  if (labeled) return labeled;
+  for (const [pattern, label] of [
+    [/yellow\s*zone/iu, "Yellow"],
+    [/orange\s*zone/iu, "Orange"],
+    [/pink\s*zone/iu, "Pink"],
+    [/green\s*zone/iu, "Green"],
+  ] as const) {
+    if (pattern.test(desc)) return label;
+  }
+  return null;
+}
+
+function livingRoomFromDescription(desc: string): string | null {
+  const labeled = labeledFieldFromDescription(desc, "Living\\s*Room");
+  if (labeled) return labeled.length > 80 ? labeled.slice(0, 80).trim() : labeled;
+  if (/enclosed\s+living\s+room/iu.test(desc)) return "Enclosed";
+  if (/open[\s-]*plan(?:\s+layout)?/iu.test(desc)) return "Open-plan";
+  if (/sunken\s+living/iu.test(desc)) return "Sunken";
+  return null;
+}
+
+function listingSpecFieldsFromDescription(desc: string): ListingSpecFields {
+  return {
+    level: levelFromDescription(desc),
+    zoning: zoningFromDescription(desc),
+    livingRoom: livingRoomFromDescription(desc),
+  };
+}
+
+let legacyListingSpecsByCode: Map<string, ListingSpecFields> | undefined;
+
+function legacyListingSpecsCandidates(): string[] {
+  const here = path.dirname(fileURLToPath(import.meta.url));
+  return [
+    path.resolve(here, "../../data", LEGACY_LISTING_SPECS_JSON),
+    path.resolve(here, "../data", LEGACY_LISTING_SPECS_JSON),
+    path.resolve(here, "data", LEGACY_LISTING_SPECS_JSON),
+    path.resolve(process.cwd(), "artifacts/api-server/data", LEGACY_LISTING_SPECS_JSON),
+    path.resolve(process.cwd(), "artifacts/api-server/dist/data", LEGACY_LISTING_SPECS_JSON),
+  ];
+}
+
+function loadLegacyListingSpecsByCode(): Map<string, ListingSpecFields> {
+  if (legacyListingSpecsByCode) return legacyListingSpecsByCode;
+  const map = new Map<string, ListingSpecFields>();
+  legacyListingSpecsByCode = map;
+  for (const filePath of legacyListingSpecsCandidates()) {
+    if (!existsSync(filePath)) continue;
+    try {
+      const raw = JSON.parse(readFileSync(filePath, "utf8")) as Record<
+        string,
+        { level?: string; zoning?: string; livingRoom?: string }
+      >;
+      for (const [code, specs] of Object.entries(raw)) {
+        const key = code.trim().toUpperCase();
+        if (!key) continue;
+        map.set(key, {
+          level: specs.level?.trim() || null,
+          zoning: specs.zoning?.trim() || null,
+          livingRoom: specs.livingRoom?.trim() || null,
+        });
+      }
+      logger.info(
+        { filePath, count: map.size },
+        "property inventory: loaded legacy listing specs fallback",
+      );
+      break;
+    } catch (err) {
+      logger.warn({ err, filePath }, "property inventory: legacy listing specs JSON unreadable");
+    }
+  }
+  return map;
+}
+
 /** Fill gaps when CRM columns are empty but marketing copy includes structured details. */
 function enrichListingFieldsFromDescription(row: Omit<SheetListingRow, "id" | "sortOrder" | "createdAt" | "updatedAt">): Omit<
   SheetListingRow,
@@ -357,20 +460,26 @@ function enrichListingFieldsFromDescription(row: Omit<SheetListingRow, "id" | "s
     ownership = `Leasehold (${leaseInDesc[1]} Years)`;
   }
 
-  if (!level) {
-    const m = d.match(/Level\s*:\s*([^\n\r]+)/i);
-    if (m?.[1]) level = m[1].trim();
-  }
-  if (!zoning) {
-    const m = d.match(/Zoning\s*:\s*([^\n\r]+)/i);
-    if (m?.[1]) zoning = m[1].trim();
-  }
-  if (!livingRoom) {
-    const m = d.match(/Living\s*Room\s*:\s*([^\n\r]+)/i);
-    if (m?.[1]) livingRoom = m[1].trim();
-  }
+  const fromDesc = listingSpecFieldsFromDescription(d);
+  if (!level) level = fromDesc.level;
+  if (!zoning) zoning = fromDesc.zoning;
+  if (!livingRoom) livingRoom = fromDesc.livingRoom;
 
   return { ...row, landSizeSqm, buildingSizeSqm, br, ba, ownership, level, zoning, livingRoom };
+}
+
+function enrichListingFieldsFromLegacy(
+  code: string,
+  row: Omit<SheetListingRow, "id" | "sortOrder" | "createdAt" | "updatedAt">,
+): Omit<SheetListingRow, "id" | "sortOrder" | "createdAt" | "updatedAt"> {
+  const legacy = loadLegacyListingSpecsByCode().get(code.trim().toUpperCase());
+  if (!legacy) return row;
+  return {
+    ...row,
+    level: row.level ?? legacy.level,
+    zoning: row.zoning ?? legacy.zoning,
+    livingRoom: row.livingRoom ?? legacy.livingRoom,
+  };
 }
 
 function listingTitleFromRow(name: string, assets: string, desc: string, code: string): string {
@@ -476,10 +585,16 @@ export function parsePropertyInventorySheetCsv(csvText: string): SheetListingRow
       "Development status",
     );
     const landSizeSqm = normalizedNullableCell(row, "LAND SIZE(Sqm)", "LAND SIZE (Sqm)", "Land Size (Sqm)");
-    const buildingSizeSqm = normalizedNullableCell(row, "BUILDING SIZE(Sqm)", "BUILDING SIZE (Sqm)", "Building Size (Sqm)");
+    const buildingSizeSqm = normalizedNullableCell(
+      row,
+      "BUILDING SIZE(Sqm)",
+      "BUILDING SIZE (Sqm)",
+      "BUILDINGSIZE(Sqm)",
+      "Building Size (Sqm)",
+    );
     const br = normalizedNullableCell(row, "BR", "br", "Bedrooms", "bedrooms");
     const ba = normalizedNullableCell(row, "BA", "ba", "Bathrooms", "bathrooms");
-    const level = normalizedNullableCell(row, "LEVEL", "Level", "level", "Levels", "Floor", "Floors");
+    const level = normalizedNullableCell(row, "LEVEL", "Level", "Level ", "level", "Levels", "Floor", "Floors");
     const zoning = normalizedNullableCell(row, "ZONING", "Zoning", "zoning", "Zone", "Zoning Type");
     const livingRoom = normalizedNullableCell(
       row,
@@ -516,29 +631,32 @@ export function parsePropertyInventorySheetCsv(csvText: string): SheetListingRow
     const listingUrl = redirectUrl ?? sourceUrl;
     const channel = rowChannel(row);
     const sortOrder = i * 10;
-    const parsed = enrichListingFieldsFromDescription({
+    const parsed = enrichListingFieldsFromLegacy(
       code,
-      sourceUrl,
-      name: name || code,
-      redirectUrl,
-      title,
-      imageUrl,
-      imageUrls: imageUrl ? [imageUrl] : [],
-      ownership,
-      location,
-      estimatePriceUsd,
-      deliveryEstimate,
-      landSizeSqm,
-      buildingSizeSqm,
-      br,
-      ba,
-      level,
-      zoning,
-      livingRoom,
-      listingUrl,
-      description: String(desc).slice(0, 100_000),
-      channel,
-    });
+      enrichListingFieldsFromDescription({
+        code,
+        sourceUrl,
+        name: name || code,
+        redirectUrl,
+        title,
+        imageUrl,
+        imageUrls: imageUrl ? [imageUrl] : [],
+        ownership,
+        location,
+        estimatePriceUsd,
+        deliveryEstimate,
+        landSizeSqm,
+        buildingSizeSqm,
+        br,
+        ba,
+        level,
+        zoning,
+        livingRoom,
+        listingUrl,
+        description: String(desc).slice(0, 100_000),
+        channel,
+      }),
+    );
     out.push({
       id: stableInventoryListingIdFromCode(code),
       ...parsed,

@@ -1,0 +1,396 @@
+{
+"8D2505": {
+"livingRoom": "Enclosed",
+"zoning": "Green"
+},
+"8D2506": {
+"livingRoom": "Open-plan"
+},
+"8D2507": {
+"livingRoom": "Open-plan"
+},
+"8D25100": {
+"level": "1",
+"livingRoom": "Enclosed"
+},
+"8D25102": {
+"zoning": "Yellow Zone"
+},
+"8D25103": {
+"livingRoom": "Open-plan",
+"zoning": "Residential"
+},
+"8D25104": {
+"livingRoom": "Open-plan"
+},
+"8D25105": {
+"level": "1"
+},
+"8D25106B": {
+"level": "1",
+"zoning": "Pink"
+},
+"8D25107": {
+"livingRoom": "Open-plan"
+},
+"8D25108": {
+"livingRoom": "Enclosed"
+},
+"8D25109": {
+"zoning": "Yellow Zone"
+},
+"8D25110": {
+"zoning": "Yellow Zone"
+},
+"8D25112": {
+"livingRoom": "Open-plan"
+},
+"8D25113": {
+"livingRoom": "Open-plan"
+},
+"8D25114": {
+"livingRoom": "Sunken"
+},
+"8D25117": {
+"livingRoom": "Open-plan"
+},
+"8D25118": {
+"level": "3"
+},
+"8D25119": {
+"level": "1",
+"livingRoom": "Open-plan"
+},
+"8D25123A": {
+"livingRoom": "Open-plan"
+},
+"8D25123B": {
+"livingRoom": "Open-plan"
+},
+"8D25124": {
+"livingRoom": "Open-plan"
+},
+"8D25125": {
+"level": "Single-storey layout"
+},
+"8D25127": {
+"livingRoom": "Open-plan"
+},
+"8D25128": {
+"livingRoom": "Open-plan"
+},
+"8D25132": {
+"livingRoom": "Open-plan"
+},
+"8D25133": {
+"zoning": "Pondok Wisata (Pink) \u2013 rental-friendly"
+},
+"8D25133A": {
+"livingRoom": "Enclosed"
+},
+"8D25133B": {
+"livingRoom": "Enclosed"
+},
+"8D25134A": {
+"livingRoom": "Open-plan"
+},
+"8D25134B": {
+"livingRoom": "Open-plan"
+},
+"8D25135": {
+"livingRoom": "Open-plan"
+},
+"8D25136": {
+"livingRoom": "Enclosed with cozy wooden floors & pool view"
+},
+"8D25137": {
+"livingRoom": "Flexible open/closed style"
+},
+"8D25138": {
+"livingRoom": "Open-plan with ocean views"
+},
+"8D25139": {
+"livingRoom": "Open-plan"
+},
+"8D25141A": {
+"livingRoom": "Open-plan"
+},
+"8D25144": {
+"livingRoom": "Open-plan",
+"zoning": "Touristic (allows rental business license)"
+},
+"8D25145": {
+"livingRoom": "Enclosed",
+"zoning": "Pink"
+},
+"8D25146A": {
+"livingRoom": "Enclosed, open-plan concept"
+},
+"8D25146B": {
+"livingRoom": "Open-plan"
+},
+"8D25147": {
+"livingRoom": "Open-plan"
+},
+"8D25149": {
+"livingRoom": "Open-plan",
+"zoning": "Residential (Yellow Zone)"
+},
+"8D25150": {
+"livingRoom": "Enclosed"
+},
+"8D25152": {
+"livingRoom": "Open-plan",
+"zoning": "Residential"
+},
+"8D25153": {
+"livingRoom": "Open-plan",
+"zoning": "Residential"
+},
+"8D25155": {
+"livingRoom": "Open-plan"
+},
+"8D25156": {
+"livingRoom": "Open-plan"
+},
+"8D25158": {
+"livingRoom": "Open-plan"
+},
+"8D25160": {
+"livingRoom": "Open-plan"
+},
+"8D25161": {
+"livingRoom": "Open-plan"
+},
+"8D25162": {
+"zoning": "Tourism (ideal for daily rentals)"
+},
+"8D25164": {
+"zoning": "Green"
+},
+"8D25167": {
+"livingRoom": "Open-plan",
+"zoning": "SHM Freehold \u2014 rare secure ownership"
+},
+"8D25169": {
+"level": "2",
+"livingRoom": "Enclosed"
+},
+"8D25173": {
+"level": "1"
+},
+"8D25179": {
+"livingRoom": "Open-plan",
+"zoning": "Yellow zone"
+},
+"8D25180": {
+"livingRoom": "Open-plan"
+},
+"8D25181": {
+"zoning": "Residential (PBG/SLF certified)"
+},
+"8D25182": {
+"livingRoom": "Enclosed"
+},
+"8D25183": {
+"livingRoom": "Enclosed"
+},
+"8D25185": {
+"level": "1",
+"livingRoom": "Enclosed"
+},
+"8D25186": {
+"level": "3",
+"livingRoom": "Enclosed"
+},
+"8D25190": {
+"level": "1",
+"livingRoom": "Open-plan",
+"zoning": "Residential"
+},
+"8D25192": {
+"livingRoom": "Enclosed",
+"zoning": "Tourism / residential compatible use"
+},
+"8D25193": {
+"livingRoom": "Enclosed",
+"zoning": "Residential / Tourism compatible"
+},
+"8D25194": {
+"livingRoom": "Enclosed"
+},
+"8D25195": {
+"livingRoom": "Enclosed",
+"zoning": "Tourism area"
+},
+"8D25196": {
+"livingRoom": "Enclosed"
+},
+"8D25197": {
+"livingRoom": "Enclosed",
+"zoning": "Red Zone (C1 Commercial) \u2013 ideal for rental business"
+},
+"8D25198": {
+"livingRoom": "Open-plan",
+"zoning": "Residential / tourism compatible"
+},
+"8D25199": {
+"livingRoom": "Open-plan",
+"zoning": "Tourism / residential area"
+},
+"8D2521": {
+"zoning": "Pink"
+},
+"8D2524": {
+"level": "1",
+"livingRoom": "Open-plan",
+"zoning": "Residential (Yellow Zone) \u2013 development flexibility"
+},
+"8D2525": {
+"level": "1",
+"zoning": "Yellow (residential) \u2013 fully compliant for rentals or private use"
+},
+"8D2531": {
+"livingRoom": "Enclosed"
+},
+"8D2533": {
+"level": "3",
+"livingRoom": "Enclosed"
+},
+"8D2534": {
+"level": "1"
+},
+"8D2536B": {
+"livingRoom": "Enclosed"
+},
+"8D2539": {
+"livingRoom": "Open-plan"
+},
+"8D2541A": {
+"livingRoom": "Enclosed, air-conditioned living area for privacy and comfort"
+},
+"8D2542": {
+"livingRoom": "Enclosed"
+},
+"8D2548B": {
+"livingRoom": "Open-plan"
+},
+"8D2552": {
+"level": "2"
+},
+"8D2554": {
+"zoning": "Residential"
+},
+"8D2555": {
+"livingRoom": "Open-plan"
+},
+"8D2556": {
+"livingRoom": "Open-plan"
+},
+"8D2557": {
+"livingRoom": "Enclosed living space with soaring ceilings and natural light"
+},
+"8D2559": {
+"level": "3",
+"livingRoom": "Enclosed, bright, and expansive",
+"zoning": "Tourism"
+},
+"8D2560": {
+"level": "3",
+"livingRoom": "Enclosed and sunlit with garden and pool views",
+"zoning": "Tourism \u2013 Eligible for rental licenses"
+},
+"8D2561": {
+"livingRoom": "Enclosed"
+},
+"8D2562": {
+"livingRoom": "Enclosed"
+},
+"8D2563": {
+"livingRoom": "Enclosed"
+},
+"8D2564": {
+"level": "1",
+"livingRoom": "Enclosed"
+},
+"8D2565": {
+"level": "3"
+},
+"8D2569": {
+"livingRoom": "Open-plan"
+},
+"8D2571": {
+"livingRoom": "Open-plan"
+},
+"8D2572": {
+"livingRoom": "Open-plan",
+"zoning": "Green"
+},
+"8D2574": {
+"livingRoom": "Spacious enclosed living area with high ceilings"
+},
+"8D2575": {
+"livingRoom": "Open-plan"
+},
+"8D2576A": {
+"livingRoom": "Open-plan"
+},
+"8D2577": {
+"livingRoom": "Enclosed"
+},
+"8D2580": {
+"livingRoom": "Enclosed"
+},
+"8D2582A": {
+"zoning": "Residential"
+},
+"8D2582B": {
+"level": "1",
+"livingRoom": "Enclosed",
+"zoning": "Residential"
+},
+"8D2583": {
+"livingRoom": "Open-plan with floor-to-ceiling glass and arched doors",
+"zoning": "Tourism \u2013 Eligible for rental licenses"
+},
+"8D2584": {
+"livingRoom": "Enclosed with Double AC"
+},
+"8D2585": {
+"livingRoom": "Open-plan",
+"zoning": "Residential"
+},
+"8D2586": {
+"livingRoom": "Open-plan",
+"zoning": "Residential"
+},
+"8D2587": {
+"livingRoom": "\u2013 Samsung 75\" Smart TV, JBL Soundbar, sofa set, coffee table",
+"zoning": "Yellow Zone (ITR Pondok Wisata \u2013 Tourism Accommodation)"
+},
+"8D2590": {
+"level": "1",
+"livingRoom": "Enclosed",
+"zoning": "Residential"
+},
+"8D2594": {
+"livingRoom": "Open-plan",
+"zoning": "Residential"
+},
+"8D2595": {
+"zoning": "Tourism (Pink Zone)"
+},
+"8D2597": {
+"livingRoom": "Open-plan",
+"zoning": "Residential"
+},
+"8DV35B": {
+"livingRoom": "Enclosed, bright and airy with tropical touches"
+},
+"8DV35C": {
+"livingRoom": "Enclosed, bright and airy with tropical touches"
+},
+"8DV36A": {
+"zoning": "Green"
+}
+}
