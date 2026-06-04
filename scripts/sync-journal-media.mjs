@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Mirror WordPress journal uploads into artifacts/8degree/public/wp-content/uploads/.
+ * Mirror WordPress journal uploads into artifacts/8degree/public/journal-media/.
  *
  * Usage:
  *   JOURNAL_MEDIA_SOURCE_BASE=https://your-old-wp.hostingersite.com pnpm journal:sync-media
@@ -11,6 +11,7 @@
 import { access, copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { fetchLegacyWpAsset } from "./lib/legacy-wp-fetch.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, "..");
@@ -20,7 +21,7 @@ const JSON_PATHS = [
 ];
 const JOURNAL_SEO = path.join(ROOT, "migration/journal-seo.json");
 const SEO_AUDIT = path.join(ROOT, "migration/seo-audit.json");
-const OUT_ROOT = path.join(ROOT, "artifacts/8degree/public/wp-content/uploads");
+const OUT_ROOT = path.join(ROOT, "artifacts/8degree/public/journal-media");
 
 const UPLOADS_RE = /\/wp-content\/uploads\/(.+?)(?:\?[^"'\\s]*)?$/i;
 
@@ -37,8 +38,9 @@ function addUrl(urls, raw) {
   if (rel) urls.add(rel);
 }
 
-function collectRelativePaths() {
+async function collectRelativePaths() {
   const rels = new Set();
+  const scope = (process.env.JOURNAL_MEDIA_SCOPE ?? "journal").toLowerCase();
 
   let dataPath = JSON_PATHS[0];
   for (const p of JSON_PATHS) {
@@ -58,26 +60,28 @@ function collectRelativePaths() {
     for (const m of (post.content ?? "").matchAll(re)) addUrl(rels, m[0]);
   }
 
-  try {
-    const seo = JSON.parse(await readFile(JOURNAL_SEO, "utf8"));
-    for (const row of Object.values(seo)) {
-      if (row && typeof row === "object" && "ogImage" in row) addUrl(rels, row.ogImage);
+  if (scope === "all" || scope === "site") {
+    try {
+      const seo = JSON.parse(await readFile(JOURNAL_SEO, "utf8"));
+      for (const row of Object.values(seo)) {
+        if (row && typeof row === "object" && "ogImage" in row) addUrl(rels, row.ogImage);
+      }
+    } catch {
+      /* optional */
     }
-  } catch {
-    /* optional */
+
+    try {
+      const audit = JSON.parse(await readFile(SEO_AUDIT, "utf8"));
+      for (const entry of audit.entries ?? []) {
+        addUrl(rels, entry.og_image);
+        for (const img of entry.image_alts ?? []) addUrl(rels, img.src);
+      }
+    } catch {
+      /* optional */
+    }
   }
 
-  try {
-    const audit = JSON.parse(await readFile(SEO_AUDIT, "utf8"));
-    for (const entry of audit.entries ?? []) {
-      addUrl(rels, entry.og_image);
-      for (const img of entry.image_alts ?? []) addUrl(rels, img.src);
-    }
-  } catch {
-    /* optional */
-  }
-
-  return { rels: [...rels], dataPath };
+  return { rels: [...rels], dataPath, scope };
 }
 
 function candidateUrls(origin, rel) {
@@ -116,16 +120,12 @@ async function downloadRel(origin, rel) {
       }
     }
     try {
-      const res = await fetch(candidate, {
-        headers: { Accept: "image/*,*/*;q=0.8", "User-Agent": "8degree-journal-sync/1.0" },
-        redirect: "follow",
-      });
-      const type = res.headers.get("content-type") ?? "";
+      const res = await fetchLegacyWpAsset(candidate, origin);
+      const type = res.contentType;
       if (!res.ok || !/^image\//i.test(type)) continue;
-      const buf = Buffer.from(await res.arrayBuffer());
-      if (buf.length < 200) continue;
-      await writeFile(dest, buf);
-      return { rel, status: "ok", bytes: buf.length, url: candidate };
+      if (res.buffer.length < 200) continue;
+      await writeFile(dest, res.buffer);
+      return { rel, status: "ok", bytes: res.buffer.length, url: candidate };
     } catch {
       /* next */
     }
@@ -143,8 +143,9 @@ async function main() {
     process.exit(1);
   }
 
-  const { rels, dataPath } = await collectRelativePaths();
+  const { rels, dataPath, scope } = await collectRelativePaths();
   console.log(`Source: ${originRaw}`);
+  console.log(`Scope: ${scope} (${rels.length} paths)`);
   console.log(`Import: ${dataPath}`);
   console.log(`Output: ${OUT_ROOT}`);
   console.log(`Files: ${rels.length} unique uploads\n`);

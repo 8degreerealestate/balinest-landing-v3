@@ -2,7 +2,7 @@ import { Router } from "express";
 import { createReadStream, existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { logger } from "../lib/logger";
+import { fetchJournalUploadFromUpstream } from "../lib/journal-media-upstream";
 import { journalUploadRelativePath } from "../lib/journal-image-url";
 
 const router = Router();
@@ -10,10 +10,11 @@ const router = Router();
 function uploadsRoots(): string[] {
   const here = path.dirname(fileURLToPath(import.meta.url));
   return [
-    path.resolve(here, "../../../8degree/public/wp-content/uploads"),
     path.resolve(here, "../../../8degree/public/journal-media"),
-    path.resolve(process.cwd(), "artifacts/8degree/public/wp-content/uploads"),
+    path.resolve(here, "../../../8degree/public/wp-content/uploads"),
     path.resolve(process.cwd(), "artifacts/8degree/public/journal-media"),
+    path.resolve(process.cwd(), "artifacts/8degree/public/wp-content/uploads"),
+    path.resolve(process.cwd(), "public/journal-media"),
     path.resolve(process.cwd(), "public/wp-content/uploads"),
   ];
 }
@@ -50,26 +51,12 @@ async function serveUpload(rel: string, res: import("express").Response): Promis
     return true;
   }
 
-  const upstream = process.env.JOURNAL_MEDIA_SOURCE_BASE?.trim().replace(/\/$/, "");
-  if (upstream) {
-    const url = `${upstream}/wp-content/uploads/${rel}`;
-    try {
-      const fetched = await fetch(url, {
-        headers: { Accept: "image/*,*/*;q=0.8", "User-Agent": "8degree-journal-media/1.0" },
-      });
-      if (fetched.ok) {
-        const contentType = fetched.headers.get("content-type") ?? "";
-        if (/^image\//i.test(contentType)) {
-          res.setHeader("Content-Type", contentType);
-          res.setHeader("Cache-Control", "public, max-age=86400");
-          const buf = Buffer.from(await fetched.arrayBuffer());
-          res.send(buf);
-          return true;
-        }
-      }
-    } catch (err) {
-      logger.warn({ err, url }, "journal media upstream fetch failed");
-    }
+  const fetched = await fetchJournalUploadFromUpstream(rel);
+  if (fetched) {
+    res.setHeader("Content-Type", fetched.contentType);
+    res.setHeader("Cache-Control", "public, max-age=86400");
+    res.send(fetched.buffer);
+    return true;
   }
 
   res.status(404).end();

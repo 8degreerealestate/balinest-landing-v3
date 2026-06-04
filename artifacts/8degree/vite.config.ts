@@ -69,11 +69,6 @@ const apiDevProxy = {
     changeOrigin: true,
     rewrite: (p: string) => `/api/journal-media${p.replace(/^\/wp-content\/uploads/, "")}`,
   },
-  "/journal-media": {
-    target: apiTarget,
-    changeOrigin: true,
-    rewrite: (p: string) => `/api${p}`,
-  },
 };
 
 export default defineConfig({

@@ -22,11 +22,7 @@
     },
     {
       "source": "/wp-content/uploads/:path*",
-      "destination": "/api/journal-media/:path*"
-    },
-    {
-      "source": "/journal-media/:path*",
-      "destination": "/api/journal-media/:path*"
+      "destination": "/journal-media/:path*"
     },
     {
       "source": "/((?!api/|wp-content/|journal-media/|8-degree-real-estate-x-balinest-villa|8-degree-real-estate-x-only-stays|partner-landing-assets/).*)",

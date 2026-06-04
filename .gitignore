@@ -59,3 +59,6 @@ Thumbs.db
 *.tar.gz
 /myprojectzip
 .vercel
+
+# Duplicate of journal-media/ from sync; only journal-media is bundled in deploys
+artifacts/8degree/public/wp-content/
