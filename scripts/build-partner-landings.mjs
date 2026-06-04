@@ -40,9 +40,11 @@ function buildPage(partner) {
     `<img class="logo-8d" src="${config.logo8Degree}" alt="8 Degree Real Estate" />`,
   );
 
+  const partnerLogoClass =
+    partner.partnerLogoInvert === false ? "logo-bv logo-bv--native" : "logo-bv";
   html = html.replace(
-    /<img class="logo-bv"[^>]*>/,
-    `<img class="logo-bv" src="${partner.partnerLogo}" alt="${partner.partnerLogoAlt}" />`,
+    /<img class="logo-bv[^"]*"[^>]*>/,
+    `<img class="${partnerLogoClass}" src="${partner.partnerLogo}" alt="${partner.partnerLogoAlt}" />`,
   );
 
   html = html.replace(
@@ -56,6 +58,17 @@ function buildPage(partner) {
   );
 
   html = html.replace(/https:\/\/wa\.link\/5ouk5b/g, partner.whatsappUrl);
+
+  if (partner.formOpensInModal === false) {
+    html = html.replace(
+      /<a\s+href="[^"]*"\s+class="btn btn-primary"\s+data-open-form="report"\s*>/,
+      `<a href="${partner.formUrl}" class="btn btn-primary" target="_blank" rel="noopener noreferrer">`,
+    );
+    html = html.replace(
+      /<div class="form-modal" id="reportFormModal"[\s\S]*?<\/div>\s*\n\n/,
+      "",
+    );
+  }
 
   const assetFiles = [
     "hero-villa.jpg",
@@ -71,9 +84,10 @@ function buildPage(partner) {
     html = html.replaceAll(`assets/${file}`, url);
   }
 
-  html = html.replace(
-    /<!-- ============== TWEAKS ============== -->[\s\S]*?<script>\s*const TWEAK_DEFAULTS[\s\S]*?<\/script>/,
-    `<script>
+  const modalScript =
+    partner.formOpensInModal === false
+      ? ""
+      : `<script>
   const reportFormModal = document.getElementById('reportFormModal');
   const reportFormClose = document.getElementById('reportFormClose');
 
@@ -100,8 +114,21 @@ function buildPage(partner) {
       reportFormModal.setAttribute('aria-hidden', 'true');
     }
   });
-</script>`,
-  );
+</script>`;
+
+  if (html.includes("<!-- ============== TWEAKS ============== -->")) {
+    html = html.replace(
+      /<!-- ============== TWEAKS ============== -->[\s\S]*?<script>\s*const TWEAK_DEFAULTS[\s\S]*?<\/script>/,
+      modalScript,
+    );
+  } else if (modalScript) {
+    html = html.replace(/<\/body>\s*<\/html>\s*$/i, `${modalScript}\n\n</body>\n</html>`);
+  } else {
+    html = html.replace(
+      /<script>[\s\S]*?reportFormModal[\s\S]*?<\/script>\s*(?=<\/body>)/,
+      "",
+    );
+  }
 
   return html;
 }

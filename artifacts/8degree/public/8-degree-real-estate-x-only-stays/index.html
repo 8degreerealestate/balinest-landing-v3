@@ -4,6 +4,11 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Own Your Slice of Bali — 8 Degree x Only Stays</title>
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="/favicon-16.png" sizes="16x16" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <link rel="stylesheet" href="/fonts/fonts.css" />
 <style>
   :root {
@@ -82,6 +87,9 @@
     height: 44px; width: auto;
     /* recolor gold artwork to white while preserving alpha */
     filter: brightness(0) invert(1);
+  }
+  .brandmark .logo-bv--native {
+    filter: none;
   }
   .nav-link {
     color: white; text-decoration: none;
@@ -581,9 +589,9 @@
 
   <nav class="hero-nav">
     <div class="brandmark">
-      <img class="logo-8d" src="/brand/8degree-logotype-white.svg" alt="8 Degree Real Estate" />
+      <img class="logo-8d" src="/brand/8degree-logotype-white-transparent.png" alt="8 Degree Real Estate" />
       <span class="x">×</span>
-      <img class="logo-bv" src="assets/logo-onlystays.svg" alt="Only Stays" />
+      <img class="logo-bv logo-bv--native" src="assets/logo-onlystays.svg" alt="Only Stays" />
     </div>
 
   </nav>
@@ -717,11 +725,7 @@
           <li>The mistakes that cost first-time investors time and money</li>
           <li>The data behind Bali's rental demand</li>
         </ul>
-        <a
-          href="https://api.leadconnectorhq.com/widget/form/ZGch73tA3ARy81tNy2P8"
-          class="btn btn-primary"
-          data-open-form="report"
-        >
+        <a href="https://8degree.co/contact" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
           <span class="arr">↓</span>
           Download the 2026 Market Report
         </a>
@@ -738,7 +742,7 @@
     <p class="footer-tagline">No pitch. No pressure. Just an honest conversation over coffee.</p>
     <div class="footer-cta-wrap">
       <a
-        href="https://wa.link/5ouk5b"
+        href="https://wa.link/paxsz0"
         class="btn btn-primary"
         target="_blank"
         rel="noopener noreferrer"
@@ -758,45 +762,7 @@
   </div>
 </footer>
 
-<div class="form-modal" id="reportFormModal" aria-hidden="true">
-  <div class="form-modal-dialog" role="dialog" aria-modal="true" aria-label="Download report form">
-    <button class="form-modal-close" id="reportFormClose" aria-label="Close form">×</button>
-    <iframe
-      src="https://api.leadconnectorhq.com/widget/form/ZGch73tA3ARy81tNy2P8"
-      title="Download report form"
-      loading="lazy"
-    ></iframe>
-  </div>
-</div>
 
-<script>
-  const reportFormModal = document.getElementById('reportFormModal');
-  const reportFormClose = document.getElementById('reportFormClose');
-
-  document.querySelectorAll('[data-open-form="report"]').forEach((el) => {
-    el.addEventListener('click', (e) => {
-      e.preventDefault();
-      reportFormModal?.classList.add('open');
-      reportFormModal?.setAttribute('aria-hidden', 'false');
-    });
-  });
-  reportFormClose?.addEventListener('click', () => {
-    reportFormModal?.classList.remove('open');
-    reportFormModal?.setAttribute('aria-hidden', 'true');
-  });
-  reportFormModal?.addEventListener('click', (e) => {
-    if (e.target === reportFormModal) {
-      reportFormModal.classList.remove('open');
-      reportFormModal.setAttribute('aria-hidden', 'true');
-    }
-  });
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && reportFormModal?.classList.contains('open')) {
-      reportFormModal.classList.remove('open');
-      reportFormModal.setAttribute('aria-hidden', 'true');
-    }
-  });
-</script>
 
 </body>
 </html>

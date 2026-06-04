@@ -362,7 +362,7 @@ export default function Home() {
   return (
     <div className="w-full min-w-0">
       <Seo
-        title="Luxury Bali real estate & strategic developments"
+        title="Premium Bali real estate & strategic developments"
         description={truncateForMeta(DEFAULT_DESCRIPTION)}
         path="/"
         jsonLd={homeJsonLd}

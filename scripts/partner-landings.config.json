@@ -8,26 +8,29 @@
     "sec3-bedroom.jpg": "/site-media/buyer-agent-villa-exterior.png",
     "section4-living.jpg": "/site-media/buyer-agent-dining.jpg"
   },
-  "logo8Degree": "/brand/8degree-logotype-white.svg",
+  "logo8Degree": "/brand/8degree-logotype-white-transparent.png",
   "partners": [
     {
       "slug": "8-degree-real-estate-x-balinest-villa",
       "title": "Own Your Slice of Bali — 8 Degree x Balinest",
       "partnerLogo": "assets/logo-partner.png",
       "partnerLogoAlt": "Balinest Villas",
+      "partnerLogoInvert": true,
       "partnerBlurb": "The villa you're in is professionally managed by <strong>Balinest</strong>, operating <strong>400+ properties</strong> across Bali.",
       "formUrl": "https://api.leadconnectorhq.com/widget/form/ZGch73tA3ARy81tNy2P8",
-      "whatsappUrl": "https://wa.link/5ouk5b"
+      "whatsappUrl": "https://wa.link/5ouk5b",
+      "formOpensInModal": true
     },
     {
       "slug": "8-degree-real-estate-x-only-stays",
       "title": "Own Your Slice of Bali — 8 Degree x Only Stays",
       "partnerLogo": "assets/logo-onlystays.svg",
       "partnerLogoAlt": "Only Stays",
+      "partnerLogoInvert": false,
       "partnerBlurb": "The villa you're in is professionally managed by <strong>Only Stays</strong> — the same hospitality standard you're experiencing right now, backed by professional operations across Bali.",
-      "formUrl": "https://api.leadconnectorhq.com/widget/form/ZGch73tA3ARy81tNy2P8",
-      "whatsappUrl": "https://wa.link/5ouk5b",
-      "_comment": "Replace formUrl and whatsappUrl with Only Stays GHL form + wa.link when Ryan shares them."
+      "formUrl": "https://8degree.co/contact",
+      "whatsappUrl": "https://wa.link/paxsz0",
+      "formOpensInModal": false
     }
   ]
 }

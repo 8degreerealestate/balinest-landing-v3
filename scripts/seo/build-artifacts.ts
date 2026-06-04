@@ -131,11 +131,11 @@ function buildPageMetadata(audit?: SeoAuditFile): Record<string, PageSeoRecord> 
 
   const defaults: Record<string, PageSeoRecord> = {
     "/": {
-      seoTitle: "Luxury Bali Real Estate & Strategic Developments",
+      seoTitle: "Premium Bali Real Estate & Strategic Developments",
       metaDescription:
-        "Boutique Bali property advisory: luxury villas, developments, and curated listings. Portfolio, investment guidance, and opportunities across Bali.",
+        "Boutique Bali property advisory: premium villas, developments, and curated listings. Portfolio and investment guidance across Bali.",
       canonical: "/",
-      h1: "Luxury Bali Real Estate",
+      h1: "Premium Bali Real Estate",
     },
     "/projects": {
       seoTitle: "Bali Properties for Sale",

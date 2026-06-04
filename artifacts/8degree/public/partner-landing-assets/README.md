@@ -20,6 +20,11 @@ If a file is missing, the build uses temporary fallbacks from `/site-media/` unt
 - Balinest: `../8-degree-real-estate-x-balinest-villa/assets/logo-partner.png` (copy from `logo-balinest.png`)
 - Only Stays: `../8-degree-real-estate-x-only-stays/assets/logo-onlystays.svg` (already in repo)
 
+**CTAs** (edit `scripts/partner-landings.config.json`, then rebuild):
+
+- Balinest: GHL report form + `wa.link/5ouk5b`
+- Only Stays: contact page + `wa.link/paxsz0` (update `formUrl` / `whatsappUrl` when partner-specific links are available)
+
 After adding files, run from repo root:
 
 ```bash

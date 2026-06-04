@@ -47,11 +47,11 @@ export function toAbsoluteImageUrl(url: string | null | undefined): string | und
 }
 
 export const SITE_NAME = "8 Degree";
-export const SITE_TAGLINE = "Luxury Bali real estate, developments, and investment advisory";
+export const SITE_TAGLINE = "Premium Bali real estate & developments";
 
 export const DEFAULT_TITLE = `${SITE_NAME} · ${SITE_TAGLINE}`;
 export const DEFAULT_DESCRIPTION =
-  "Boutique Bali property advisory: luxury villas, developments, and listings. Portfolio, investment guidance, and curated opportunities across Seminyak, Canggu, Uluwatu, and beyond.";
+  "Boutique Bali property advisory: premium villas, developments, and curated listings. Portfolio and investment guidance across Bali.";
 
 export const DEFAULT_OG_IMAGE =
   "https://images.unsplash.com/photo-1613490908578-7804bb61483b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
