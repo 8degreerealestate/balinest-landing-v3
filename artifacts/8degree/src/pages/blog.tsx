@@ -9,6 +9,7 @@ import { truncateForMeta } from "@/lib/site-seo";
 import { type SiteLanguage, useSiteLanguage } from "@/lib/site-language";
 import { JOURNAL_PATH, journalPostPath } from "@/lib/journal-paths";
 import { loadStaticJournalPosts } from "@/lib/journal-static-fallback";
+import { onJournalImageError, resolveJournalImageUrl } from "@/lib/journal-image-url";
 import type { BlogPost } from "@workspace/api-client-react";
 
 export default function Blog() {
@@ -69,7 +70,10 @@ export default function Blog() {
     void loadStaticJournalPosts().then(setStaticPosts);
   }, []);
 
-  const apiPosts = data?.posts ?? [];
+  const apiPosts = (data?.posts ?? []).map((p) => ({
+    ...p,
+    featuredImageUrl: resolveJournalImageUrl(p.featuredImageUrl) ?? p.featuredImageUrl,
+  }));
   const sourcePosts = apiPosts.length > 0 ? apiPosts : staticPosts ?? [];
   const posts = [...sourcePosts]
     .filter((p) => !activeCategory || p.categoryName === activeCategory)
@@ -100,7 +104,7 @@ export default function Blog() {
         <div className="pointer-events-none absolute inset-0 min-h-[min(72dvh,720px)] overflow-hidden">
           <div className="absolute inset-0 z-10 bg-black/45" aria-hidden />
           <img
-            src="/site-media/journal-hero.png"
+            src="/site-media/hero-mobile-poster.jpg"
             alt=""
             className="hero-image-breathe h-full min-h-[min(72dvh,720px)] w-full object-cover object-center"
             loading="eager"
@@ -190,6 +194,7 @@ export default function Blog() {
                           src={post.featuredImageUrl}
                           alt={post.title}
                           className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                          onError={onJournalImageError}
                         />
                       ) : (
                         <div className="w-full h-full bg-gradient-to-br from-muted to-muted/50" />

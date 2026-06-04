@@ -1,6 +1,7 @@
-/** Public journal URLs (matches live site https://8degree.co/journal/). */
-export const JOURNAL_PATH = "/journal";
-
-export function journalPostPath(slug: string): string {
-  return `${JOURNAL_PATH}/${encodeURIComponent(slug)}`;
-}
+export {
+  ABOUT_PATH,
+  JOURNAL_INDEX_PATH as JOURNAL_PATH,
+  journalPostPath,
+  isReservedRootSlug,
+  RESERVED_ROOT_SLUGS,
+} from "@/lib/site-paths";

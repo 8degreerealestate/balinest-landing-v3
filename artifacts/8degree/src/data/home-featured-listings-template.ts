@@ -13,7 +13,7 @@ export type HomeFeaturedListingTemplate = {
   id: string;
   /** Property reference shown on the card (e.g. OPUM016) */
   code: string;
-  /** Link when the card is clicked — use `/properties/{code}` when the listing exists in CRM */
+  /** Link when the card is clicked — use `/property/{code}` when the listing exists in CRM */
   href: string;
   title: string;
   /** Main photo URL */
@@ -32,7 +32,7 @@ export type HomeFeaturedListingTemplate = {
 };
 
 /**
- * Replace these rows with your real listings (homepage shows 6; projects highlighted strip can show 9).
+ * Replace these rows with your real listings (homepage highlighted strip shows 6 when mode is `"template"`).
  * Optional fields can be removed if unknown.
  */
 export const HOME_FEATURED_LISTINGS_TEMPLATE: HomeFeaturedListingTemplate[] = [

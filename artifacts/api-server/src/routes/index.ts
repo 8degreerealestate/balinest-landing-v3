@@ -9,6 +9,7 @@ import statsRouter from "./stats";
 import guidesRouter from "./guides";
 import contentRouter from "./content";
 import inventoryRouter from "./inventory";
+import journalMediaRouter from "./journal-media";
 
 const router: IRouter = Router();
 
@@ -16,6 +17,7 @@ router.use(healthRouter);
 router.use(projectsRouter);
 router.use(unitsRouter);
 router.use(blogRouter);
+router.use(journalMediaRouter);
 router.use(enquiriesRouter);
 router.use(testimonialsRouter);
 router.use(statsRouter);

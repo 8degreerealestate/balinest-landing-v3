@@ -1,0 +1,33 @@
+{
+  "sharedAssetsPrefix": "/partner-landing-assets",
+  "assetFallbacks": {
+    "hero-villa.jpg": "/site-media/hero-still.jpg",
+    "sec3-pool.jpg": "/site-media/invest-returns.jpg",
+    "sec3-kitchen.jpg": "/site-media/buyer-agent-kitchen.png",
+    "sec3-living.jpg": "/site-media/buyer-agent-intro-interior.png",
+    "sec3-bedroom.jpg": "/site-media/buyer-agent-villa-exterior.png",
+    "section4-living.jpg": "/site-media/buyer-agent-dining.jpg"
+  },
+  "logo8Degree": "/brand/8degree-logotype-white.svg",
+  "partners": [
+    {
+      "slug": "8-degree-real-estate-x-balinest-villa",
+      "title": "Own Your Slice of Bali — 8 Degree x Balinest",
+      "partnerLogo": "assets/logo-partner.png",
+      "partnerLogoAlt": "Balinest Villas",
+      "partnerBlurb": "The villa you're in is professionally managed by <strong>Balinest</strong>, operating <strong>400+ properties</strong> across Bali.",
+      "formUrl": "https://api.leadconnectorhq.com/widget/form/ZGch73tA3ARy81tNy2P8",
+      "whatsappUrl": "https://wa.link/5ouk5b"
+    },
+    {
+      "slug": "8-degree-real-estate-x-only-stays",
+      "title": "Own Your Slice of Bali — 8 Degree x Only Stays",
+      "partnerLogo": "assets/logo-onlystays.svg",
+      "partnerLogoAlt": "Only Stays",
+      "partnerBlurb": "The villa you're in is professionally managed by <strong>Only Stays</strong> — the same hospitality standard you're experiencing right now, backed by professional operations across Bali.",
+      "formUrl": "https://api.leadconnectorhq.com/widget/form/ZGch73tA3ARy81tNy2P8",
+      "whatsappUrl": "https://wa.link/5ouk5b",
+      "_comment": "Replace formUrl and whatsappUrl with Only Stays GHL form + wa.link when Ryan shares them."
+    }
+  ]
+}

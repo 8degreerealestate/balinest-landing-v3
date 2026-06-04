@@ -1,3 +1,5 @@
+import { parseUsdNumber } from "@/lib/site-currency";
+
 export const LISTING_IMAGE_FALLBACK =
   "https://images.unsplash.com/photo-1613490908578-7804bb61483b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80";
 
@@ -59,12 +61,28 @@ export function inventoryGalleryUrls(listing: {
   imageUrl?: string | null;
   imageUrls?: string[] | null;
 }): string[] {
-  const fromArr = Array.isArray(listing.imageUrls)
-    ? listing.imageUrls.filter((u): u is string => isDisplayableInventoryImageUrl(u))
-    : [];
-  if (fromArr.length > 0) return fromArr.map((u) => proxyInventoryImageUrl(u) ?? u);
-  const single = pickInventoryThumbnail(listing);
-  return single ? [single] : [];
+  const candidates: string[] = [];
+  if (isDisplayableInventoryImageUrl(listing.imageUrl)) {
+    candidates.push(listing.imageUrl!.trim());
+  }
+  if (Array.isArray(listing.imageUrls)) {
+    for (const u of listing.imageUrls) {
+      if (isDisplayableInventoryImageUrl(u)) candidates.push(u.trim());
+    }
+  }
+
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const raw of candidates) {
+    const proxied = proxyInventoryImageUrl(raw) ?? raw;
+    const url = proxied.trim();
+    if (!url) continue;
+    const key = url.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(url);
+  }
+  return out;
 }
 
 /** Use a sibling row’s gallery when this listing has no resolved thumbnail yet. */
@@ -130,6 +148,19 @@ export function listingPriceLine(description: string): string {
   const eur = d.match(/EUR\s*([\d,.]+)/i);
   if (eur) return `From EUR ${eur[1].replace(/,/g, "")}`;
   return "Price on request";
+}
+
+/** Canonical USD amount for inventory rows (sheet column or parsed from description). */
+export function inventoryListingPriceUsd(
+  estimatePriceUsd: string | null | undefined,
+  description: string,
+): number | null {
+  if (estimatePriceUsd) {
+    const raw = String(estimatePriceUsd).replace(/,/g, "").trim();
+    const n = Number(raw);
+    if (!Number.isNaN(n) && n > 0) return n;
+  }
+  return parseUsdNumber(listingPriceLine(description));
 }
 
 export function listingShortBlurb(description: string, maxLen = 160): string {

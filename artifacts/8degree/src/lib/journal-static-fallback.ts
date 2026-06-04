@@ -1,4 +1,5 @@
 import type { BlogPost } from "@workspace/api-client-react";
+import { resolveJournalImageUrl, rewriteJournalContentHtml } from "@/lib/journal-image-url";
 
 type JournalImportFile = {
   posts: Array<{
@@ -23,8 +24,8 @@ function toBlogPost(row: JournalImportFile["posts"][number], index: number): Blo
     title: row.title,
     slug: row.slug,
     excerpt: row.excerpt,
-    content: row.content,
-    featuredImageUrl: row.featuredImageUrl,
+    content: rewriteJournalContentHtml(row.content),
+    featuredImageUrl: resolveJournalImageUrl(row.featuredImageUrl),
     author: row.author,
     categoryId: null,
     categoryName: row.categoryName,

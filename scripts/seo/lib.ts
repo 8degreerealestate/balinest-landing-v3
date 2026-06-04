@@ -173,7 +173,7 @@ export function imageAlts(html: string): Array<{ src: string; alt: string }> {
 export const WP_TO_NEW_PATH: Record<string, string> = {
   "/": "/",
   "/about-us": "/about-us",
-  "/about": "/about",
+  "/about": "/about-us",
   "/contact": "/contact",
   "/contact-us": "/contact",
   "/buyer-agents": "/buyer-agents",
@@ -209,31 +209,30 @@ export function resolveNewPath(oldPath: string, journalSlugs: Set<string>): stri
   const p = oldPath.replace(/\/+$/, "") || "/";
   if (WP_TO_NEW_PATH[p]) return WP_TO_NEW_PATH[p];
 
-  const property = p.match(/^\/property\/([^/]+)$/i);
+  const property = p.match(/^\/(?:property|properties)\/([^/]+)$/i);
   if (property) {
-    const code = decodeURIComponent(property[1]).toUpperCase();
-    return `/properties/${encodeURIComponent(code)}`;
+    const code = decodeURIComponent(property[1]).toLowerCase();
+    return `/property/${encodeURIComponent(code)}`;
   }
 
   const rootSlug = p.match(/^\/([^/]+)$/);
   if (rootSlug && journalSlugs.has(rootSlug[1])) {
-    return `/journal/${encodeURIComponent(rootSlug[1])}`;
+    return `/${encodeURIComponent(rootSlug[1])}`;
   }
 
   const wpJournal = p.match(/^\/journal\/([^/]+)$/);
   if (wpJournal && journalSlugs.has(wpJournal[1])) {
-    return `/journal/${encodeURIComponent(wpJournal[1])}`;
+    return `/${encodeURIComponent(wpJournal[1])}`;
   }
 
   const blogSlug = p.match(/^\/blog\/([^/]+)$/);
-  if (blogSlug) return `/journal/${encodeURIComponent(blogSlug[1])}`;
+  if (blogSlug) return `/${encodeURIComponent(blogSlug[1])}`;
 
   return null;
 }
 
 export const INDEXABLE_STATIC_PATHS = [
   "/",
-  "/about",
   "/about-us",
   "/contact",
   "/projects",

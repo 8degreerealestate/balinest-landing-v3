@@ -17,6 +17,7 @@ import {
   syncJournalImportToDatabaseIfEmpty,
   type JournalPostDto,
 } from "../lib/journal-import-fallback";
+import { resolveJournalImageUrl, rewriteJournalContentHtml } from "../lib/journal-image-url";
 
 const router = Router();
 
@@ -232,8 +233,8 @@ function mapPost(
     title: p.title,
     slug: p.slug,
     excerpt: p.excerpt,
-    content: p.content,
-    featuredImageUrl: p.featuredImageUrl ?? null,
+    content: rewriteJournalContentHtml(p.content),
+    featuredImageUrl: resolveJournalImageUrl(p.featuredImageUrl),
     author: p.author,
     categoryId: p.categoryId ?? null,
     categoryName: categoryName ?? null,

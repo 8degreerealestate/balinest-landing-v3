@@ -13,6 +13,11 @@ import { JOURNAL_PATH, journalPostPath } from "@/lib/journal-paths";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { articleJsonLd, breadcrumbJsonLd, buildSiteGraph } from "@/lib/seo-migration/schema";
 import { getStaticJournalPost, loadStaticJournalPosts } from "@/lib/journal-static-fallback";
+import {
+  onJournalImageError,
+  resolveJournalImageUrl,
+  rewriteJournalContentHtml,
+} from "@/lib/journal-image-url";
 import type { BlogPost } from "@workspace/api-client-react";
 
 export default function BlogDetail() {
@@ -26,7 +31,8 @@ export default function BlogDetail() {
   }[language];
   const [, journalParams] = useRoute("/journal/:slug");
   const [, blogParams] = useRoute("/blog/:slug");
-  const slug = journalParams?.slug ?? blogParams?.slug ?? "";
+  const [, rootParams] = useRoute("/:slug");
+  const slug = journalParams?.slug ?? blogParams?.slug ?? rootParams?.slug ?? "";
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const createEnquiry = useCreateEnquiry();
@@ -58,8 +64,19 @@ export default function BlogDetail() {
     void loadStaticJournalPosts().then(setStaticRelated);
   }, [relatedData?.posts?.length]);
 
-  const article = post ?? staticPost;
+  const rawArticle = post ?? staticPost;
+  const article = rawArticle
+    ? {
+        ...rawArticle,
+        featuredImageUrl: resolveJournalImageUrl(rawArticle.featuredImageUrl) ?? rawArticle.featuredImageUrl,
+        content: rewriteJournalContentHtml(rawArticle.content),
+      }
+    : null;
   const related = [...(relatedData?.posts?.length ? relatedData.posts : staticRelated)]
+    .map((p) => ({
+      ...p,
+      featuredImageUrl: resolveJournalImageUrl(p.featuredImageUrl) ?? p.featuredImageUrl,
+    }))
     .filter((p) => p.slug !== slug)
     .slice(0, 3);
 
@@ -144,7 +161,12 @@ export default function BlogDetail() {
       {/* Hero */}
       {article.featuredImageUrl && (
         <div className="relative h-[50vh] min-h-[400px] overflow-hidden">
-          <img src={article.featuredImageUrl} alt={article.title} className="w-full h-full object-cover" />
+          <img
+            src={article.featuredImageUrl}
+            alt={article.title}
+            className="w-full h-full object-cover"
+            onError={onJournalImageError}
+          />
           <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-black/60" />
         </div>
       )}
@@ -186,7 +208,7 @@ export default function BlogDetail() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="prose prose-stone max-w-none mb-16"
+          className="prose prose-stone max-w-none mb-16 prose-img:rounded-md prose-img:my-6"
           dangerouslySetInnerHTML={{ __html: article.content }}
         />
 
@@ -233,7 +255,12 @@ export default function BlogDetail() {
                   <div className="group cursor-pointer">
                     {p.featuredImageUrl && (
                       <div className="aspect-video overflow-hidden bg-muted mb-3">
-                        <img src={p.featuredImageUrl} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                        <img
+                          src={p.featuredImageUrl}
+                          alt={p.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          onError={onJournalImageError}
+                        />
                       </div>
                     )}
                     <h3 className="font-serif text-sm leading-snug group-hover:text-primary transition-colors">{p.title}</h3>

@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import { Facebook, Instagram, Linkedin, MapPin, Youtube } from "lucide-react";
 import type { SVGProps } from "react";
 import { type SiteLanguage, useSiteLanguage } from "@/lib/site-language";
-import { buildWhatsappUrl } from "@/lib/site-contact";
+import { buildWhatsappUrl, getOfficeMapsUrl, OFFICE_ADDRESS } from "@/lib/site-contact";
 
 function WhatsAppIcon(props: SVGProps<SVGSVGElement>) {
   return (
@@ -184,12 +184,12 @@ export function Footer() {
               <h4 className="mb-6 text-sm font-medium uppercase tracking-[0.28em] text-primary-foreground">Guides</h4>
               <ul className="space-y-4 text-sm font-light text-primary-foreground/80 [&_a]:whitespace-normal">
                 <li>
-                  <Link href="/legal-services" className="transition-colors hover:text-primary-foreground">
+                  <Link href="/legal-guide" className="transition-colors hover:text-primary-foreground">
                     Legal Guide
                   </Link>
                 </li>
                 <li>
-                  <Link href="/bali-property-guide" className="transition-colors hover:text-primary-foreground">
+                  <Link href="/bali-location-guide" className="transition-colors hover:text-primary-foreground">
                     Location Guide
                   </Link>
                 </li>
@@ -205,7 +205,7 @@ export function Footer() {
               <h4 className="mb-6 text-sm font-medium uppercase tracking-[0.28em] text-primary-foreground">Company</h4>
               <ul className="space-y-4 text-sm font-light text-primary-foreground/80 [&_a]:whitespace-normal">
                 <li>
-                  <Link href="/about" className="transition-colors hover:text-primary-foreground">
+                  <Link href="/about-us" className="transition-colors hover:text-primary-foreground">
                     About Us
                   </Link>
                 </li>
@@ -226,14 +226,14 @@ export function Footer() {
 
         <div className="grid grid-cols-1 gap-6 border-t border-primary-foreground/20 pt-8 text-xs text-primary-foreground/75 md:grid-cols-3 md:items-start">
           <a
-            href="https://maps.google.com/maps?vet=10CAAQoqAOahcKEwiA-t-Z6LCUAxUAAAAAHQAAAAAQCg..i&sca_esv=635f647f0ac037ee&pvq=Cg0vZy8xMWx0d3I2Nl9fIg4KCDggZGVncmVlEAIYAw&lqi=Cgg4IGRlZ3JlZUj_t8y757KAgAhaEhAAEAEYABgBIgg4IGRlZ3JlZZIBEnJlYWxfZXN0YXRlX2FnZW50cw&fvr=1&cs=0&um=1&ie=UTF-8&fb=1&gl=id&sa=X&ftid=0x2dd239c01f2dfe25:0x7e7d44b637752e71"
+            href={getOfficeMapsUrl()}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-start gap-2 text-sm font-light leading-relaxed text-primary-foreground/80 transition-colors hover:text-primary-foreground md:justify-self-start"
             aria-label="Open 8 Degree location on Google Maps"
           >
             <MapPin size={16} className="mt-0.5 shrink-0" />
-            <span>Teratai S18, Jl. Kayu Tulang, Canggu, Kec. Kuta Utara, Kabupaten Badung, Bali 80361</span>
+            <span>{OFFICE_ADDRESS}</span>
           </a>
 
           <div className="flex flex-col items-center gap-3 md:justify-self-center">

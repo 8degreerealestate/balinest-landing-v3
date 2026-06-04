@@ -1,7 +1,15 @@
 /** Public contact channels — set via Vite env at build time (see root `.env.example`). */
 
+const DEFAULT_WHATSAPP_URL = "https://wa.link/paxsz0";
 const DEFAULT_WHATSAPP_E164 = "6287787169089";
 const DEFAULT_CONTACT_EMAIL = "hello@8degree.com";
+
+export const OFFICE_ADDRESS =
+  "Teratai S18, Jl. Kayu Tulang, Canggu, Kec. Kuta Utara, Kabupaten Badung, Bali 80361";
+
+export function getOfficeMapsUrl(): string {
+  return `https://maps.google.com/maps?q=${encodeURIComponent(OFFICE_ADDRESS)}`;
+}
 
 /** Digits only, suitable for `https://wa.me/{e164}` (no +). */
 export function getWhatsappE164(): string {
@@ -37,7 +45,9 @@ export function getContactPhoneDisplay(): string {
 }
 
 export function buildWhatsappUrl(message?: string): string {
-  const base = `https://wa.me/${getWhatsappE164()}`;
-  if (!message?.trim()) return base;
-  return `${base}?text=${encodeURIComponent(message)}`;
+  const custom = import.meta.env.VITE_WHATSAPP_URL?.trim();
+  const base = custom || DEFAULT_WHATSAPP_URL;
+  if (base.includes("wa.link") || !message?.trim()) return base;
+  const waMe = `https://wa.me/${getWhatsappE164()}`;
+  return `${waMe}?text=${encodeURIComponent(message)}`;
 }

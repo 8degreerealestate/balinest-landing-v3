@@ -162,11 +162,13 @@ export function Navbar() {
   const isPropertySectionActive =
     location === "/projects" ||
     location.startsWith("/projects/") ||
-    location.startsWith("/properties/") ||
+    location.startsWith("/property/") ||
     location === "/long-term-rentals";
+  const isListingDetailPage =
+    location.startsWith("/property/") && location.length > "/property/".length;
   const navLinks = [
     { href: "/invest", label: copy.invest },
-    { href: "/about", label: copy.aboutUs },
+    { href: "/about-us", label: copy.aboutUs },
     { href: "/journal", label: copy.journal },
   ];
 
@@ -181,7 +183,20 @@ export function Navbar() {
     >
       <div className="flex w-full min-w-0 items-center justify-between gap-3 pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] sm:pl-6 sm:pr-6 lg:pl-8 lg:pr-8">
         <div className="flex min-w-0 items-center gap-2 sm:gap-3">
-          {isPropertySectionActive ? (
+          {isListingDetailPage ? (
+            <Link
+              href="/projects"
+              className="flex min-h-11 shrink-0 items-center gap-1.5 text-white transition-colors hover:text-white/90"
+              aria-label={copy.portfolio}
+              onClick={() => setIsOpen(false)}
+              data-testid="navbar-back-portfolio"
+            >
+              <ArrowLeft size={22} strokeWidth={1.5} aria-hidden />
+              <span className="text-xs font-medium uppercase tracking-wider max-lg:inline lg:sr-only">
+                {copy.portfolio}
+              </span>
+            </Link>
+          ) : isPropertySectionActive ? (
             <Link
               href="/"
               className="flex min-h-11 shrink-0 items-center gap-1.5 text-white transition-colors hover:text-white/90 lg:hidden"

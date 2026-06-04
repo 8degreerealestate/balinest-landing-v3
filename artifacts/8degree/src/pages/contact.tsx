@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { MapPin, Phone, Mail, MessageCircle } from "lucide-react";
 import { useCreateEnquiry } from "@workspace/api-client-react";
@@ -8,12 +9,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { useForm } from "react-hook-form";
 import { Seo } from "@/components/site/Seo";
+import { SITE_MEDIA } from "@/lib/site-assets";
 import { truncateForMeta } from "@/lib/site-seo";
 import { type SiteLanguage, useSiteLanguage } from "@/lib/site-language";
 import {
   buildWhatsappUrl,
   getContactEmail,
   getContactPhoneDisplay,
+  getOfficeMapsUrl,
+  OFFICE_ADDRESS,
 } from "@/lib/site-contact";
 
 const CONTACT_COPY: Record<SiteLanguage, Record<string, string>> = {
@@ -23,6 +27,19 @@ const CONTACT_COPY: Record<SiteLanguage, Record<string, string>> = {
   zh: { letsTalk: "联系我们", getInTouch: "立即咨询", chat: "WhatsApp 咨询", send: "发送信息", sending: "发送中...", budget: "投资预算" },
   tr: { letsTalk: "Konusalim", getInTouch: "Iletisime Gecin", chat: "WhatsApp'ta Sohbet", send: "Mesaj Gonder", sending: "Gonderiliyor...", budget: "Yatirim Butcesi" },
 };
+
+function ContactHeroImage({ className, alt }: { className?: string; alt: string }) {
+  const [useFallback, setUseFallback] = useState(false);
+  return (
+    <img
+      src={useFallback ? SITE_MEDIA.heroStill : SITE_MEDIA.contactHero}
+      alt={alt}
+      className={className}
+      onError={() => setUseFallback(true)}
+      referrerPolicy="no-referrer"
+    />
+  );
+}
 
 export default function Contact() {
   const language = useSiteLanguage();
@@ -57,7 +74,12 @@ export default function Contact() {
   const contactEmail = getContactEmail();
   const contactPhone = getContactPhoneDisplay();
   const contactDetails = [
-    { icon: MapPin, label: "Location", value: "Jalan Laksmana 88, Seminyak, Bali, Indonesia 80361" },
+    {
+      icon: MapPin,
+      label: "Location",
+      value: OFFICE_ADDRESS,
+      href: getOfficeMapsUrl(),
+    },
     { icon: Mail, label: "Email", value: contactEmail },
     { icon: Phone, label: "Phone", value: contactPhone },
     { icon: MessageCircle, label: "WhatsApp", value: contactPhone },
@@ -68,16 +90,24 @@ export default function Contact() {
       <Seo
         title="Contact · enquire about Bali property"
         description={truncateForMeta(
-          "Contact 8 Degree in Seminyak for villa sales, developments, and investment enquiries across Bali.",
+          "Contact 8 Degree in Canggu for villa sales, developments, and investment enquiries across Bali.",
         )}
         path="/contact"
       />
-      <div className="bg-foreground text-background pt-32 pb-16 px-6">
-        <div className="container mx-auto max-w-6xl">
+
+      <section className="relative w-full overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 overflow-hidden min-h-[min(72dvh,680px)]">
+          <ContactHeroImage
+            alt="8 Degree Real Estate office in Canggu, Bali"
+            className="hero-image-breathe h-full min-h-[min(72dvh,680px)] w-full object-cover object-center"
+          />
+          <div className="absolute inset-0 z-10 bg-black/40" aria-hidden />
+        </div>
+        <div className="relative z-20 mx-auto flex min-h-[min(72dvh,680px)] w-full max-w-6xl flex-col items-center justify-center px-6 py-20 text-center text-white translate-y-[6dvh] md:translate-y-[8dvh] lg:translate-y-[9dvh] md:px-12 md:py-24">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-xs tracking-[0.3em] uppercase text-primary mb-4"
+            className="mb-4 text-[11px] font-medium uppercase tracking-[0.2em] text-white/90"
           >
             {t.letsTalk}
           </motion.p>
@@ -85,16 +115,15 @@ export default function Contact() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="font-serif text-4xl md:text-6xl leading-tight"
+            className="max-w-4xl font-serif text-3xl font-bold leading-[1.12] tracking-[0.03em] md:text-4xl lg:text-[2.55rem]"
           >
             {t.getInTouch}
           </motion.h1>
         </div>
-      </div>
+      </section>
 
       <div className="container mx-auto max-w-6xl px-6 py-16">
         <div className="grid md:grid-cols-5 gap-16">
-          {/* Contact Info */}
           <div className="md:col-span-2">
             <p className="text-muted-foreground leading-relaxed mb-8">
               8 Degree is a boutique advisory. Whether you are focused on portfolio performance, relocation, or high-value transactions, we respond with structured guidance. We aim to reply within one business day.
@@ -107,7 +136,18 @@ export default function Contact() {
                   </div>
                   <div>
                     <p className="text-xs text-muted-foreground tracking-[0.2em] uppercase mb-1">{item.label}</p>
-                    <p className="text-sm">{item.value}</p>
+                    {"href" in item && item.href ? (
+                      <a
+                        href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm transition-colors hover:text-primary"
+                      >
+                        {item.value}
+                      </a>
+                    ) : (
+                      <p className="text-sm">{item.value}</p>
+                    )}
                   </div>
                 </div>
               ))}
@@ -122,7 +162,6 @@ export default function Contact() {
             </div>
           </div>
 
-          {/* Form */}
           <div className="md:col-span-3">
             <form onSubmit={onSubmit} className="space-y-4">
               <div className="grid sm:grid-cols-2 gap-4">

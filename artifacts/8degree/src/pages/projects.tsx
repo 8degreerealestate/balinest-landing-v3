@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { useListInventoryListings, useListProjects } from "@workspace/api-client-react";
 import { borrowInventoryImages, inferBedroomsBucket, inferListingArea } from "@/lib/portfolio-listing";
 import { Seo } from "@/components/site/Seo";
-import { FeaturedInventoryStrip } from "@/components/site/FeaturedInventoryStrip";
 import { PropertySearchPanel, type PropertySearchApplyPayload } from "@/components/site/PropertySearchPanel";
 import { HOME_COPY } from "@/lib/i18n/home-copy";
 import { truncateForMeta } from "@/lib/site-seo";
@@ -288,24 +287,10 @@ export default function Projects() {
           >
             {t.heroSub}
           </motion.p>
-          <PropertySearchPanel
-            layout="embeddedInHero"
-            labels={searchLabels}
-            onApply={handleSearchApply}
-          />
         </div>
       </section>
 
-      <FeaturedInventoryStrip
-        title={homeCopy.highlighted}
-        subtitle={homeCopy.highlightedSub}
-        viewAllLabel={homeCopy.viewAll}
-        viewAllHref="#portfolio-results"
-        sectionVariant="standalone"
-        hideHeading
-        maxCards={9}
-        sectionBackgroundColor={BALI_PROPERTIES_PAGE_SURFACE}
-      />
+      <PropertySearchPanel labels={searchLabels} onApply={handleSearchApply} />
 
       <div id="portfolio-results" className="container mx-auto max-w-6xl px-6 py-16">
         {projectsFetchFailed ? (

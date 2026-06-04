@@ -771,7 +771,7 @@ export default function About() {
         description={truncateForMeta(
           "Meet the 8 Degree team: boutique Bali property advisory focused on clarity, curation, and long-term value.",
         )}
-        path="/about"
+        path="/about-us"
         jsonLd={jsonLdGraph([organizationJsonLdNode()])}
       />
       {/* Hero */}

@@ -65,6 +65,22 @@ export function formatCurrency(amount: number, currency: SiteCurrency): string {
   }).format(amount);
 }
 
+/** Listing cards / grids: convert canonical USD when known, else keep marketing copy. */
+export function formatPriceForSiteCurrency(
+  priceUsd: number | null | undefined,
+  fallbackLabel: string,
+  currency: SiteCurrency,
+): string {
+  if (priceUsd != null && priceUsd > 0) {
+    return formatCurrency(convertFromUsd(priceUsd, currency), currency);
+  }
+  const parsed = parseUsdNumber(fallbackLabel);
+  if (parsed != null && parsed > 0) {
+    return formatCurrency(convertFromUsd(parsed, currency), currency);
+  }
+  return fallbackLabel.trim() || "Price on request";
+}
+
 /**
  * Best-effort numeric parser for legacy free-form price strings like
  * "USD 2,800,000" or "$1.4m". Falls back to null if nothing usable is found.

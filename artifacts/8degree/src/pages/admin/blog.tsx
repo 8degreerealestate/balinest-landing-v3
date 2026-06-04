@@ -129,7 +129,7 @@ export default function AdminBlog() {
                   </td>
                   <td className="py-3 px-4">
                     <div className="flex items-center gap-2 justify-end">
-                      <a href={`/journal/${post.slug}`} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary"><Eye size={14} /></a>
+                      <a href={`/${post.slug}`} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-primary"><Eye size={14} /></a>
                       <button onClick={() => handleDelete(post.slug, post.title)} className="text-muted-foreground hover:text-destructive" data-testid={`button-delete-post-${post.id}`}>
                         <Trash2 size={14} />
                       </button>

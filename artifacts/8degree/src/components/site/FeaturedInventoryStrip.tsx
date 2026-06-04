@@ -13,6 +13,7 @@ import {
   borrowInventoryImages,
   pickInventoryThumbnail,
 } from "@/lib/portfolio-listing";
+import { parseUsdNumber } from "@/lib/site-currency";
 import {
   FeaturedListingCard,
   inventoryRowToFeaturedModel,
@@ -54,6 +55,7 @@ function templateToCard(t: HomeFeaturedListingTemplate, idx: number): FeaturedCa
     imageUrl: t.imageUrl,
     imageAlt: t.title,
     area: t.location,
+    priceUsd: parseUsdNumber(t.priceDisplay),
     priceDisplay: t.priceDisplay,
     ownership: t.ownership,
     bedrooms: t.bedrooms,

@@ -10,6 +10,7 @@ import { PropertySearchPanel } from "@/components/site/PropertySearchPanel";
 import { TopAreaImage } from "@/components/site/TopAreaImage";
 import { useGetFeaturedProjects, useListBlogPosts } from "@workspace/api-client-react";
 import { loadLatestJournalPosts } from "@/lib/journal-static-fallback";
+import { JOURNAL_IMAGE_FALLBACK, resolveJournalImageUrl } from "@/lib/journal-image-url";
 import { journalPostPath } from "@/lib/journal-paths";
 import { useLiteMotion } from "@/lib/use-lite-motion";
 import {
@@ -72,7 +73,7 @@ const ADVANTAGE_STATS: Record<SiteLanguage, AdvantageStatRow[]> = {
 };
 
 const LATEST_NEWS_COUNT = 3;
-const JOURNAL_CARD_IMAGE_FALLBACK = "/site-media/journal-hero.png";
+const JOURNAL_CARD_IMAGE_FALLBACK = JOURNAL_IMAGE_FALLBACK;
 
 type FaqItem = { id: string; q: string; a: string };
 
@@ -288,7 +289,7 @@ export default function Home() {
           id: String(post.id),
           tag: post.categoryName ?? "Journal",
           title: post.title,
-          imageUrl: post.featuredImageUrl ?? JOURNAL_CARD_IMAGE_FALLBACK,
+          imageUrl: resolveJournalImageUrl(post.featuredImageUrl) ?? JOURNAL_CARD_IMAGE_FALLBACK,
           href: journalPostPath(post.slug),
         })),
       );
@@ -309,7 +310,7 @@ export default function Home() {
         id: String(post.id),
         tag: post.categoryName ?? "Journal",
         title: post.title,
-        imageUrl: post.featuredImageUrl ?? JOURNAL_CARD_IMAGE_FALLBACK,
+        imageUrl: resolveJournalImageUrl(post.featuredImageUrl) ?? JOURNAL_CARD_IMAGE_FALLBACK,
         href: journalPostPath(post.slug),
       }));
     }
@@ -437,7 +438,7 @@ export default function Home() {
                 ))}
               </div>
 
-              <Link href="/about">
+              <Link href="/about-us">
                 <Button variant="outline" className="h-12 rounded-none px-8 uppercase tracking-widest text-primary">
                   {t.philosophy}
                 </Button>

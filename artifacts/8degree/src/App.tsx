@@ -1,6 +1,6 @@
 import { Suspense, useEffect, type ComponentType, type LazyExoticComponent } from "react";
 import { clearChunkReloadFlag, lazyWithRetry } from "@/lib/lazy-with-retry";
-import { Switch, Route, Router as WouterRouter, useRoute, Redirect } from "wouter";
+import { Switch, Route, Router as WouterRouter, useLocation, useRoute, Redirect } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { setBaseUrl } from "@workspace/api-client-react";
 import { Toaster } from "@/components/ui/toaster";
@@ -15,6 +15,13 @@ import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import { getApiBaseUrl } from "@/lib/api-base";
 import { Seo } from "@/components/site/Seo";
 import { SITE_NAME } from "@/lib/site-seo";
+import {
+  ABOUT_PATH,
+  isReservedRootSlug,
+  journalPostPath,
+  JOURNAL_INDEX_PATH,
+  propertyListingPath,
+} from "@/lib/site-paths";
 
 const Home = lazyWithRetry(() => import("@/pages/home"));
 const Projects = lazyWithRetry(() => import("@/pages/projects"));
@@ -63,8 +70,41 @@ const queryClient = new QueryClient({
 
 function BlogSlugRedirect() {
   const [, params] = useRoute("/blog/:slug");
-  if (!params?.slug) return <Redirect to="/journal" />;
-  return <Redirect to={`/journal/${encodeURIComponent(params.slug)}`} />;
+  if (!params?.slug) return <Redirect to={JOURNAL_INDEX_PATH} />;
+  return <Redirect to={journalPostPath(params.slug)} />;
+}
+
+function JournalPrefixedArticleRedirect() {
+  const [, params] = useRoute("/journal/:slug");
+  if (!params?.slug) return <Redirect to={JOURNAL_INDEX_PATH} />;
+  return <Redirect to={journalPostPath(params.slug)} />;
+}
+
+/** New-app URLs → legacy /property/{code} (lowercase). */
+function PropertiesLegacyRedirect() {
+  const [, params] = useRoute("/properties/:code");
+  const raw = (params?.code ?? "").replace(/\/+$/, "").trim();
+  if (!raw) return <Redirect to="/projects" />;
+  return <Redirect to={propertyListingPath(raw)} />;
+}
+
+function JournalArticleBySlug() {
+  const [, params] = useRoute("/:slug");
+  const slug = (params?.slug ?? "").replace(/\/+$/, "").trim();
+  if (!slug || isReservedRootSlug(slug)) {
+    return (
+      <PublicLayout>
+        <NotFound />
+      </PublicLayout>
+    );
+  }
+  return (
+    <PublicLayout>
+      <Suspense fallback={<PageSpinner />}>
+        <BlogDetail />
+      </Suspense>
+    </PublicLayout>
+  );
 }
 
 function PageSpinner() {
@@ -148,13 +188,14 @@ function Router() {
       <Route path="/" component={wrapPublic(Home)} />
       <Route path="/projects" component={wrapPublic(Projects)} />
       <Route path="/projects/completed" component={wrapPublic(CompletedProjects)} />
-      <Route path="/properties/:code" component={wrapPublic(ListingDetail)} />
+      <Route path="/properties/:code" component={PropertiesLegacyRedirect} />
+      <Route path="/property/:code" component={wrapPublic(ListingDetail)} />
       <Route path="/projects/:slug" component={wrapPublic(ProjectDetail)} />
-      <Route path="/blog" component={() => <Redirect to="/journal" />} />
+      <Route path="/blog" component={() => <Redirect to={JOURNAL_INDEX_PATH} />} />
       <Route path="/blog/:slug" component={BlogSlugRedirect} />
       <Route path="/journal" component={wrapPublic(Blog)} />
-      <Route path="/journal/:slug" component={wrapPublic(BlogDetail)} />
-      <Route path="/about" component={wrapPublic(About)} />
+      <Route path="/journal/:slug" component={JournalPrefixedArticleRedirect} />
+      <Route path="/about" component={() => <Redirect to={ABOUT_PATH} />} />
       <Route path="/about-us" component={wrapPublic(About)} />
       <Route path="/contact" component={wrapPublic(Contact)} />
       <Route path="/invest" component={wrapPublic(Invest)} />
@@ -178,6 +219,8 @@ function Router() {
       <Route path="/bali-location-guide" component={wrapPublic(LocationGuide)} />
       <Route path="/location-guide" component={wrapPublic(LocationGuide)} />
       <Route path="/long-term-rentals" component={wrapPublic(LongTermRentals)} />
+
+      <Route path="/:slug" component={JournalArticleBySlug} />
 
       <Route component={NotFound} />
     </Switch>

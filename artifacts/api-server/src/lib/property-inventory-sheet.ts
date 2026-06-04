@@ -1,6 +1,12 @@
 import { createHash } from "node:crypto";
+import { existsSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { parse } from "csv-parse/sync";
 import { logger } from "./logger";
+
+/** Shipped CSV used when `NODE_ENV=development` and Google Sheet export is unreachable (DNS, offline, etc.). */
+const DEV_PROPERTY_INVENTORY_FALLBACK_CSV = "dev-property-inventory-fallback.csv";
 
 /** Default workbook + tab (gid) for 8D property list. */
 export const DEFAULT_PROPERTY_INVENTORY_SPREADSHEET_ID =
@@ -48,6 +54,7 @@ export function clearPropertyInventorySheetCache(): void {
 }
 
 function resolvedSpreadsheetIdAndGid(): { spreadsheetId: string; gid: string } {
+  const gids = propertyInventorySheetTabGids();
   const full = process.env.PROPERTY_INVENTORY_SHEET_EXPORT_URL?.trim();
   if (full) {
     const m = /\/spreadsheets\/d\/([a-zA-Z0-9-_]+)\//.exec(full);
@@ -57,16 +64,56 @@ function resolvedSpreadsheetIdAndGid(): { spreadsheetId: string; gid: string } {
     }
   }
   const id = process.env.PROPERTY_INVENTORY_SPREADSHEET_ID?.trim() || DEFAULT_PROPERTY_INVENTORY_SPREADSHEET_ID;
-  const gid = process.env.PROPERTY_INVENTORY_SHEET_GID?.trim() || DEFAULT_PROPERTY_INVENTORY_SHEET_GID;
-  return { spreadsheetId: id, gid };
+  return { spreadsheetId: id, gid: gids[0] ?? DEFAULT_PROPERTY_INVENTORY_SHEET_GID };
+}
+
+/** Tab gids to load and merge (website, silent, rentals, etc.). Later tabs override duplicate codes. */
+export function propertyInventorySheetTabGids(): string[] {
+  const primary = process.env.PROPERTY_INVENTORY_SHEET_GID?.trim() || DEFAULT_PROPERTY_INVENTORY_SHEET_GID;
+  const extra = (process.env.PROPERTY_INVENTORY_SHEET_GIDS ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const g of [primary, ...extra]) {
+    if (!seen.has(g)) {
+      seen.add(g);
+      out.push(g);
+    }
+  }
+  return out;
+}
+
+function csvExportUrlsForSpreadsheetTab(spreadsheetId: string, gid: string): string[] {
+  return [
+    `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=csv&gid=${gid}`,
+    `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:csv&gid=${gid}`,
+  ];
+}
+
+async function fetchSheetCsvForTab(spreadsheetId: string, gid: string): Promise<{ csv: string; url: string } | null> {
+  for (const url of csvExportUrlsForSpreadsheetTab(spreadsheetId, gid)) {
+    const csv = await fetchSheetCsv(url);
+    if (!csv?.trim()) continue;
+    if (!looksLikePropertyInventorySheetCsv(csv)) {
+      logger.warn(
+        { url, gid, snippet: csv.slice(0, 200).replace(/\s+/g, " ") },
+        "property inventory sheet: tab response is not valid CSV",
+      );
+      continue;
+    }
+    return { csv, url };
+  }
+  return null;
 }
 
 /** Stable cache / log key for this workbook tab. */
 export function propertyInventorySheetCacheKey(): string {
   const full = process.env.PROPERTY_INVENTORY_SHEET_EXPORT_URL?.trim();
   if (full) return full;
-  const { spreadsheetId, gid } = resolvedSpreadsheetIdAndGid();
-  return `sheet:${spreadsheetId}:${gid}`;
+  const { spreadsheetId } = resolvedSpreadsheetIdAndGid();
+  return `sheet:${spreadsheetId}:${propertyInventorySheetTabGids().join(",")}`;
 }
 
 /**
@@ -77,11 +124,45 @@ export function propertyInventorySheetCandidateCsvUrls(): string[] {
   const full = process.env.PROPERTY_INVENTORY_SHEET_EXPORT_URL?.trim();
   if (full) return [full];
 
-  const { spreadsheetId, gid } = resolvedSpreadsheetIdAndGid();
-  return [
-    `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=csv&gid=${gid}`,
-    `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:csv&gid=${gid}`,
+  const { spreadsheetId } = resolvedSpreadsheetIdAndGid();
+  const urls: string[] = [];
+  for (const gid of propertyInventorySheetTabGids()) {
+    urls.push(...csvExportUrlsForSpreadsheetTab(spreadsheetId, gid));
+  }
+  return urls;
+}
+
+/**
+ * Extra CSV sources after network URLs: optional env path, or bundled sample when not production.
+ * (Many local runs omit NODE_ENV; only production/prod disables the shipped CSV.)
+ * Use `PROPERTY_INVENTORY_SHEET_EXPORT_URL=file:///.../export.csv` for a fully offline sheet.
+ * Set `PROPERTY_INVENTORY_SHIPPED_FALLBACK=0` to disable the shipped file on non-prod hosts.
+ */
+function shouldTryShippedInventoryFallbackCsv(): boolean {
+  const off = process.env.PROPERTY_INVENTORY_SHIPPED_FALLBACK?.trim().toLowerCase();
+  if (off === "0" || off === "false" || off === "no") return false;
+  const n = (process.env.NODE_ENV || "").trim().toLowerCase();
+  return n !== "production" && n !== "prod";
+}
+
+function inventorySheetCsvExtraCandidates(): string[] {
+  const explicit = process.env.PROPERTY_INVENTORY_FALLBACK_CSV?.trim();
+  if (explicit) {
+    const abs = path.isAbsolute(explicit) ? explicit : path.resolve(process.cwd(), explicit);
+    return [pathToFileURL(abs).href];
+  }
+  if (!shouldTryShippedInventoryFallbackCsv()) return [];
+
+  const here = path.dirname(fileURLToPath(import.meta.url));
+  const candidates = [
+    path.resolve(here, "../../data", DEV_PROPERTY_INVENTORY_FALLBACK_CSV),
+    path.resolve(here, "../data", DEV_PROPERTY_INVENTORY_FALLBACK_CSV),
+    path.resolve(process.cwd(), "artifacts/api-server/data", DEV_PROPERTY_INVENTORY_FALLBACK_CSV),
   ];
+  for (const p of candidates) {
+    if (existsSync(p)) return [pathToFileURL(p).href];
+  }
+  return [];
 }
 
 function slugSku(raw: string): string {
@@ -554,6 +635,17 @@ const SHEET_FETCH_HEADERS = {
 };
 
 async function fetchSheetCsv(url: string): Promise<string | null> {
+  if (/^file:\/\//i.test(url.trim())) {
+    try {
+      const { readFile } = await import("node:fs/promises");
+      const filePath = fileURLToPath(url.trim());
+      return await readFile(filePath, "utf8");
+    } catch (err) {
+      logger.warn({ err, url }, "property inventory sheet: file URL read failed");
+      return null;
+    }
+  }
+
   const controller = new AbortController();
   const t = setTimeout(() => controller.abort(), 25_000);
   try {
@@ -599,51 +691,73 @@ export async function loadListingsFromGoogleSheet(options?: {
     return cache.rows.length > 0 ? cache.rows : null;
   }
 
-  const urls = propertyInventorySheetCandidateCsvUrls();
+  const fallbackUrls = inventorySheetCsvExtraCandidates();
+  const byCode = new Map<string, SheetListingRow>();
+  const loadedTabs: { gid: string; url: string; rowCount: number }[] = [];
 
-  for (const url of urls) {
-    const csv = await fetchSheetCsv(url);
-    if (!csv?.trim()) continue;
-
-    if (!looksLikePropertyInventorySheetCsv(csv)) {
-      logger.warn(
-        { url, snippet: csv.slice(0, 200).replace(/\s+/g, " ") },
-        "property inventory sheet: response is not valid CSV for this URL",
-      );
-      continue;
+  const fullExport = process.env.PROPERTY_INVENTORY_SHEET_EXPORT_URL?.trim();
+  if (fullExport) {
+    const csv = await fetchSheetCsv(fullExport);
+    if (csv?.trim() && looksLikePropertyInventorySheetCsv(csv)) {
+      try {
+        for (const row of parsePropertyInventorySheetCsv(csv)) byCode.set(row.code, row);
+      } catch (err) {
+        logger.warn({ err, url: fullExport }, "property inventory sheet: CSV parse failed");
+      }
     }
-
-    try {
-      const parsedRows = parsePropertyInventorySheetCsv(csv);
-      let rows: SheetListingRow[];
-      if (resolveDrive) {
-        try {
-          rows = backfillMissingListingImages(await enrichRowsWithDriveImages(parsedRows));
-        } catch (enrichErr) {
-          logger.warn(
-            { err: enrichErr, url },
-            "property inventory sheet: drive folder image enrich failed; using parsed rows",
-          );
-          rows = backfillMissingListingImages(parsedRows);
-        }
-      } else {
-        rows = backfillMissingListingImages(parsedRows);
+  } else {
+    const { spreadsheetId } = resolvedSpreadsheetIdAndGid();
+    for (const gid of propertyInventorySheetTabGids()) {
+      const fetched = await fetchSheetCsvForTab(spreadsheetId, gid);
+      if (!fetched) continue;
+      try {
+        const parsedRows = parsePropertyInventorySheetCsv(fetched.csv);
+        for (const row of parsedRows) byCode.set(row.code, row);
+        loadedTabs.push({ gid, url: fetched.url, rowCount: parsedRows.length });
+      } catch (err) {
+        logger.warn({ err, gid, url: fetched.url }, "property inventory sheet: tab CSV parse failed");
       }
-      if (rows.length === 0) {
-        logger.warn({ url }, "property inventory sheet: CSV parsed to zero rows");
-        continue;
-      }
-      cache = { key: cacheKey, fetchedAt: Date.now(), rows };
-      logger.info({ url, rowCount: rows.length }, "property inventory sheet: loaded OK");
-      return rows;
-    } catch (err) {
-      logger.warn({ err, url }, "property inventory sheet: CSV parse failed");
     }
   }
 
-  logger.warn(
-    { tried: urls, cacheKey },
-    "property inventory sheet: all CSV URLs failed — set link sharing to Viewer (not Commenter) or use File → Share → Publish to web",
+  if (byCode.size === 0) {
+    for (const url of fallbackUrls) {
+      const csv = await fetchSheetCsv(url);
+      if (!csv?.trim() || !looksLikePropertyInventorySheetCsv(csv)) continue;
+      try {
+        for (const row of parsePropertyInventorySheetCsv(csv)) byCode.set(row.code, row);
+        logger.info({ url, rowCount: byCode.size }, "property inventory sheet: loaded from fallback CSV");
+        break;
+      } catch (err) {
+        logger.warn({ err, url }, "property inventory sheet: fallback CSV parse failed");
+      }
+    }
+  }
+
+  if (byCode.size === 0) {
+    logger.warn(
+      { tabs: propertyInventorySheetTabGids(), cacheKey },
+      "property inventory sheet: all tabs/URLs failed — set link sharing to Viewer (not Commenter) or use File → Share → Publish to web",
+    );
+    return null;
+  }
+
+  let rows = [...byCode.values()].sort((a, b) => a.sortOrder - b.sortOrder);
+  if (resolveDrive) {
+    try {
+      rows = backfillMissingListingImages(await enrichRowsWithDriveImages(rows));
+    } catch (enrichErr) {
+      logger.warn({ err: enrichErr }, "property inventory sheet: drive folder image enrich failed; using parsed rows");
+      rows = backfillMissingListingImages(rows);
+    }
+  } else {
+    rows = backfillMissingListingImages(rows);
+  }
+
+  cache = { key: cacheKey, fetchedAt: Date.now(), rows };
+  logger.info(
+    { rowCount: rows.length, loadedTabs, tabGids: propertyInventorySheetTabGids() },
+    "property inventory sheet: loaded OK",
   );
-  return null;
+  return rows;
 }

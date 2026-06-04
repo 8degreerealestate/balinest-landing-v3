@@ -5,7 +5,6 @@ import { useListInventoryListings } from "@workspace/api-client-react";
 import type { PropertyInventoryListing } from "@workspace/api-client-react";
 import { borrowInventoryImages, inferBedroomsBucket, inferListingArea } from "@/lib/portfolio-listing";
 import { Seo } from "@/components/site/Seo";
-import { FeaturedInventoryStrip } from "@/components/site/FeaturedInventoryStrip";
 import {
   PropertySearchPanel,
   type PropertySearchApplyPayload,
@@ -70,7 +69,6 @@ export default function LongTermRentalsPage() {
         portfolioBrowseTitle: "Rental listings",
         portfolioBrowseSubtitle:
           "Results follow your search and filters above. Use page numbers when there are more than nine matches.",
-        viewAllGrid: "View all rentals",
         rentalFallbackBanner:
           "No rows in your sheet matched rental keywords yet; showing all website listings. Tag rentals in titles or descriptions, or contact us for availability.",
       },
@@ -82,7 +80,6 @@ export default function LongTermRentalsPage() {
         portfolioBrowseTitle: "Listing sewa",
         portfolioBrowseSubtitle:
           "Hasil mengikuti pencarian dan filter di atas. Gunakan nomor halaman jika lebih dari sembilan hasil.",
-        viewAllGrid: "Lihat semua sewa",
         rentalFallbackBanner:
           "Belum ada baris yang terdeteksi sebagai sewa; menampilkan semua listing website. Tambahkan kata kunci sewa di judul/deskripsi atau hubungi kami.",
       },
@@ -94,7 +91,6 @@ export default function LongTermRentalsPage() {
         portfolioBrowseTitle: "Annonces location",
         portfolioBrowseSubtitle:
           "Les resultats suivent votre recherche et vos filtres. Pagination au-dela de neuf biens.",
-        viewAllGrid: "Voir toutes les locations",
         rentalFallbackBanner:
           "Aucune ligne ne correspond encore aux mots-cles location; affichage de tout l inventaire web. Precisez location dans le titre ou contactez-nous.",
       },
@@ -105,7 +101,6 @@ export default function LongTermRentalsPage() {
           "探索巴厘岛别墅与住宅的长期租赁方案——移居、远程办公或季节性居住。在下方完善搜索条件。",
         portfolioBrowseTitle: "租赁房源",
         portfolioBrowseSubtitle: "结果随上方搜索与筛选更新；超过九条请用页码翻页。",
-        viewAllGrid: "查看全部租赁",
         rentalFallbackBanner:
           "当前表格中暂无明确租赁关键词的条目；正在显示网站全部房源。可在标题/描述中标注租赁或联系我们。",
       },
@@ -117,7 +112,6 @@ export default function LongTermRentalsPage() {
         portfolioBrowseTitle: "Kiralik ilanlar",
         portfolioBrowseSubtitle:
           "Sonuclar ustteki arama ve filtrelere gore guncellenir. Dokuzdan fazla icin sayfa numaralari.",
-        viewAllGrid: "Tum kiraliklari gor",
         rentalFallbackBanner:
           "Tabloda kiralama anahtar kelimesi eslesmedi; tum web ilanlari gosteriliyor. Baslik/aciklama ekleyin veya iletisime gecin.",
       },
@@ -222,7 +216,6 @@ export default function LongTermRentalsPage() {
     setListingsPage((p) => Math.min(p, listingsTotalPages - 1));
   }, [listingsTotalPages]);
 
-  const homeCopy = HOME_COPY[language];
   const searchLabels = useMemo((): PropertySearchLabels => {
     const h = HOME_COPY[language];
     return {
@@ -299,17 +292,6 @@ export default function LongTermRentalsPage() {
           />
         </div>
       </section>
-
-      <FeaturedInventoryStrip
-        title={homeCopy.highlighted}
-        subtitle={homeCopy.highlightedSub}
-        viewAllLabel={t.viewAllGrid}
-        viewAllHref="#rental-results"
-        sectionVariant="standalone"
-        hideHeading
-        maxCards={9}
-        sectionBackgroundColor={BALI_PROPERTIES_PAGE_SURFACE}
-      />
 
       <div id="rental-results" className="container mx-auto max-w-6xl px-6 py-16">
         {inventoryError ? (

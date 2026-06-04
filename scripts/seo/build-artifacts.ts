@@ -78,28 +78,35 @@ function buildRedirects(journalSlugs: Set<string>, audit?: SeoAuditFile): SeoRed
   };
 
   add("/blog", "/journal");
-
-  for (const slug of journalSlugs) {
-    add(`/${slug}`, `/journal/${slug}`);
-  }
-
+  add("/about", "/about-us");
   add("/property", "/projects");
 
   if (audit) {
     for (const e of audit.entries) {
       if (!e.redirect_required || !e.new_url) continue;
+      const path = e.path.replace(/\/+$/, "") || "/";
+      const target = e.new_url.replace(/\/+$/, "") || "/";
+      if (journalSlugs.has(path.replace(/^\//, "")) && target.startsWith("/journal/")) {
+        add(path, target.replace(/^\/journal\//, "/"));
+        continue;
+      }
+      if (target.startsWith("/properties/")) {
+        const code = target.slice("/properties/".length);
+        add(path, `/property/${encodeURIComponent(code.toLowerCase())}`);
+        continue;
+      }
       add(e.path, e.new_url);
     }
-  } else {
-    for (const slug of journalSlugs) {
-      add(`/${slug}`, `/journal/${slug}`);
-    }
+  }
+
+  for (const slug of journalSlugs) {
+    add(`/journal/${slug}`, `/${slug}`);
   }
 
   for (const [oldPath, newPath] of Object.entries({
     "/completed-projects": "/projects/completed",
     "/real-estate-for-sale": "/projects",
-    "/houzez_agent": "/about",
+    "/houzez_agent": "/about-us",
   })) {
     add(oldPath, newPath);
   }
@@ -116,7 +123,7 @@ function buildPageMetadata(audit?: SeoAuditFile): Record<string, PageSeoRecord> 
     for (const e of audit.entries) {
       const target = e.new_url ?? e.path;
       if (!target || e.status_code !== 200) continue;
-      if (target.startsWith("/journal/") || target.startsWith("/properties/")) continue;
+      if (target.startsWith("/property/")) continue;
       if (target.startsWith("/admin")) continue;
       out[target] = entryToPageSeo(target, e);
     }
@@ -182,12 +189,13 @@ function buildJournalSeo(journal: JournalImport, audit?: SeoAuditFile): Record<s
     const oldPath = normalizePath(post.sourceUrl ?? `/${post.slug}`, "https://8degree.co");
     const auditEntry =
       auditByPath.get(oldPath) ?? auditByPath.get(`/${post.slug}`) ?? auditByPath.get(post.slug);
+    const articlePath = `/${post.slug}`;
     const base = auditEntry
-      ? entryToPageSeo(`/journal/${post.slug}`, auditEntry)
+      ? entryToPageSeo(articlePath, auditEntry)
       : {
           seoTitle: post.title,
           metaDescription: truncateMeta(post.excerpt || post.title),
-          canonical: `/journal/${post.slug}`,
+          canonical: articlePath,
           ogImage: post.featuredImageUrl ?? undefined,
         };
     out[post.slug] = {
@@ -203,7 +211,7 @@ function buildJournalSeo(journal: JournalImport, audit?: SeoAuditFile): Record<s
 function buildSitemapPaths(journal: JournalImport): string[] {
   const paths = new Set<string>(INDEXABLE_STATIC_PATHS);
   for (const post of journal.posts) {
-    paths.add(`/journal/${post.slug}`);
+    paths.add(`/${post.slug}`);
   }
   return [...paths].sort();
 }
@@ -229,9 +237,11 @@ function syncVercelRedirects(redirects: SeoRedirect[]): void {
       destination: "https://8degree.co/:path*",
       permanent: true,
     },
-    { source: "/property/:code", destination: "/properties/:code", permanent: true },
-    { source: "/blog/:slug", destination: "/journal/:slug", permanent: true },
+    { source: "/properties/:code", destination: "/property/:code", permanent: true },
+    { source: "/journal/:slug", destination: "/:slug", permanent: true },
+    { source: "/blog/:slug", destination: "/:slug", permanent: true },
     { source: "/blog", destination: "/journal", permanent: true },
+    { source: "/about", destination: "/about-us", permanent: true },
     { source: "/property", destination: "/projects", permanent: true },
   ];
   const manual = [

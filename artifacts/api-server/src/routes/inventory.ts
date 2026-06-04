@@ -355,8 +355,14 @@ function listingJsonFromDbRow(r: {
   };
 }
 
+/** CRM codes are alphanumeric; URLs often use lowercase (legacy WordPress links). */
+function inventoryListingCodeKey(code: string): string {
+  return code.trim().toUpperCase();
+}
+
 async function findListingByCode(code: string): Promise<ListingRowJson | null> {
   const normalized = code.trim();
+  const codeKey = inventoryListingCodeKey(normalized);
   const rawSource = (process.env.PROPERTY_INVENTORY_SOURCE || "").trim().toLowerCase();
   const databaseOnly =
     rawSource === "database" || rawSource === "db" || rawSource === "postgres";
@@ -367,7 +373,7 @@ async function findListingByCode(code: string): Promise<ListingRowJson | null> {
       resolveDriveImages: false,
     });
     if (fromSheet && fromSheet.length > 0) {
-      const hit = fromSheet.find((r) => r.code.trim() === normalized);
+      const hit = fromSheet.find((r) => inventoryListingCodeKey(r.code) === codeKey);
       if (hit) {
         let row: SheetListingRow = hit;
         try {
@@ -385,7 +391,7 @@ async function findListingByCode(code: string): Promise<ListingRowJson | null> {
     const [r] = await db
       .select(inventoryDbRowSelect)
       .from(propertyInventoryTable)
-      .where(eq(propertyInventoryTable.code, normalized))
+      .where(sql`upper(${propertyInventoryTable.code}) = ${codeKey}`)
       .limit(1);
     if (!r) return null;
     const merged = await mergeMetaIntoListings([listingJsonFromDbRow(r)]);
@@ -575,17 +581,23 @@ router.get("/inventory/listings", async (req, res): Promise<void> => {
       });
       if (fromSheet && fromSheet.length > 0) {
         const { listings, total } = jsonFromExternalRows(fromSheet, channel, limit, offset);
-        const merged = await mergeMetaIntoListings(listings);
-        if (inventoryListingsDebugEnabled()) {
-          logger.info(
-            { outcome: "google_sheet", sheetRowCount: fromSheet.length, total, listingCount: listings.length, channel },
-            "inventory listings: PROPERTY_INVENTORY_DEBUG response",
-          );
+        if (total > 0) {
+          const merged = await mergeMetaIntoListings(listings);
+          if (inventoryListingsDebugEnabled()) {
+            logger.info(
+              { outcome: "google_sheet", sheetRowCount: fromSheet.length, total, listingCount: listings.length, channel },
+              "inventory listings: PROPERTY_INVENTORY_DEBUG response",
+            );
+          }
+          setInventoryResponseCacheHeaders(res, forceExternalRefresh);
+          setInventoryListingsSourceHeader(res, "google_sheet");
+          res.json({ listings: merged.map(compactListingForListResponse), total });
+          return;
         }
-        setInventoryResponseCacheHeaders(res, forceExternalRefresh);
-        setInventoryListingsSourceHeader(res, "google_sheet");
-        res.json({ listings: merged.map(compactListingForListResponse), total });
-        return;
+        logger.warn(
+          { sheetRowCount: fromSheet.length, channel },
+          "inventory listings: sheet loaded but no rows match channel filter; falling back to database",
+        );
       }
       if (inventoryListingsDebugEnabled()) {
         logger.info(

@@ -1,18 +1,9 @@
-import { useEffect, useId, useMemo, useRef, useState } from "react";
-import { ChevronDown, Search } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ChevronDown } from "lucide-react";
+import { AreaSearchMenuDropdown } from "@/components/site/AreaSearchMenuDropdown";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import {
-  activeBaliMapRegions,
-  BALI_HIGHLIGHT_BOXES,
-  BALI_ISLAND_PATH_D,
-  BALI_MAP_BASE_FILL,
-  BALI_MAP_BASE_STROKE,
-  BALI_MAP_BRAND,
-  BALI_MAP_VIEW,
-  baliHighlightRectPath,
-} from "@/lib/bali-area-map";
 import { HOME_LISTINGS_BAND } from "@/lib/home-section-surfaces";
 
 const MIN_PRICE_BOUND = 0;
@@ -45,23 +36,10 @@ function formatPriceInput(value: number, maxBound: number = MAX_PRICE_BOUND) {
   return clamp(value, MIN_PRICE_BOUND, maxBound).toLocaleString("en-US");
 }
 
-const POPULAR_AREA_NAMES = ["Uluwatu", "Melasti", "Bingin", "Pecatu", "Pandawa", "Ungasan", "Padang Padang"] as const;
-const PROPERTY_AREA_NAMES = ["Uluwatu", "Canggu", "Umalas", "Pererenan", "Others", "Seminyak", "Ubud", "Tabanan"] as const;
-
-function filterAreaNames(names: readonly string[], query: string): string[] {
-  const needle = query.trim().toLowerCase();
-  if (!needle) return [...names];
-  return names.filter((name) => name.toLowerCase().includes(needle));
-}
-
 const SEARCH_SELECT_ITEM =
   "cursor-pointer hover:bg-[#e0fdac] focus:bg-[#e0fdac] focus:text-[#1f1d1b] data-[highlighted]:bg-[#e0fdac] data-[highlighted]:text-[#1f1d1b]";
 const SEARCH_SELECT_TRIGGER =
   "mt-1 h-auto min-h-10 w-full min-w-0 border-0 border-b border-[#1f1d1b]/35 bg-transparent px-0 py-1 text-base text-[#1f1d1b] shadow-none rounded-none ring-offset-0 focus:ring-0 focus:ring-offset-0 focus:border-[#01514E] whitespace-normal items-start [&>span]:block [&>span]:min-w-0 [&>span]:max-w-full [&>span]:overflow-hidden [&>span]:whitespace-normal [&>span]:leading-snug [&>svg]:mt-1 [&>svg]:h-4 [&>svg]:w-4 [&>svg]:shrink-0 [&>svg]:stroke-[2] [&>svg]:opacity-70";
-
-/** Area map dropdown: full width of field on mobile (avoids 92vw overflow past viewport). */
-const AREA_MENU_PANEL_CLASS =
-  "absolute left-0 right-0 top-12 z-50 grid w-full max-w-full grid-cols-1 gap-2 rounded border border-[#01514E]/25 bg-[#f7f5f1] p-2.5 shadow-xl md:left-0 md:right-auto md:w-[min(92vw,780px)] md:grid-cols-[1fr_1fr_1.45fr]";
 
 const SEARCH_FIELD_LABEL =
   "text-[11px] font-medium uppercase tracking-[0.14em] text-[#01514E] sm:tracking-[0.22em] md:tracking-[0.28em]";
@@ -133,7 +111,6 @@ export function PropertySearchPanel({
 }: PropertySearchPanelProps) {
   const effectivePriceMax = priceRangeMax ?? MAX_PRICE_BOUND;
 
-  const baliMapClipId = `bali-map-clip-${useId().replace(/:/g, "")}`;
   const [isAreaMenuOpen, setIsAreaMenuOpen] = useState(false);
   const [areaLocationSearch, setAreaLocationSearch] = useState("");
   const [selectedArea, setSelectedArea] = useState("Area");
@@ -148,18 +125,9 @@ export function PropertySearchPanel({
   const [minSlider, setMinSlider] = useState(0);
   const [maxSlider, setMaxSlider] = useState(100);
   const [propertyCode, setPropertyCode] = useState("");
-  const areaMenuRef = useRef<HTMLDivElement | null>(null);
+  const areaTriggerRef = useRef<HTMLButtonElement | null>(null);
   const areaLocationSearchRef = useRef<HTMLInputElement | null>(null);
   const priceMenuRef = useRef<HTMLDivElement | null>(null);
-
-  const filteredPopularAreas = useMemo(
-    () => filterAreaNames(POPULAR_AREA_NAMES, areaLocationSearch),
-    [areaLocationSearch],
-  );
-  const filteredPropertyAreas = useMemo(
-    () => filterAreaNames(PROPERTY_AREA_NAMES, areaLocationSearch),
-    [areaLocationSearch],
-  );
 
   useEffect(() => {
     if (!isAreaMenuOpen) {
@@ -172,9 +140,6 @@ export function PropertySearchPanel({
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (areaMenuRef.current && !areaMenuRef.current.contains(event.target as Node)) {
-        setIsAreaMenuOpen(false);
-      }
       if (!priceMenuRef.current) return;
       if (!priceMenuRef.current.contains(event.target as Node)) {
         setIsPriceMenuOpen(false);
@@ -183,8 +148,6 @@ export function PropertySearchPanel({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  const mapActive = activeBaliMapRegions(selectedArea);
 
   function emitApply() {
     onApply?.({
@@ -198,136 +161,37 @@ export function PropertySearchPanel({
   const embedded = layout === "embeddedInHero";
   const minimalRental = fieldSet === "rentalsMinimal";
 
+  const areaSearchControl = (
+    <>
+      <button
+        ref={areaTriggerRef}
+        type="button"
+        className="flex h-10 w-full items-center justify-between border-0 border-b border-[#1f1d1b]/35 bg-transparent px-0 text-left text-base text-[#1f1d1b] focus:border-[#01514E] focus:outline-none"
+        onClick={() => setIsAreaMenuOpen((prev) => !prev)}
+        aria-expanded={isAreaMenuOpen}
+        aria-label={t.area}
+      >
+        <span>{selectedArea}</span>
+        <SearchFieldChevron open={isAreaMenuOpen} />
+      </button>
+      <AreaSearchMenuDropdown
+        open={isAreaMenuOpen}
+        onClose={() => setIsAreaMenuOpen(false)}
+        triggerRef={areaTriggerRef}
+        selectedArea={selectedArea}
+        areaLocationSearch={areaLocationSearch}
+        onAreaLocationSearchChange={setAreaLocationSearch}
+        onSelectArea={setSelectedArea}
+        searchInputRef={areaLocationSearchRef}
+      />
+    </>
+  );
+
   const rentalMinimalGrid = minimalRental ? (
     <div className="grid min-w-0 grid-cols-1 gap-x-5 gap-y-5 md:grid-cols-12 md:items-end">
       <label className="block min-w-0 md:col-span-12 lg:col-span-4">
         <span className={SEARCH_FIELD_LABEL}>{t.area}</span>
-        <div className="relative mt-1 min-w-0" ref={areaMenuRef}>
-          <button
-            type="button"
-            className="flex h-10 w-full items-center justify-between border-0 border-b border-[#1f1d1b]/35 bg-transparent px-0 text-left text-base text-[#1f1d1b] focus:border-[#01514E] focus:outline-none"
-            onClick={() => setIsAreaMenuOpen((prev) => !prev)}
-            aria-expanded={isAreaMenuOpen}
-            aria-label={t.area}
-          >
-            <span>{selectedArea}</span>
-            <SearchFieldChevron open={isAreaMenuOpen} />
-          </button>
-
-          {isAreaMenuOpen ? (
-            <div className={AREA_MENU_PANEL_CLASS}>
-              <div>
-                <p className="text-xs font-semibold text-[#01514E]">Search Locations</p>
-                <div className="relative mt-2">
-                  <Search
-                    className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#01514E]"
-                    strokeWidth={2}
-                    aria-hidden
-                  />
-                  <input
-                    ref={areaLocationSearchRef}
-                    type="search"
-                    value={areaLocationSearch}
-                    onChange={(e) => setAreaLocationSearch(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key !== "Enter") return;
-                      const pick = filteredPopularAreas[0] ?? filteredPropertyAreas[0];
-                      if (!pick) return;
-                      e.preventDefault();
-                      setSelectedArea(pick);
-                      setIsAreaMenuOpen(false);
-                    }}
-                    placeholder="Search area…"
-                    autoComplete="off"
-                    aria-label="Search locations"
-                    className="h-9 w-full rounded border border-[#01514E] bg-[#f7f7f5] py-1 pl-9 pr-2 text-xs text-[#1f1d1b] placeholder:text-[#1f1d1b]/45 focus:border-[#01514E] focus:outline-none focus:ring-1 focus:ring-[#01514E]/30"
-                  />
-                </div>
-                <p className="mt-1.5 text-[11px] text-[#01514E]/70">Popular Locations</p>
-                <div className="mt-1.5 space-y-0.5 text-xs">
-                  {filteredPopularAreas.length === 0 ? (
-                    <p className="px-1.5 py-1 text-[11px] text-[#1f1d1b]/50">No matches in popular areas</p>
-                  ) : (
-                    filteredPopularAreas.map((area) => (
-                      <button
-                        key={area}
-                        type="button"
-                        onClick={() => {
-                          setSelectedArea(area);
-                          setIsAreaMenuOpen(false);
-                        }}
-                        className="flex w-full items-center gap-2 rounded px-1.5 py-1 text-left text-[#1f1d1b] hover:bg-[#01514E]/10"
-                      >
-                        <span className="inline-flex h-5 w-5 items-center justify-center rounded bg-[#01514E] text-[10px] text-white">
-                          ●
-                        </span>
-                        {area}
-                      </button>
-                    ))
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <p className="text-xs font-semibold text-[#01514E]">Property Locations</p>
-                <div className="mt-1.5 space-y-1">
-                  {filteredPropertyAreas.length === 0 ? (
-                    <p className="rounded px-2 py-1.5 text-[11px] text-[#1f1d1b]/50">No matches in property locations</p>
-                  ) : (
-                    filteredPropertyAreas.map((area) => (
-                      <button
-                        key={area}
-                        type="button"
-                        onClick={() => {
-                          setSelectedArea(area);
-                          setIsAreaMenuOpen(false);
-                        }}
-                        className={`w-full rounded px-2 py-1.5 text-xs ${
-                          selectedArea === area
-                            ? "bg-[#01514E] text-white"
-                            : "bg-[#e6efee] text-[#1f1d1b] hover:bg-[#d7e6e4]"
-                        }`}
-                      >
-                        {area}
-                      </button>
-                    ))
-                  )}
-                </div>
-              </div>
-
-              <div className="relative min-h-[220px] overflow-hidden rounded border border-[#01514E]/15 bg-[#e8eceb] md:min-h-[260px]">
-                <svg
-                  viewBox={`0 0 ${BALI_MAP_VIEW.w} ${BALI_MAP_VIEW.h}`}
-                  className="h-full w-full min-h-[240px]"
-                  aria-hidden
-                >
-                  <title>Bali map</title>
-                  <defs>
-                    <clipPath id={baliMapClipId}>
-                      <path d={BALI_ISLAND_PATH_D} />
-                    </clipPath>
-                  </defs>
-                  <path fill={BALI_MAP_BASE_FILL} stroke={BALI_MAP_BASE_STROKE} strokeWidth="1" d={BALI_ISLAND_PATH_D} />
-                  <g clipPath={`url(#${baliMapClipId})`}>
-                    {(Object.keys(BALI_HIGHLIGHT_BOXES) as string[]).map((regionId) => {
-                      const [w, s, e, n] = BALI_HIGHLIGHT_BOXES[regionId];
-                      const on = mapActive.has(regionId);
-                      return (
-                        <path
-                          key={regionId}
-                          d={baliHighlightRectPath(w, s, e, n)}
-                          fill={on ? BALI_MAP_BRAND : "transparent"}
-                          fillOpacity={on ? 0.9 : 0}
-                        />
-                      );
-                    })}
-                  </g>
-                  <path fill="none" stroke={BALI_MAP_BASE_STROKE} strokeWidth="1" d={BALI_ISLAND_PATH_D} />
-                </svg>
-              </div>
-            </div>
-          ) : null}
-        </div>
+        <div className="relative mt-1 min-w-0">{areaSearchControl}</div>
       </label>
       <div className="block md:col-span-6 lg:col-span-2">
         <span className={SEARCH_FIELD_LABEL}>{t.bedrooms}</span>
@@ -495,7 +359,10 @@ export function PropertySearchPanel({
       className={
         embedded
           ? "relative z-20 mt-6 w-full min-w-0 md:mt-8"
-          : "relative z-30 mt-4 w-full min-w-0 overflow-x-clip pb-2 sm:-mt-14 md:-mt-20 md:pb-3"
+          : cn(
+              "relative z-30 mt-4 w-full min-w-0 pb-2 sm:-mt-14 md:-mt-20 md:pb-3",
+              isAreaMenuOpen ? "overflow-visible" : "overflow-x-clip",
+            )
       }
       style={embedded ? undefined : { backgroundColor: HOME_LISTINGS_BAND }}
     >
@@ -544,132 +411,7 @@ export function PropertySearchPanel({
                   </div>
               <label className="block min-w-0">
                 <span className={SEARCH_FIELD_LABEL}>{t.area}</span>
-                <div className="relative mt-1 min-w-0" ref={areaMenuRef}>
-                  <button
-                    type="button"
-                    className="flex h-10 w-full items-center justify-between border-0 border-b border-[#1f1d1b]/35 bg-transparent px-0 text-left text-base text-[#1f1d1b] focus:border-[#01514E] focus:outline-none"
-                    onClick={() => setIsAreaMenuOpen((prev) => !prev)}
-                    aria-expanded={isAreaMenuOpen}
-                    aria-label={t.area}
-                  >
-                    <span>{selectedArea}</span>
-                    <SearchFieldChevron open={isAreaMenuOpen} />
-                  </button>
-
-                  {isAreaMenuOpen ? (
-                    <div className={AREA_MENU_PANEL_CLASS}>
-                      <div>
-                        <p className="text-xs font-semibold text-[#01514E]">Search Locations</p>
-                        <div className="relative mt-2">
-                          <Search
-                            className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#01514E]"
-                            strokeWidth={2}
-                            aria-hidden
-                          />
-                          <input
-                            ref={areaLocationSearchRef}
-                            type="search"
-                            value={areaLocationSearch}
-                            onChange={(e) => setAreaLocationSearch(e.target.value)}
-                            onKeyDown={(e) => {
-                              if (e.key !== "Enter") return;
-                              const pick = filteredPopularAreas[0] ?? filteredPropertyAreas[0];
-                              if (!pick) return;
-                              e.preventDefault();
-                              setSelectedArea(pick);
-                              setIsAreaMenuOpen(false);
-                            }}
-                            placeholder="Search area…"
-                            autoComplete="off"
-                            aria-label="Search locations"
-                            className="h-9 w-full rounded border border-[#01514E] bg-[#f7f7f5] py-1 pl-9 pr-2 text-xs text-[#1f1d1b] placeholder:text-[#1f1d1b]/45 focus:border-[#01514E] focus:outline-none focus:ring-1 focus:ring-[#01514E]/30"
-                          />
-                        </div>
-                        <p className="mt-1.5 text-[11px] text-[#01514E]/70">Popular Locations</p>
-                        <div className="mt-1.5 space-y-0.5 text-xs">
-                          {filteredPopularAreas.length === 0 ? (
-                            <p className="px-1.5 py-1 text-[11px] text-[#1f1d1b]/50">No matches in popular areas</p>
-                          ) : (
-                            filteredPopularAreas.map((area) => (
-                              <button
-                                key={area}
-                                type="button"
-                                onClick={() => {
-                                  setSelectedArea(area);
-                                  setIsAreaMenuOpen(false);
-                                }}
-                                className="flex w-full items-center gap-2 rounded px-1.5 py-1 text-left text-[#1f1d1b] hover:bg-[#01514E]/10"
-                              >
-                                <span className="inline-flex h-5 w-5 items-center justify-center rounded bg-[#01514E] text-[10px] text-white">
-                                  ●
-                                </span>
-                                {area}
-                              </button>
-                            ))
-                          )}
-                        </div>
-                      </div>
-
-                      <div>
-                        <p className="text-xs font-semibold text-[#01514E]">Property Locations</p>
-                        <div className="mt-1.5 space-y-1">
-                          {filteredPropertyAreas.length === 0 ? (
-                            <p className="rounded px-2 py-1.5 text-[11px] text-[#1f1d1b]/50">No matches in property locations</p>
-                          ) : (
-                            filteredPropertyAreas.map((area) => (
-                              <button
-                                key={area}
-                                type="button"
-                                onClick={() => {
-                                  setSelectedArea(area);
-                                  setIsAreaMenuOpen(false);
-                                }}
-                                className={`w-full rounded px-2 py-1.5 text-xs ${
-                                  selectedArea === area
-                                    ? "bg-[#01514E] text-white"
-                                    : "bg-[#e6efee] text-[#1f1d1b] hover:bg-[#d7e6e4]"
-                                }`}
-                              >
-                                {area}
-                              </button>
-                            ))
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="relative min-h-[220px] overflow-hidden rounded border border-[#01514E]/15 bg-[#e8eceb] md:min-h-[260px]">
-                        <svg
-                          viewBox={`0 0 ${BALI_MAP_VIEW.w} ${BALI_MAP_VIEW.h}`}
-                          className="h-full w-full min-h-[240px]"
-                          aria-hidden
-                        >
-                          <title>Bali map</title>
-                          <defs>
-                            <clipPath id={baliMapClipId}>
-                              <path d={BALI_ISLAND_PATH_D} />
-                            </clipPath>
-                          </defs>
-                          <path fill={BALI_MAP_BASE_FILL} stroke={BALI_MAP_BASE_STROKE} strokeWidth="1" d={BALI_ISLAND_PATH_D} />
-                          <g clipPath={`url(#${baliMapClipId})`}>
-                            {(Object.keys(BALI_HIGHLIGHT_BOXES) as string[]).map((regionId) => {
-                              const [w, s, e, n] = BALI_HIGHLIGHT_BOXES[regionId];
-                              const on = mapActive.has(regionId);
-                              return (
-                                <path
-                                  key={regionId}
-                                  d={baliHighlightRectPath(w, s, e, n)}
-                                  fill={on ? BALI_MAP_BRAND : "transparent"}
-                                  fillOpacity={on ? 0.9 : 0}
-                                />
-                              );
-                            })}
-                          </g>
-                          <path fill="none" stroke={BALI_MAP_BASE_STROKE} strokeWidth="1" d={BALI_ISLAND_PATH_D} />
-                        </svg>
-                      </div>
-                    </div>
-                  ) : null}
-                </div>
+                <div className="relative mt-1 min-w-0">{areaSearchControl}</div>
               </label>
               <div className="block min-w-0">
                 <span className={SEARCH_FIELD_LABEL}>{t.bedrooms}</span>

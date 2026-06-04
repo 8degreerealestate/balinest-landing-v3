@@ -1,6 +1,6 @@
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Link, useRoute } from "wouter";
-import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
+import { Link, useLocation, useRoute } from "wouter";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import {
   ApiError,
   getInventoryListingQueryKey,
@@ -27,6 +27,7 @@ import {
   pickInventoryThumbnail,
 } from "@/lib/portfolio-listing";
 import { pickSimilarInventoryListings } from "@/lib/similar-inventory-listings";
+import { propertyListingPath } from "@/lib/site-paths";
 import { buildWhatsappUrl, getContactEmail } from "@/lib/site-contact";
 import { Seo } from "@/components/site/Seo";
 import {
@@ -93,7 +94,7 @@ const GRAIN_DATA_URI =
   "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E\")";
 
 /**
- * Sample listing used when navigating to `/properties/preview`.
+ * Sample listing used when navigating to `/property/preview`.
  * Lets us preview the editorial layout without depending on the DB / sheet path.
  */
 const PREVIEW_LISTING = {
@@ -544,9 +545,10 @@ export default function ListingDetail() {
     },
   }[language];
 
-  const [, params] = useRoute("/properties/:code");
-  const code = (params?.code ?? "").trim();
+  const [, params] = useRoute("/property/:code");
+  const code = (params?.code ?? "").replace(/\/+$/, "").trim();
   const isPreview = code.toLowerCase() === "preview";
+  const [location, setLocation] = useLocation();
 
   const { data, isLoading: apiLoading, isError, error } = useGetInventoryListing(code, {
     query: {
@@ -575,17 +577,17 @@ export default function ListingDetail() {
         "@type": "Residence",
         name: listing.title || listing.code,
         description: truncateForMeta(listingShortBlurb(listing.description) || listing.title),
-        url: canonicalUrl(`/properties/${encodeURIComponent(listing.code)}`),
+        url: canonicalUrl(propertyListingPath(listing.code)),
         ...(images.length ? { image: images } : {}),
       },
     ]);
   }, [listing]);
 
+  /** Silent listings are link-only (not on public browse); still viewable at /property/:code. */
+  const isSilentListing = listing?.channel === "silent";
   const isUnavailable = Boolean(
     listing &&
-      (listing.visibility === "draft" ||
-        listing.saleStatus === "sold" ||
-        listing.channel !== "website"),
+      (listing.visibility === "draft" || listing.saleStatus === "sold"),
   );
 
   const form = useForm({
@@ -597,18 +599,36 @@ export default function ListingDetail() {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, [code]);
 
+  /** Canonical legacy URL: /property/8d25169 (lowercase code). */
+  useEffect(() => {
+    if (!listing || isPreview) return;
+    const canonical = propertyListingPath(listing.code);
+    if (location !== canonical) setLocation(canonical, { replace: true });
+  }, [listing, isPreview, location, setLocation]);
+
   /**
    * Full deduped image list — drives the hero grid and the lightbox.
    * Computed before any early returns so the hooks below stay stable across renders.
    */
+  const [brokenGalleryUrls, setBrokenGalleryUrls] = useState(() => new Set<string>());
+  useEffect(() => {
+    setBrokenGalleryUrls(new Set());
+  }, [code]);
+
+  const markGalleryImageBroken = useCallback((url: string) => {
+    setBrokenGalleryUrls((prev) => {
+      if (prev.has(url)) return prev;
+      const next = new Set(prev);
+      next.add(url);
+      return next;
+    });
+  }, []);
+
   const allImages = useMemo(() => {
     if (!listing) return [];
-    const urls = inventoryGalleryUrls(listing);
-    if (urls.length > 0) return urls;
-    return [FALLBACK_HERO];
-  }, [listing]);
-
-  const [heroIndex, setHeroIndex] = useState(0);
+    const urls = inventoryGalleryUrls(listing).filter((u) => !brokenGalleryUrls.has(u));
+    return urls.length > 0 ? urls : [FALLBACK_HERO];
+  }, [listing, brokenGalleryUrls]);
 
   /** Lightbox state — null = closed; number = current index in `allImages`. */
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
@@ -618,23 +638,7 @@ export default function ListingDetail() {
   const lightboxNext = () =>
     setLightboxIndex((i) => (i === null ? i : Math.min(allImages.length - 1, i + 1)));
 
-  const heroPrev = useCallback(() => {
-    setHeroIndex((i) => Math.max(0, i - 1));
-  }, []);
-
-  const heroNext = useCallback(() => {
-    setHeroIndex((i) => Math.min(allImages.length - 1, i + 1));
-  }, [allImages.length]);
-
-  const heroSwipe = useHorizontalSwipe(heroNext, heroPrev);
-  const lightboxSwipe = useHorizontalSwipe(
-    () => setLightboxIndex((i) => (i === null ? i : Math.min(allImages.length - 1, i + 1))),
-    () => setLightboxIndex((i) => (i === null ? i : Math.max(0, i - 1))),
-  );
-
-  useEffect(() => {
-    setHeroIndex(0);
-  }, [code, allImages.length]);
+  const lightboxSwipe = useHorizontalSwipe(lightboxNext, lightboxPrev);
 
   const [dismissedSimilarCodes, setDismissedSimilarCodes] = useState(() => new Set<string>());
   useEffect(() => {
@@ -652,7 +656,7 @@ export default function ListingDetail() {
 
   const similarCards = useMemo((): FeaturedCardModel[] => {
     if (isPreview) {
-      return SIMILAR_LISTINGS_DEFAULT.map((s, idx) => similarToFeaturedModel(s, currency));
+      return SIMILAR_LISTINGS_DEFAULT.map((s, idx) => similarToFeaturedModel(s));
     }
     if (!listing || !inventoryListData?.listings?.length) return [];
 
@@ -670,15 +674,10 @@ export default function ListingDetail() {
   // Keyboard nav (Esc / ← / →) + body scroll lock while the lightbox is open.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (lightboxIndex !== null) {
-        if (e.key === "Escape") closeLightbox();
-        else if (e.key === "ArrowLeft") lightboxPrev();
-        else if (e.key === "ArrowRight") lightboxNext();
-        return;
-      }
-      if (allImages.length <= 1) return;
-      if (e.key === "ArrowLeft") heroPrev();
-      else if (e.key === "ArrowRight") heroNext();
+      if (lightboxIndex === null) return;
+      if (e.key === "Escape") closeLightbox();
+      else if (e.key === "ArrowLeft") lightboxPrev();
+      else if (e.key === "ArrowRight") lightboxNext();
     };
     document.addEventListener("keydown", onKey);
     if (lightboxIndex === null) {
@@ -690,7 +689,7 @@ export default function ListingDetail() {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = prevOverflow;
     };
-  }, [lightboxIndex, allImages.length, heroPrev, heroNext, lightboxPrev, lightboxNext]);
+  }, [lightboxIndex, lightboxPrev, lightboxNext]);
 
   // Auto-scroll the active thumbnail into view inside the lightbox strip.
   const thumbsRef = useRef<HTMLDivElement>(null);
@@ -701,6 +700,12 @@ export default function ListingDetail() {
     );
     if (active) active.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
   }, [lightboxIndex]);
+
+  useEffect(() => {
+    if (lightboxIndex === null || allImages.length === 0) return;
+    if (lightboxIndex < allImages.length) return;
+    setLightboxIndex(Math.max(0, allImages.length - 1));
+  }, [lightboxIndex, allImages.length]);
 
   const onSubmit = form.handleSubmit(async (values) => {
     if (!listing) return;
@@ -738,7 +743,7 @@ export default function ListingDetail() {
   if (isLoading) {
     return (
       <Fragment>
-        <Seo title={t.listing} description={t.loading} path={`/properties/${encodeURIComponent(code)}`} />
+        <Seo title={t.listing} description={t.loading} path={propertyListingPath(code)} />
         <div className="min-h-screen pt-32" style={{ backgroundColor: PALETTE.paper }}>
           <div className="mx-auto max-w-6xl px-6">
             <div className="mb-8 h-12 w-48 animate-pulse rounded bg-black/5" />
@@ -761,7 +766,7 @@ export default function ListingDetail() {
         <Seo
           title={listing.title || listing.code}
           description={t.notAvailable}
-          path={`/properties/${encodeURIComponent(code)}`}
+          path={propertyListingPath(code)}
           noindex
         />
         <ErrorState
@@ -784,7 +789,7 @@ export default function ListingDetail() {
         <Seo
           title={t.notFound}
           description="We could not find this listing."
-          path={`/properties/${encodeURIComponent(code)}`}
+          path={propertyListingPath(code)}
           noindex
         />
         <ErrorState
@@ -797,9 +802,9 @@ export default function ListingDetail() {
               style={{ fontFamily: FONT_MONO, color: PALETTE.brandSoft, opacity: 0.55, letterSpacing: "0.06em" }}
             >
               Tip: open{" "}
-              <Link href="/properties/preview">
+              <Link href="/property/preview">
                 <span style={{ textDecoration: "underline", textUnderlineOffset: 4 }}>
-                  /properties/preview
+                  /property/preview
                 </span>
               </Link>{" "}
               to view the layout with sample data.
@@ -814,7 +819,7 @@ export default function ListingDetail() {
   const priceLine = listing.estimatePriceUsd?.trim() || listingPriceLine(listing.description);
   const ownership = listing.ownership?.trim() || inferListingStatus(listing.description) || "—";
   const leaseLabel = inferLeaseYearsLabel(listing.description);
-  const primaryImage = allImages[heroIndex] ?? allImages[0] ?? null;
+  const primaryImage = allImages[0] ?? null;
   const description = listing.description?.trim() ?? "";
   const pullquote = firstShortQuote(description);
   const bullets = extractBullets(description);
@@ -825,8 +830,23 @@ export default function ListingDetail() {
   const whatsappHref = buildWhatsappUrl(
     `Hi, I'm interested in ${listing.title} (${listing.code})`,
   );
-  const heroSlideCount = allImages.length;
-  const safeHeroIndex = heroSlideCount > 0 ? Math.min(heroIndex, heroSlideCount - 1) : 0;
+
+  const HERO_COLLAGE_SLOTS = 6;
+  const heroImages = allImages.slice(0, HERO_COLLAGE_SLOTS);
+  const remainingCount = Math.max(0, allImages.length - heroImages.length);
+
+  /**
+   * Asymmetric 6-tile collage (sm+): tall left, stacked center, tall right, two wide bottom tiles.
+   * Matches the Villa Ananta property-detail design comp.
+   */
+  const TILE_PLACEMENT = [
+    "sm:col-start-1 sm:col-end-3 sm:row-start-1 sm:row-end-3",
+    "sm:col-start-3 sm:col-end-5 sm:row-start-1 sm:row-end-2",
+    "sm:col-start-3 sm:col-end-5 sm:row-start-2 sm:row-end-3",
+    "sm:col-start-5 sm:col-end-7 sm:row-start-1 sm:row-end-3",
+    "sm:col-start-1 sm:col-end-4 sm:row-start-3 sm:row-end-4",
+    "sm:col-start-4 sm:col-end-7 sm:row-start-3 sm:row-end-4",
+  ] as const;
 
   // `level`, `zoning`, and `livingRoom` aren't typed on the API listing — read via a narrow cast.
   const levelVal = (listing as { level?: string }).level?.trim() || "—";
@@ -935,9 +955,10 @@ export default function ListingDetail() {
       <Seo
         title={listing.title || listing.code}
         description={truncateForMeta(listingShortBlurb(listing.description) || `${area}. ${priceLine}`)}
-        path={`/properties/${encodeURIComponent(listing.code)}`}
+        path={propertyListingPath(listing.code)}
         image={primaryImage}
         jsonLd={listingJsonLd}
+        noindex={isSilentListing}
       />
 
       {/* Film grain overlay */}
@@ -951,101 +972,8 @@ export default function ListingDetail() {
         }}
       />
 
-      {/* HERO: full-bleed photo carousel with prev/next arrows ================== */}
-      <header className="relative z-[2] w-full overflow-hidden bg-[#e8e2da]">
-        <div
-          className="relative h-[min(75vh,880px)] min-h-[400px] w-full touch-pan-y"
-          {...heroSwipe.handlers}
-        >
-          {allImages.map((url, i) => (
-            <button
-              key={`${url}-${i}`}
-              type="button"
-              onClick={() => {
-                if (heroSwipe.shouldIgnoreClick()) return;
-                setLightboxIndex(i);
-              }}
-              className={`absolute inset-0 h-full w-full cursor-zoom-in transition-opacity duration-500 ${
-                i === safeHeroIndex ? "opacity-100 z-[1]" : "opacity-0 z-0 pointer-events-none"
-              }`}
-              aria-label={`${listing.code} — ${i + 1} / ${heroSlideCount}`}
-              tabIndex={i === safeHeroIndex ? 0 : -1}
-            >
-              <img
-                src={url}
-                alt=""
-                className="h-full w-full object-cover"
-                loading={i === 0 ? "eager" : "lazy"}
-                decoding="async"
-                referrerPolicy="no-referrer"
-                draggable={false}
-              />
-            </button>
-          ))}
-          <div
-            className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-b from-black/30 via-transparent to-black/40"
-            aria-hidden
-          />
-
-          <div className="absolute left-0 right-0 top-0 z-[3]">
-            <div className="mx-auto flex max-w-[1500px] items-center justify-between px-6 py-6 md:px-12">
-              <Link href="/projects">
-                <span className="inline-flex items-center gap-2 font-sans text-[11px] font-medium uppercase tracking-[0.28em] text-white/90 transition-colors hover:text-white">
-                  <ArrowLeft size={14} strokeWidth={1.5} aria-hidden />
-                  {t.back}
-                </span>
-              </Link>
-              {heroSlideCount > 0 ? (
-                <span
-                  className="rounded-full bg-black/35 px-3 py-1 font-sans text-[11px] font-medium uppercase tracking-[0.2em] text-white/95 backdrop-blur-sm"
-                  aria-live="polite"
-                >
-                  {safeHeroIndex + 1} / {heroSlideCount}
-                </span>
-              ) : null}
-            </div>
-          </div>
-
-          {heroSlideCount > 1 ? (
-            <>
-              <button
-                type="button"
-                onClick={heroPrev}
-                disabled={safeHeroIndex === 0}
-                aria-label={t.previous}
-                className="absolute left-3 top-1/2 z-[4] inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[#1c1917] shadow-md transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-35 md:left-6 md:h-12 md:w-12"
-              >
-                <ChevronLeft size={22} strokeWidth={1.75} aria-hidden />
-              </button>
-              <button
-                type="button"
-                onClick={heroNext}
-                disabled={safeHeroIndex >= heroSlideCount - 1}
-                aria-label={t.next}
-                className="absolute right-3 top-1/2 z-[4] inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[#1c1917] shadow-md transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-35 md:right-6 md:h-12 md:w-12"
-              >
-                <ChevronRight size={22} strokeWidth={1.75} aria-hidden />
-              </button>
-              <div className="absolute bottom-6 left-1/2 z-[4] flex -translate-x-1/2 gap-2">
-                {allImages.map((_, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    aria-label={`${listing.code} — ${i + 1}`}
-                    aria-current={i === safeHeroIndex ? "true" : undefined}
-                    onClick={() => setHeroIndex(i)}
-                    className={`h-1.5 rounded-full transition-all ${
-                      i === safeHeroIndex ? "w-8 bg-white" : "w-1.5 bg-white/45 hover:bg-white/70"
-                    }`}
-                  />
-                ))}
-              </div>
-            </>
-          ) : null}
-        </div>
-      </header>
-
-      <section className="relative z-[2] mx-auto max-w-[1500px] px-6 pb-10 pt-10 md:px-12 md:pb-12 lg:pb-14">
+      {/* HERO: serif display title + breadcrumb + asymmetric photo collage ========= */}
+      <section className="relative z-[2] mx-auto max-w-[1500px] px-6 pb-10 pt-28 md:px-12 md:pb-12 md:pt-32 lg:pb-16 lg:pt-36">
         {(() => {
           const titleStr = (listing.title || listing.code || "").trim();
           const parts = titleStr.split(/\s+/);
@@ -1094,9 +1022,57 @@ export default function ListingDetail() {
           ) : null}
           <BreadcrumbChevron />
           <span className="max-w-[60vw] truncate" style={{ color: PALETTE.brand, fontWeight: 500 }}>
-            {listing.code}
+            {listing.title || listing.code}
           </span>
         </nav>
+
+        <div
+          className="mt-6 grid grid-cols-1 gap-3 sm:mt-8 sm:grid-cols-6 sm:gap-4 sm:[grid-template-rows:1fr_1fr_1.05fr] sm:h-[min(52vw,480px)] md:h-[540px] lg:h-[620px] xl:h-[680px]"
+        >
+          {heroImages.map((url, i) => {
+            const isLast = i === heroImages.length - 1;
+            const showOverlay = isLast && remainingCount > 0;
+            const placement = TILE_PLACEMENT[i] ?? TILE_PLACEMENT[TILE_PLACEMENT.length - 1];
+            return (
+              <button
+                key={`${url}-${i}`}
+                type="button"
+                onClick={() => setLightboxIndex(showOverlay ? heroImages.length : i)}
+                className={`group relative aspect-[4/3] sm:aspect-auto sm:h-full ${placement} overflow-hidden`}
+                style={{ borderRadius: 12 }}
+                aria-label={
+                  showOverlay
+                    ? `${t.seeMore} (+${remainingCount})`
+                    : `${listing.title || listing.code} — ${i + 1} / ${allImages.length}`
+                }
+              >
+                <img
+                  src={url}
+                  alt={i === 0 ? listing.title : ""}
+                  className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                  loading={i === 0 ? "eager" : "lazy"}
+                  decoding="async"
+                  referrerPolicy="no-referrer"
+                  onError={() => markGalleryImageBroken(url)}
+                />
+                {showOverlay ? (
+                  <div
+                    className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-0.5 text-center"
+                    style={{
+                      backgroundColor: "rgba(28, 25, 23, 0.55)",
+                      color: PALETTE.cream,
+                      fontFamily: FONT_SANS,
+                      fontWeight: 500,
+                    }}
+                  >
+                    <span style={{ fontSize: 15 }}>{t.seeMore}</span>
+                    <span style={{ fontSize: 13, opacity: 0.9 }}>+ {remainingCount}</span>
+                  </div>
+                ) : null}
+              </button>
+            );
+          })}
+        </div>
       </section>
 
       {/* STORY: SectionLabel title, body fills width minus 3cm side margins  */}
@@ -1590,6 +1566,10 @@ export default function ListingDetail() {
                 boxShadow: "0 30px 80px -20px rgba(28, 25, 23, 0.35), 0 8px 24px -8px rgba(28, 25, 23, 0.18)",
               }}
               draggable={false}
+              onError={() => {
+                const url = allImages[lightboxIndex];
+                if (url) markGalleryImageBroken(url);
+              }}
             />
             <button
               type="button"
@@ -1643,7 +1623,14 @@ export default function ListingDetail() {
                       opacity: isActive ? 1 : 0.55,
                     }}
                   >
-                    <img src={url} alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
+                    <img
+                      src={url}
+                      alt=""
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                      onError={() => markGalleryImageBroken(url)}
+                    />
                   </button>
                 );
               })}
@@ -1931,7 +1918,7 @@ const SIMILAR_LISTINGS_DEFAULT: SimilarSeed[] = [
   {
     id: "sim-1",
     code: "OPUM015",
-    href: "/properties/preview",
+    href: "/property/preview",
     title: "6 Bedroom Villa in Umalas with Modern Luxury Tropical Design",
     imageUrl: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1200&q=80",
     area: "Umalas",
@@ -1948,7 +1935,7 @@ const SIMILAR_LISTINGS_DEFAULT: SimilarSeed[] = [
   {
     id: "sim-2",
     code: "OPUM037",
-    href: "/properties/preview",
+    href: "/property/preview",
     title: "Ocean-View Estate in Uluwatu with Infinity Pool",
     imageUrl: "https://images.unsplash.com/photo-1582719508461-905c673771fd?w=1200&q=80",
     area: "Uluwatu",
@@ -1965,7 +1952,7 @@ const SIMILAR_LISTINGS_DEFAULT: SimilarSeed[] = [
   {
     id: "sim-3",
     code: "OPUM052",
-    href: "/properties/preview",
+    href: "/property/preview",
     title: "Designer Villa Walking Distance to Pererenan Beach",
     imageUrl: "https://images.unsplash.com/photo-1602088113235-229c19758e9f?w=1200&q=80",
     area: "Pererenan",
@@ -1981,8 +1968,8 @@ const SIMILAR_LISTINGS_DEFAULT: SimilarSeed[] = [
   },
 ];
 
-/** Project a SimilarSeed into the homepage card's model with a currency-aware price. */
-function similarToFeaturedModel(s: SimilarSeed, currency: SiteCurrency): FeaturedCardModel {
+/** Project a SimilarSeed into the shared listing card model (price converts in the card). */
+function similarToFeaturedModel(s: SimilarSeed): FeaturedCardModel {
   return {
     id: s.id,
     href: s.href,
@@ -1991,7 +1978,8 @@ function similarToFeaturedModel(s: SimilarSeed, currency: SiteCurrency): Feature
     imageUrl: s.imageUrl,
     imageAlt: s.title,
     area: s.area,
-    priceDisplay: formatCurrency(convertFromUsd(s.priceUsd, currency), currency),
+    priceUsd: s.priceUsd,
+    priceDisplay: `USD ${s.priceUsd.toLocaleString("en-US")}`,
     ownership: s.ownership,
     bedrooms: s.bedrooms,
     buildingSqm: s.buildingSqm,

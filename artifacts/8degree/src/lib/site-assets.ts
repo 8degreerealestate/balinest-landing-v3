@@ -71,6 +71,10 @@ export const SITE_MEDIA = {
   /** Seller's Agent landing (`/seller-agents`). */
   sellerAgentHero: "/site-media/seller-agent-hero.png",
 
+  /** Contact page hero — Drive file 1EzAf7m8c_zn56-2vacaSGJOEVyjphbnU */
+  contactHero:
+    "https://drive.google.com/thumbnail?id=1EzAf7m8c_zn56-2vacaSGJOEVyjphbnU&sz=w2000",
+
   /** Legal Guide hero (`/legal-guide`). */
   legalGuideHero: "/site-media/legal-guide-hero.png",
   /** Legal Guide intro panel (lead image under hero). */

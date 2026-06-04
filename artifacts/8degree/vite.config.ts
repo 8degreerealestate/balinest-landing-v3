@@ -56,10 +56,22 @@ const basePath = process.env.BASE_PATH ?? "/";
 // bind plus permissive Host checks. Set VITE_STRICT_LOCAL=1 for 127.0.0.1 only.
 const strictLocal = process.env.VITE_STRICT_LOCAL === "1";
 
+const apiTarget = process.env.API_URL ?? "http://localhost:8080";
+
 const apiDevProxy = {
   "/api": {
-    target: process.env.API_URL ?? "http://localhost:8080",
+    target: apiTarget,
     changeOrigin: true,
+  },
+  "/wp-content/uploads": {
+    target: apiTarget,
+    changeOrigin: true,
+    rewrite: (p: string) => `/api/journal-media${p.replace(/^\/wp-content\/uploads/, "")}`,
+  },
+  "/journal-media": {
+    target: apiTarget,
+    changeOrigin: true,
+    rewrite: (p: string) => `/api${p}`,
   },
 };
 

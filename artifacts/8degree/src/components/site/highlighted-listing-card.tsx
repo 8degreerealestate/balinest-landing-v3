@@ -16,13 +16,16 @@ import {
   inferLeaseYearsLabel,
   inferListingArea,
   inferListingStatus,
+  inventoryListingPriceUsd,
   listingPriceLine,
   inventoryGalleryUrls,
   LISTING_IMAGE_FALLBACK,
   pickInventoryThumbnail,
 } from "@/lib/portfolio-listing";
+import { formatPriceForSiteCurrency, parseUsdNumber, useSiteCurrency } from "@/lib/site-currency";
 import { COMMON_COPY } from "@/lib/i18n/common";
 import { useSiteCopy } from "@/lib/site-language";
+import { propertyListingPath } from "@/lib/site-paths";
 
 export const HIGHLIGHTED_CARD_BRAND = "#01514E";
 export const HIGHLIGHTED_CARD_ACCENT = "#e0fdac";
@@ -37,6 +40,9 @@ export type FeaturedCardModel = {
   imageCandidates?: string[];
   imageAlt: string;
   area: string;
+  /** Canonical USD for navbar currency conversion; null uses `priceDisplay` fallback. */
+  priceUsd: number | null;
+  /** Raw marketing label when USD amount is unknown (templates, non-USD dev projects). */
   priceDisplay: string;
   ownership: string;
   bedrooms: string;
@@ -59,16 +65,6 @@ export function resolveCalendarTenure(ownership: string, leaseYears: string | nu
   const o = ownership.toLowerCase();
   if (/\bfreehold\b/.test(o) && !/\bleasehold\b/.test(o)) return { kind: "infinity" };
   return { kind: "dash" };
-}
-
-function formatCardPrice(row: PropertyInventoryListing): string {
-  if (row.estimatePriceUsd) {
-    const raw = String(row.estimatePriceUsd).replace(/,/g, "").trim();
-    const n = Number(raw);
-    if (!Number.isNaN(n) && n > 0) return `USD ${n.toLocaleString("en-US")}`;
-    if (raw) return `USD ${raw}`;
-  }
-  return listingPriceLine(row.description);
 }
 
 function displayBedrooms(row: PropertyInventoryListing): string {
@@ -107,14 +103,15 @@ export function inventoryRowToFeaturedModel(row: PropertyInventoryListing, idx: 
   const displayTitle = stripEmojis(row.title || row.code) || row.code;
   return {
     id: row.id,
-    href: `/properties/${encodeURIComponent(row.code)}`,
+    href: propertyListingPath(row.code),
     code: row.code,
     title: displayTitle,
     imageUrl: img,
     imageCandidates: gallery.length > 0 ? gallery : [img],
     imageAlt: `${row.code} property photo`,
     area,
-    priceDisplay: formatCardPrice(row),
+    priceUsd: inventoryListingPriceUsd(row.estimatePriceUsd, row.description),
+    priceDisplay: listingPriceLine(row.description),
     ownership,
     bedrooms: displayBedrooms(row),
     buildingSqm: row.buildingSizeSqm?.trim() ? row.buildingSizeSqm : null,
@@ -149,6 +146,8 @@ export function developmentProjectToFeaturedModel(p: DevelopmentFeaturedInput, i
       : `${p.bedroomsMin}–${p.bedroomsMax}`;
   const priceDisplay =
     p.priceFrom > 0 ? `${p.currency} ${p.priceFrom.toLocaleString("en-US")}` : "Price on request";
+  const priceUsd =
+    p.priceFrom > 0 && p.currency.trim().toUpperCase() === "USD" ? p.priceFrom : null;
   const leaseYears = inferLeaseYearsLabel(p.shortDescription);
   const showGreatDeal = Boolean(p.featured) || idx >= 2;
   const category =
@@ -162,6 +161,7 @@ export function developmentProjectToFeaturedModel(p: DevelopmentFeaturedInput, i
     imageUrl: p.heroImageUrl ?? null,
     imageAlt: p.title,
     area: p.area?.trim() || "Bali",
+    priceUsd,
     priceDisplay,
     ownership: p.propertyType?.trim() || "Off-plan",
     bedrooms,
@@ -184,6 +184,11 @@ export type FeaturedListingCardProps = {
 
 export function FeaturedListingCard({ model: row, idx, onImageUnavailable }: FeaturedListingCardProps) {
   const common = useSiteCopy(COMMON_COPY);
+  const currency = useSiteCurrency();
+  const priceLabel = useMemo(
+    () => formatPriceForSiteCurrency(row.priceUsd, row.priceDisplay, currency),
+    [row.priceUsd, row.priceDisplay, currency],
+  );
   const candidates = useMemo(() => {
     const raw = row.imageCandidates?.length
       ? row.imageCandidates
@@ -336,7 +341,7 @@ export function FeaturedListingCard({ model: row, idx, onImageUnavailable }: Fea
                 isExclusive ? "text-white" : "text-[#1c1917]",
               ].join(" ")}
             >
-              {row.priceDisplay}
+              {priceLabel}
             </span>
             <span
               className={[
