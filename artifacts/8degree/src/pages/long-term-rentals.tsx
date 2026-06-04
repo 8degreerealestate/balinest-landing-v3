@@ -5,11 +5,11 @@ import { useListInventoryListings } from "@workspace/api-client-react";
 import type { PropertyInventoryListing } from "@workspace/api-client-react";
 import { borrowInventoryImages } from "@/lib/portfolio-listing";
 import {
-  filtersFromSearchPayload,
   inventoryListingMatchesSearch,
   searchFiltersAreActive,
   type PropertySearchFilterState,
 } from "@/lib/property-search-filters";
+import { filtersFromSearchPayload } from "@/lib/property-search-url";
 import { Seo } from "@/components/site/Seo";
 import {
   PropertySearchPanel,
