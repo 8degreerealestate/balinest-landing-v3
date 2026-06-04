@@ -23,7 +23,7 @@ If a file is missing, the build uses temporary fallbacks from `/site-media/` unt
 **CTAs** (edit `scripts/partner-landings.config.json`, then rebuild):
 
 - Balinest: GHL report form + `wa.link/5ouk5b`
-- Only Stays: contact page + `wa.link/paxsz0` (update `formUrl` / `whatsappUrl` when partner-specific links are available)
+- Only Stays: GHL report form (modal) + `wa.link/paxsz0` (set a different `formUrl` in config if Only Stays gets its own GHL form)
 
 After adding files, run from repo root:
 

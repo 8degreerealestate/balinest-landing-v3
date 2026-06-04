@@ -725,7 +725,11 @@
           <li>The mistakes that cost first-time investors time and money</li>
           <li>The data behind Bali's rental demand</li>
         </ul>
-        <a href="https://8degree.co/contact" class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+        <a
+          href="https://api.leadconnectorhq.com/widget/form/ZGch73tA3ARy81tNy2P8"
+          class="btn btn-primary"
+          data-open-form="report"
+        >
           <span class="arr">↓</span>
           Download the 2026 Market Report
         </a>
@@ -762,7 +766,45 @@
   </div>
 </footer>
 
+<div class="form-modal" id="reportFormModal" aria-hidden="true">
+  <div class="form-modal-dialog" role="dialog" aria-modal="true" aria-label="Download report form">
+    <button class="form-modal-close" id="reportFormClose" aria-label="Close form">×</button>
+    <iframe
+      src="https://api.leadconnectorhq.com/widget/form/ZGch73tA3ARy81tNy2P8"
+      title="Download report form"
+      loading="lazy"
+    ></iframe>
+  </div>
+</div>
 
+<script>
+  const reportFormModal = document.getElementById('reportFormModal');
+  const reportFormClose = document.getElementById('reportFormClose');
+
+  document.querySelectorAll('[data-open-form="report"]').forEach((el) => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      reportFormModal?.classList.add('open');
+      reportFormModal?.setAttribute('aria-hidden', 'false');
+    });
+  });
+  reportFormClose?.addEventListener('click', () => {
+    reportFormModal?.classList.remove('open');
+    reportFormModal?.setAttribute('aria-hidden', 'true');
+  });
+  reportFormModal?.addEventListener('click', (e) => {
+    if (e.target === reportFormModal) {
+      reportFormModal.classList.remove('open');
+      reportFormModal.setAttribute('aria-hidden', 'true');
+    }
+  });
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && reportFormModal?.classList.contains('open')) {
+      reportFormModal.classList.remove('open');
+      reportFormModal.setAttribute('aria-hidden', 'true');
+    }
+  });
+</script>
 
 </body>
 </html>

@@ -28,9 +28,9 @@
       "partnerLogoAlt": "Only Stays",
       "partnerLogoInvert": false,
       "partnerBlurb": "The villa you're in is professionally managed by <strong>Only Stays</strong> — the same hospitality standard you're experiencing right now, backed by professional operations across Bali.",
-      "formUrl": "https://8degree.co/contact",
+      "formUrl": "https://api.leadconnectorhq.com/widget/form/ZGch73tA3ARy81tNy2P8",
       "whatsappUrl": "https://wa.link/paxsz0",
-      "formOpensInModal": false
+      "formOpensInModal": true
     }
   ]
 }
