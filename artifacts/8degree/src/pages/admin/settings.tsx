@@ -23,8 +23,10 @@ export default function AdminSettings() {
             PROPERTY_INVENTORY_SHEET_EXPORT_URL / SPREADSHEET_ID / SHEET_GID: optional sheet overrides (see API server).
           </li>
           <li className="text-foreground/80 list-none -ml-5 mt-2 font-sans text-[13px]">
-            <strong>Featured on the public site:</strong> rows come from the sheet; <strong>featured / draft / sold</strong>{" "}
-            overrides are stored in Postgres (<code>inventory_listing_meta</code>) when you use Admin → Inventory actions.
+            <strong>Featured on the public site:</strong> add a <code>Featured</code> column on the sheet (values{" "}
+            <code>Yes</code> / <code>Y</code> / <code>1</code>) for homepage highlighted listings. Admin → Inventory
+            star actions still override when set. <strong>Draft / sold</strong> overrides are stored in Postgres (
+            <code>inventory_listing_meta</code>).
             Apply the SQL migration in <code className="text-xs">scripts/sql/inventory_listing_meta.sql</code> if PATCH
             returns 503.
           </li>

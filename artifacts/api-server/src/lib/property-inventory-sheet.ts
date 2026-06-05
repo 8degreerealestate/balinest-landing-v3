@@ -42,6 +42,8 @@ export type SheetListingRow = {
   listingUrl: string | null;
   description: string;
   channel: "silent" | "website";
+  /** When true, listing is prioritized on the homepage highlighted strip (up to 6 cards). */
+  featured: boolean;
   sortOrder: number;
   createdAt: string;
   updatedAt: string;
@@ -523,6 +525,27 @@ function rowChannel(row: Record<string, string>): "silent" | "website" {
   return "website";
 }
 
+function isTruthySheetFlag(raw: string): boolean {
+  const v = raw.trim().toLowerCase();
+  if (!v) return false;
+  return ["yes", "y", "true", "1", "featured", "highlight", "highlighted", "on", "✓", "✅", "x"].includes(v);
+}
+
+/** Sheet column for homepage highlighted listings (not a separate “tag” field). */
+function rowFeatured(row: Record<string, string>): boolean {
+  const raw = normalizedRowGet(
+    row,
+    "Featured",
+    "featured",
+    "Highlight",
+    "Highlighted",
+    "Homepage Featured",
+    "Homepage",
+    "Highlight on homepage",
+  );
+  return isTruthySheetFlag(raw);
+}
+
 /** Reject HTML / auth walls / empty bodies so we never treat a failed export as an empty inventory. */
 export function looksLikePropertyInventorySheetCsv(text: string): boolean {
   const s = text.replace(/^\ufeff/, "").trimStart();
@@ -630,6 +653,7 @@ export function parsePropertyInventorySheetCsv(csvText: string): SheetListingRow
     const redirectUrl = parseListingUrl(redirectUrlCell);
     const listingUrl = redirectUrl ?? sourceUrl;
     const channel = rowChannel(row);
+    const featured = rowFeatured(row);
     const sortOrder = i * 10;
     const parsed = enrichListingFieldsFromLegacy(
       code,
@@ -655,6 +679,7 @@ export function parsePropertyInventorySheetCsv(csvText: string): SheetListingRow
         listingUrl,
         description: String(desc).slice(0, 100_000),
         channel,
+        featured,
       }),
     );
     out.push({

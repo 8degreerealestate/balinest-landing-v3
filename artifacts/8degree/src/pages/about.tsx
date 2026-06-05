@@ -777,8 +777,8 @@ export default function About() {
       {/* Hero */}
       <div className="relative h-[55vh] min-h-[420px] overflow-hidden">
         <img
-          src={SITE_MEDIA.heroPoster}
-          alt="Bali"
+          src={SITE_MEDIA.teamGroupHero}
+          alt="8 Degree team"
           className="hero-image-breathe h-full w-full object-cover object-center"
           onError={(e) => {
             e.currentTarget.src = SITE_MEDIA.heroStill;

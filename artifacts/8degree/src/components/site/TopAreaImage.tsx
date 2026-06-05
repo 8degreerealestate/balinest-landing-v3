@@ -16,11 +16,11 @@ export function TopAreaImage({ alt }: { alt: string }) {
       loading="lazy"
       onError={() => {
         if (src === SITE_MEDIA.topArea) {
-          setSrc(SITE_MEDIA.heroPoster);
+          setSrc(SITE_MEDIA.heroStill);
           return;
         }
-        if (src === SITE_MEDIA.heroPoster) {
-          setSrc(SITE_MEDIA.heroStill);
+        if (src === SITE_MEDIA.heroStill) {
+          setSrc(SITE_MEDIA.heroPoster);
           return;
         }
         setSrc(FALLBACK);

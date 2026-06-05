@@ -37,7 +37,7 @@ export function HeroMedia() {
           }
         : {
             videoSrc: SITE_MEDIA.heroVideo,
-            posterSrc: SITE_MEDIA.heroPoster,
+            posterSrc: SITE_MEDIA.heroStill,
             stillFallback: SITE_MEDIA.heroStill,
           },
     [isMobile],
@@ -90,7 +90,7 @@ export function HeroMedia() {
       muted
       loop
       playsInline
-      preload="metadata"
+      preload="auto"
       poster={posterSrc}
       onError={() => setVideoFailed(true)}
     >

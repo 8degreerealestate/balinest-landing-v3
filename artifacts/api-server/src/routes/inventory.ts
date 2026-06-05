@@ -212,7 +212,7 @@ function mapExternalRow(r: SheetListingRow) {
     sortOrder: r.sortOrder,
     createdAt: r.createdAt,
     updatedAt: r.updatedAt,
-    featured: false,
+    featured: Boolean(r.featured),
     visibility: "active" as "active" | "draft",
     saleStatus: "available" as "available" | "sold",
     postedAt: r.updatedAt,

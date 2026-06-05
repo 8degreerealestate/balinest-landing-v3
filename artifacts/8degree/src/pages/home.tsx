@@ -525,45 +525,43 @@ export default function Home() {
             <p className="text-muted-foreground">{t.clientVoicesSub}</p>
           </div>
 
-          <Carousel opts={{ align: "center", loop: true }} className="mx-auto w-full max-w-4xl px-1 sm:px-2">
-            <div className="flex items-center gap-2 sm:gap-4">
-              <CarouselPrevious
-                className="static h-10 w-10 shrink-0 translate-x-0 translate-y-0 border-primary/40 bg-background text-primary shadow-sm hover:bg-primary/10 disabled:opacity-40"
-                aria-label="Previous testimonial"
-              />
-              <div className="min-w-0 flex-1">
-                <CarouselContent className="-ml-0">
-                  {TESTIMONIAL_TEMPLATES.map((row) => (
-                    <CarouselItem key={row.id} className="basis-full pl-0">
-                      <div className="h-full rounded-2xl border border-border bg-background p-6 sm:p-8">
-                        <div className="flex items-center gap-4">
-                          <img
-                            src={row.avatarUrl}
-                            alt={row.name}
-                            className="h-11 w-11 shrink-0 rounded-full object-cover"
-                            loading="lazy"
-                            decoding="async"
-                          />
-                          <div className="min-w-0">
-                            <div className="truncate font-medium text-foreground">{row.name}</div>
-                            <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-primary/80">
-                              Client testimony
-                            </div>
+          <Carousel opts={{ align: "center", loop: true }} className="mx-auto w-full max-w-4xl">
+            <div className="relative px-11 sm:px-12 md:px-14">
+              <CarouselContent className="-ml-0">
+                {TESTIMONIAL_TEMPLATES.map((row) => (
+                  <CarouselItem key={row.id} className="basis-full pl-0">
+                    <div className="h-full rounded-2xl border border-border bg-background p-6 sm:p-8">
+                      <div className="flex items-center gap-4">
+                        <img
+                          src={row.avatarUrl}
+                          alt={row.name}
+                          className="h-11 w-11 shrink-0 rounded-full object-cover"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                        <div className="min-w-0">
+                          <div className="truncate font-medium text-foreground">{row.name}</div>
+                          <div className="text-[11px] font-medium uppercase tracking-[0.22em] text-primary/80">
+                            Client testimony
                           </div>
                         </div>
-
-                        <div className="mt-6 space-y-4 text-sm font-light leading-relaxed text-muted-foreground">
-                          {row.quote.split("\n\n").map((para) => (
-                            <p key={para}>{para}</p>
-                          ))}
-                        </div>
                       </div>
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-              </div>
+
+                      <div className="mt-6 space-y-4 text-sm font-light leading-relaxed text-muted-foreground">
+                        {row.quote.split("\n\n").map((para) => (
+                          <p key={para}>{para}</p>
+                        ))}
+                      </div>
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious
+                className="left-0 top-1/2 z-10 h-9 w-9 -translate-y-1/2 border-primary/40 bg-background text-primary shadow-sm hover:bg-primary/10 disabled:opacity-40 sm:h-10 sm:w-10 md:-left-2"
+                aria-label="Previous testimonial"
+              />
               <CarouselNext
-                className="static h-10 w-10 shrink-0 translate-x-0 translate-y-0 border-primary/40 bg-background text-primary shadow-sm hover:bg-primary/10 disabled:opacity-40"
+                className="right-0 top-1/2 z-10 h-9 w-9 -translate-y-1/2 border-primary/40 bg-background text-primary shadow-sm hover:bg-primary/10 disabled:opacity-40 sm:h-10 sm:w-10 md:-right-2"
                 aria-label="Next testimonial"
               />
             </div>

@@ -6,8 +6,8 @@
  *   hero-cinematic.mp4      ← Drive ID 10sSFDovjSw_krEVU918oNqNQPrWVFX9z (desktop hero)
  *   hero-mobile.mp4         ← encoded from brand mobile hero .mov (~3MB)
  *   hero-mobile-poster.jpg  ← first frame of hero-mobile.mp4 (mobile poster/thumbnail)
- *   hero-still.jpg          ← Drive ID 1qaXnGteqT0MRHOCrCILtQmEh3wRI42_x
- *   hero-poster.jpg         ← Drive ID 1ub5eDDyyhD6lKjTNd5IfHXgd8G-0jqi-
+ *   hero-still.jpg          ← Drive ID 1qaXnGteqT0MRHOCrCILtQmEh3wRI42_x (homepage video poster)
+ *   hero-poster.jpg         ← Drive ID 1ub5eDDyyhD6lKjTNd5IfHXgd8G-0jqi- (team group — About page only)
  *
  * Team photos     ← Drive folder 1y_5qRH398Jexl7ccmWx_63lQ7jSXxePb
  * Area images     ← Drive folder 1_XsNdvz-ip0KqnLnecHdyxNDQFlE84Dp
@@ -27,7 +27,10 @@
 
 export const SITE_MEDIA = {
   heroVideo: "/site-media/hero-cinematic.mp4",
-  heroPoster: "/site-media/hero-poster.jpg",
+  /** Still shown before desktop hero video loads (must not be the team group photo). */
+  heroPoster: "/site-media/hero-still.jpg",
+  /** Team group photo — About page hero only. */
+  teamGroupHero: "/site-media/hero-poster.jpg",
   /** Homepage hero on mobile — first frame in hero-mobile-poster.jpg */
   heroMobileVideo: "/site-media/hero-mobile.mp4",
   heroMobilePoster: "/site-media/hero-mobile-poster.jpg",
@@ -42,13 +45,11 @@ export const SITE_MEDIA = {
   team: [
     { src: "/site-media/team-robert.jpg",   name: "Robert",   role: "CEO" },
     { src: "/site-media/team-stephen.jpg",  name: "Stephen",  role: "Listing Agent" },
-    { src: "/site-media/team-maya.jpg",     name: "Maya",     role: "Property Adviser" },
     { src: "/site-media/team-ryan.jpg",     name: "Ryan",     role: "Marketing Manager" },
     { src: "/site-media/team-mariam.jpg",   name: "Mariam",   role: "Business Office Manager" },
     { src: "/site-media/team-yohanes.jpg",  name: "Yohanes",  role: "Executive Sales Advisor" },
     { src: "/site-media/team-kinan.jpg",    name: "Kinan",    role: "Social Media Manager" },
     { src: "/site-media/team-rangga.jpg",   name: "Rangga",   role: "Photographer & Graphic Designer" },
-    { src: "/site-media/team-charis.jpg",   name: "Charis",   role: "Videographer" },
   ] as const,
 
   areas: [
