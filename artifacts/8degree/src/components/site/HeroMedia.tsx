@@ -170,7 +170,7 @@ export function HeroMedia() {
         key={videoSrc}
         className={[
           heroVideoClass,
-          "z-[1]",
+          "hero-bg-video z-[1]",
           isPlaying ? "opacity-100" : "opacity-0",
         ].join(" ")}
         autoPlay
