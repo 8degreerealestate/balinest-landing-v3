@@ -26,9 +26,13 @@ export type HomeFeaturedListingTemplate = {
   landSqm?: string;
   /** e.g. "30 Years", or omit / null for "—" */
   leaseYears?: string | null;
+  /** Homepage sort priority — not the EXCLUSIVE badge. */
   featured?: boolean;
+  /** EXCLUSIVE badge + green card (only when legally accurate). */
+  showExclusive?: boolean;
   category?: "Residential" | "Investment";
-  showGreatDeal?: boolean;
+  /** Bottom-right photo badge: Ready, Off-plan, Great deal, or omit. */
+  statusBadge?: string | null;
 };
 
 /**
@@ -52,7 +56,7 @@ export const HOME_FEATURED_LISTINGS_TEMPLATE: HomeFeaturedListingTemplate[] = [
     leaseYears: "30 Years",
     featured: true,
     category: "Residential",
-    showGreatDeal: false,
+    statusBadge: null,
   },
   {
     id: "tpl-2",
@@ -70,7 +74,7 @@ export const HOME_FEATURED_LISTINGS_TEMPLATE: HomeFeaturedListingTemplate[] = [
     leaseYears: null,
     featured: true,
     category: "Investment",
-    showGreatDeal: false,
+    statusBadge: null,
   },
   {
     id: "tpl-3",
@@ -88,7 +92,7 @@ export const HOME_FEATURED_LISTINGS_TEMPLATE: HomeFeaturedListingTemplate[] = [
     leaseYears: "25 Years",
     featured: false,
     category: "Residential",
-    showGreatDeal: true,
+    statusBadge: "Ready",
   },
   {
     id: "tpl-4",
@@ -106,7 +110,7 @@ export const HOME_FEATURED_LISTINGS_TEMPLATE: HomeFeaturedListingTemplate[] = [
     leaseYears: "20 Years",
     featured: false,
     category: "Investment",
-    showGreatDeal: true,
+    statusBadge: "Ready",
   },
   {
     id: "tpl-5",
@@ -124,7 +128,7 @@ export const HOME_FEATURED_LISTINGS_TEMPLATE: HomeFeaturedListingTemplate[] = [
     leaseYears: null,
     featured: false,
     category: "Residential",
-    showGreatDeal: true,
+    statusBadge: "Ready",
   },
   {
     id: "tpl-6",
@@ -142,7 +146,7 @@ export const HOME_FEATURED_LISTINGS_TEMPLATE: HomeFeaturedListingTemplate[] = [
     leaseYears: "28 Years",
     featured: false,
     category: "Investment",
-    showGreatDeal: true,
+    statusBadge: "Ready",
   },
   {
     id: "tpl-7",
@@ -160,7 +164,7 @@ export const HOME_FEATURED_LISTINGS_TEMPLATE: HomeFeaturedListingTemplate[] = [
     leaseYears: "22 Years",
     featured: false,
     category: "Residential",
-    showGreatDeal: true,
+    statusBadge: "Ready",
   },
   {
     id: "tpl-8",
@@ -178,7 +182,7 @@ export const HOME_FEATURED_LISTINGS_TEMPLATE: HomeFeaturedListingTemplate[] = [
     leaseYears: null,
     featured: true,
     category: "Residential",
-    showGreatDeal: false,
+    statusBadge: null,
   },
   {
     id: "tpl-9",
@@ -196,6 +200,6 @@ export const HOME_FEATURED_LISTINGS_TEMPLATE: HomeFeaturedListingTemplate[] = [
     leaseYears: "30 Years",
     featured: false,
     category: "Investment",
-    showGreatDeal: true,
+    statusBadge: "Ready",
   },
 ];

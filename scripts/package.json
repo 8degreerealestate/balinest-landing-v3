@@ -13,6 +13,7 @@
     "crm:test": "tsx ./test-gohighlevel.ts",
     "seo:crawl": "tsx ../scripts/seo/crawl-wordpress.ts",
     "seo:build": "tsx ../scripts/seo/build-artifacts.ts",
+    "seo:prerender-listings": "tsx --tsconfig ../artifacts/8degree/tsconfig.json ../scripts/seo/prerender-listing-pages.ts",
     "seo:compare": "tsx ../scripts/seo/compare-sites.ts"
   },
   "dependencies": {

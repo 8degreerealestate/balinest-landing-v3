@@ -821,7 +821,7 @@ export default function LocationGuidePage() {
               <h2 className="text-[11px] font-bold uppercase tracking-[0.24em] text-[#0d4542] md:text-xs">{copy.compareKicker}</h2>
               <p className="mt-5 text-base font-light leading-relaxed text-[#1c1917]/88 md:text-lg">{copy.compareBody}</p>
             </div>
-            <div className="-mt-[2cm] rounded-2xl border border-[#0d4542]/12 bg-white p-5 shadow-[0_16px_40px_-20px_rgba(13,69,66,0.16)] md:p-6">
+            <div className="relative z-10 rounded-2xl border border-[#0d4542]/12 bg-white p-5 shadow-[0_16px_40px_-20px_rgba(13,69,66,0.16)] md:p-6">
               <LocationGuideReportForm />
             </div>
           </div>

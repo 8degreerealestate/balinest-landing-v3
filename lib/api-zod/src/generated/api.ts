@@ -584,7 +584,7 @@ export const listInventoryListingsQueryOffsetDefault = 0;
 export const listInventoryListingsQueryOffsetMin = 0;
 
 export const ListInventoryListingsQueryParams = zod.object({
-  channel: zod.enum(["silent", "website"]).optional(),
+  channel: zod.enum(["silent", "website", "rentals"]).optional(),
   limit: zod.coerce
     .number()
     .min(1)
@@ -619,7 +619,7 @@ export const ListInventoryListingsResponse = zod.object({
       livingRoom: zod.string().nullable(),
       listingUrl: zod.string().nullable(),
       description: zod.string(),
-      channel: zod.enum(["silent", "website"]),
+      channel: zod.enum(["silent", "website", "rentals"]),
       sortOrder: zod.number(),
       createdAt: zod.coerce.date().nullable(),
       updatedAt: zod.coerce.date().nullable(),

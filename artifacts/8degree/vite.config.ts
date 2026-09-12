@@ -5,6 +5,32 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { spaStaticConflictGuard } from "./src/lib/spa-static-conflict-guard";
 
+const DEFAULT_GTM_ID = "GTM-KW37FZ3F";
+
+function gtmHtmlPlugin(): Plugin {
+  const gtmId = (process.env.VITE_GTM_ID ?? DEFAULT_GTM_ID).trim();
+  return {
+    name: "8degree-gtm-html",
+    transformIndexHtml(html) {
+      if (!gtmId) return html;
+      const headScript = `<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','${gtmId}');</script>
+<!-- End Google Tag Manager -->`;
+      const bodyNoscript = `<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=${gtmId}"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->`;
+      return html
+        .replace("</head>", `    ${headScript}\n  </head>`)
+        .replace("<body>", `<body>\n    ${bodyNoscript}`);
+    },
+  };
+}
+
 function loadSitemapPaths(): string[] {
   const generated = path.resolve(import.meta.dirname, "../../migration/sitemap-paths.json");
   if (fs.existsSync(generated)) {
@@ -78,6 +104,7 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
+    gtmHtmlPlugin(),
     spaStaticConflictGuard(path.resolve(import.meta.dirname, "public")),
     seoStaticPlugin(basePath),
   ],

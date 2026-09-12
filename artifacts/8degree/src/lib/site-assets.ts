@@ -3,10 +3,10 @@
  * Source Drive folder IDs are preserved in scripts/fetch-site-media-from-drive.sh.
  *
  * Hero assets
- *   hero-cinematic.mp4      ← Drive ID 10sSFDovjSw_krEVU918oNqNQPrWVFX9z (desktop hero)
- *   hero-mobile.mp4         ← encoded from brand mobile hero .mov (~3MB)
- *   hero-mobile-poster.jpg  ← first frame of hero-mobile.mp4 (mobile poster/thumbnail)
- *   hero-still.jpg          ← Drive ID 1qaXnGteqT0MRHOCrCILtQmEh3wRI42_x (homepage video poster)
+ *   hero-cinematic.mp4      ← homepage desktop hero (8Degree-Web-Update-August, muted web encode)
+ *   hero-mobile.mp4         ← Palm Tree Pool Sunset (Artlist vertical) → 1280×2276 web mp4 (~3MB)
+ *   hero-mobile-poster.jpg  ← frame from hero-mobile.mp4 (mobile poster/thumbnail)
+ *   hero-still.jpg          ← desktop hero poster (frame from hero-cinematic.mp4)
  *   hero-poster.jpg         ← Drive ID 1ub5eDDyyhD6lKjTNd5IfHXgd8G-0jqi- (team group — About page only)
  *
  * Team photos     ← Drive folder 1y_5qRH398Jexl7ccmWx_63lQ7jSXxePb
@@ -78,9 +78,8 @@ export const SITE_MEDIA = {
   /** Seller's Agent landing (`/seller-agents`). */
   sellerAgentHero: "/site-media/seller-agent-hero.png",
 
-  /** Contact page hero — Drive file 1EzAf7m8c_zn56-2vacaSGJOEVyjphbnU */
-  contactHero:
-    "https://drive.google.com/thumbnail?id=1EzAf7m8c_zn56-2vacaSGJOEVyjphbnU&sz=w2000",
+  /** Contact page hero — Drive file 1AyGixmvqpLI7d84t4amUkrN3FK54NSZG (proxied for reliable CDN). */
+  contactHero: "/api/inventory/thumb/1AyGixmvqpLI7d84t4amUkrN3FK54NSZG",
 
   /** Legal Guide hero (`/legal-guide`). */
   legalGuideHero: "/site-media/legal-guide-hero.png",

@@ -143,6 +143,13 @@ function buildPageMetadata(audit?: SeoAuditFile): Record<string, PageSeoRecord> 
         "Explore curated villas, developments, and land across Bali. Refine your search and view available listings.",
       canonical: "/projects",
     },
+    "/long-term-rentals": {
+      seoTitle: "Long Term Rentals · Bali Villa & Home Rentals",
+      metaDescription:
+        "Explore villa and home rentals for extended stays in Bali — relocation, remote work, or seasonal living.",
+      canonical: "/long-term-rentals",
+      h1: "Long Term Rentals",
+    },
     "/journal": {
       seoTitle: "Journal · Bali Property Insights",
       metaDescription:

@@ -11,8 +11,10 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { AdminSidebar } from "@/components/layout/AdminSidebar";
 import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
+import { GtmRouteTracker } from "@/components/site/GtmRouteTracker";
 
 import { getApiBaseUrl } from "@/lib/api-base";
+import { ensureCurrencyRatesLoaded } from "@/lib/site-currency";
 import { Seo } from "@/components/site/Seo";
 import { SITE_NAME } from "@/lib/site-seo";
 import {
@@ -244,12 +246,14 @@ function Router() {
 function App() {
   useEffect(() => {
     clearChunkReloadFlag();
+    void ensureCurrencyRatesLoaded();
   }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <WouterRouter base={(import.meta.env.BASE_URL ?? "/").replace(/\/$/, "")}>
+          <GtmRouteTracker />
           <Router />
         </WouterRouter>
         <Toaster />

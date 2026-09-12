@@ -1,22 +1,27 @@
+import { BALI_AREA_GROUPS } from "@/lib/bali-search-areas";
 import { parseUsdNumber } from "@/lib/site-currency";
 
 export const LISTING_IMAGE_FALLBACK =
   "https://images.unsplash.com/photo-1613490908578-7804bb61483b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80";
 
-/** Group variants (e.g. 8DV106A / 8DV106B) for sharing gallery images. */
+/**
+ * Group only letter-suffixed unit variants (e.g. 8DV106A / 8DV106B) for
+ * optional gallery sharing. Never collapse unrelated codes like 8D25138 → 8D251.
+ */
 export function listingFamilyKey(code: string): string {
   const c = code.trim().toUpperCase();
   const letterSuffix = /^(.+\d)([A-Z])$/.exec(c);
   if (letterSuffix && letterSuffix[1].length >= 5) return letterSuffix[1];
-  if (/^8D\d/i.test(c) && c.length >= 6) return c.slice(0, 5);
-  if (/^8DV\d/i.test(c) && c.length >= 6) return c.slice(0, 5);
   return c;
 }
 
 /** True when URL can be used in `<img src>` (not a Drive folder link). */
 export function isDisplayableInventoryImageUrl(url: string | null | undefined): boolean {
   const t = (url ?? "").trim();
-  if (!t || !/^https?:\/\//i.test(t)) return false;
+  if (!t) return false;
+  // Same-origin Drive thumb proxy (already safe for <img>).
+  if (/^\/api\/inventory\/thumb\/[a-zA-Z0-9_-]+$/i.test(t)) return true;
+  if (!/^https?:\/\//i.test(t)) return false;
   if (/drive\.google\.com\/drive\/folders\//i.test(t)) return false;
   return true;
 }
@@ -36,10 +41,15 @@ export function listingHasDriveFolderSource(row: {
 export function proxyInventoryImageUrl(url: string | null | undefined): string | null {
   const t = (url ?? "").trim();
   if (!t) return null;
+  if (/^\/api\/inventory\/thumb\/[a-zA-Z0-9_-]+$/i.test(t)) return t;
   const thumb = /drive\.google\.com\/thumbnail\?id=([a-zA-Z0-9_-]+)/i.exec(t);
   if (thumb?.[1]) return `/api/inventory/thumb/${encodeURIComponent(thumb[1])}`;
   const file = /drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/i.exec(t);
   if (file?.[1]) return `/api/inventory/thumb/${encodeURIComponent(file[1])}`;
+  const openId = /drive\.google\.com\/(?:uc|open)\?[^#]*[?&]id=([a-zA-Z0-9_-]+)/i.exec(t);
+  if (openId?.[1]) return `/api/inventory/thumb/${encodeURIComponent(openId[1])}`;
+  // Never use Drive folder links as <img src>.
+  if (/drive\.google\.com\/drive\/folders\//i.test(t)) return null;
   return t;
 }
 
@@ -104,21 +114,15 @@ export function borrowInventoryImages<T extends { code: string; imageUrl?: strin
   };
 }
 
-const AREA_KEYWORDS: { area: string; keys: string[] }[] = [
-  { area: "Seminyak", keys: ["Seminyak", "Oberoi", "Bidadari", "Gang Kahyangan", "Dewi Sri"] },
-  { area: "Canggu", keys: ["Canggu", "Berawa", "Pererenan", "Batu Bolong", "Padonan", "Babakan", "Tumbak Bayuh", "Kayu Tulang", "Buduk", "Munggu", "Seseh", "Cemagi", "Mengening"] },
-  { area: "Umalas", keys: ["Umalas", "Kerobokan", "Petitenget"] },
-  { area: "Uluwatu", keys: ["Uluwatu", "Bingin", "Pecatu", "Balangan", "Ungasan", "Melasti", "Dreamland", "Jimbaran", "Bukit"] },
-  { area: "Ubud", keys: ["Ubud", "Tegallalang", "Gianyar", "Kemenuh", "Peliatan", "Mas "] },
-  { area: "Sanur", keys: ["Sanur"] },
-  { area: "Nusa Dua", keys: ["Nusa Dua", "Tanjung Benoa"] },
-  { area: "Tabanan", keys: ["Tabanan", "Tanah Lot", "Nyanyi", "Kedungu", "Kaba-Kaba", "Buwit"] },
-];
-
-export function inferListingArea(title: string, description: string): string {
-  const hay = `${title}\n${description}`.slice(0, 1200);
-  for (const { area, keys } of AREA_KEYWORDS) {
-    if (keys.some((k) => hay.includes(k))) return area;
+export function inferListingArea(
+  title: string,
+  description: string,
+  location?: string | null,
+): string {
+  const hay = `${title}\n${description}\n${location ?? ""}`.slice(0, 1600);
+  for (const { area, keys } of BALI_AREA_GROUPS) {
+    if (hay.includes(area)) return area;
+    if (keys.some((k) => k.trim() && hay.includes(k.trim()))) return area;
   }
   return "Bali";
 }
@@ -171,6 +175,68 @@ export function listingShortBlurb(description: string, maxLen = 160): string {
 }
 
 /** Admin display only; derived from marketing copy until CRM exposes a status field. */
+/** Parse sheet `Tag` cell — up to 3 comma-separated photo badge labels. */
+export function parseListingTagsCell(raw: string | null | undefined): string[] {
+  const normalized = (raw ?? "").trim().replace(/^[,;|]+/, "").replace(/[,;|]+$/, "");
+  if (!normalized) return [];
+  return normalized
+    .split(/[,;|]/)
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .slice(0, 3);
+}
+
+export type ListingPhotoBadgeInput = {
+  listingTags?: string[] | null;
+  exclusive?: boolean;
+  listingCategory?: string | null;
+  statusBadge?: string | null;
+  title?: string;
+  description?: string;
+};
+
+function inferCategoryBadgeLabel(input: ListingPhotoBadgeInput): string {
+  const fromSheet = input.listingCategory?.trim();
+  if (fromSheet) return fromSheet;
+  const t = `${input.title ?? ""} ${input.description ?? ""}`.toLowerCase();
+  if (/\b(villa|residence|home|house)\b/.test(t)) return "Residential";
+  return "Investment";
+}
+
+/**
+ * Photo badge slots for listing cards — sheet `Tag` column wins when present
+ * (comma-separated: top-left, top-right, bottom-right). Otherwise legacy columns.
+ * Bottom-right “Great deal” is opt-in only (Tag slot 3 or Status/Great Deal column).
+ */
+export function resolveListingPhotoBadges(input: ListingPhotoBadgeInput): {
+  showExclusive: boolean;
+  badgeTopLeft: string | null;
+  categoryLabel: string | null;
+  statusBadge: string | null;
+} {
+  const tags = (input.listingTags ?? []).map((t) => t.trim()).filter(Boolean);
+  const showExclusive =
+    Boolean(input.exclusive) || tags.some((t) => /^exclusive$/i.test(t));
+
+  if (tags.length > 0) {
+    const fromTags = tags[2] ?? null;
+    return {
+      showExclusive,
+      badgeTopLeft: tags[0] && !/^exclusive$/i.test(tags[0]) ? tags[0] : null,
+      categoryLabel: tags[1] ?? null,
+      // Prefer explicit Tag slot; if missing, fall back to sheet Status / Great Deal column.
+      statusBadge: fromTags ?? (input.statusBadge?.trim() || null),
+    };
+  }
+
+  return {
+    showExclusive,
+    badgeTopLeft: null,
+    categoryLabel: inferCategoryBadgeLabel(input),
+    statusBadge: input.statusBadge?.trim() || null,
+  };
+}
+
 export function inferListingStatus(description: string): string {
   const d = description.slice(0, 3000).toLowerCase();
   if (/\bsold\b|under contract|reserved only|fully reserved\b/.test(d)) return "Reserved";
@@ -181,11 +247,52 @@ export function inferListingStatus(description: string): string {
   return "Active";
 }
 
+/** Prefer sheet `Year of Leasehold`, then infer from marketing copy. */
+export function resolveLeaseYearsLabel(
+  sheetValue: string | null | undefined,
+  ...textSources: (string | null | undefined)[]
+): string | null {
+  const fromSheet = sheetValue?.trim();
+  if (fromSheet) {
+    if (/\byears?\b/i.test(fromSheet)) {
+      return fromSheet
+        .replace(/^(\d+)[,.](\d+)\s*years?$/i, "$1.$2 Years")
+        .replace(/^(\d+)\s*years?$/i, "$1 Years");
+    }
+    const decimal = fromSheet.match(/^(\d+)[,.](\d+)\s*\+?$/);
+    if (decimal) return `${decimal[1]}.${decimal[2]} Years`;
+    const n = fromSheet.match(/^(\d+)\s*\+?$/);
+    if (n) return `${n[1]} Years`;
+    return fromSheet;
+  }
+  for (const src of textSources) {
+    const inferred = inferLeaseYearsLabel(src ?? "");
+    if (inferred) return inferred;
+  }
+  return null;
+}
+
+/**
+ * Tenure shown beside price: prefer sheet years for leasehold
+ * (e.g. "36 Years"), otherwise the ownership label.
+ */
+export function formatTenureBesidePrice(
+  ownership: string | null | undefined,
+  leaseYears: string | null | undefined,
+  ...inferFrom: (string | null | undefined)[]
+): { ownershipLabel: string; yearsLabel: string | null } {
+  const ownershipLabel = (ownership ?? "").trim() || "—";
+  const yearsLabel = resolveLeaseYearsLabel(leaseYears, ownershipLabel, ...inferFrom);
+  return { ownershipLabel, yearsLabel };
+}
+
 /** E.g. "30 Years" for marketing copy; used on listing cards. */
 export function inferLeaseYearsLabel(description: string): string | null {
   const d = description.slice(0, 2800);
   const leaseholdParen = d.match(/Leasehold\s*\(\s*(\d+)\s*Years?\s*\)/i);
   if (leaseholdParen) return `${leaseholdParen[1]} Years`;
+  const hyphenYear = d.match(/\b(\d+)\s*[-–]\s*(?:years?|yrs?)(?:\s*leasehold)?\b/i);
+  if (hyphenYear) return `${hyphenYear[1]} Years`;
   const m = d.match(/\b(\d+)\s*(?:years?|yrs?)\b(?:\s*(?:lease|remaining))?/i);
   if (m) return `${m[1]} Years`;
   const m2 = d.match(/(\d+)\s*(?:years?|yrs?)\s*leasehold/i);

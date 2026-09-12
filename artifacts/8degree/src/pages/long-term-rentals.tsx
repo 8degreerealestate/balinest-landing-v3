@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
 import { useListInventoryListings } from "@workspace/api-client-react";
-import type { PropertyInventoryListing } from "@workspace/api-client-react";
 import { borrowInventoryImages } from "@/lib/portfolio-listing";
 import {
   inventoryListingMatchesSearch,
@@ -52,17 +51,7 @@ const RENTAL_SEARCH_PRICE_MAX_USD = 150_000;
 const EMPTY_LIST: [] = [];
 const LISTINGS_PAGE_SIZE = 9;
 
-/** Heuristic: sheet row reads as a rental / lease (not sale-only). */
-function listingLooksLikeRental(row: PropertyInventoryListing): boolean {
-  const blob = `${row.title} ${row.description}`.toLowerCase();
-  if (/\b(for sale|dijual|sale only|freehold sale)\b/i.test(blob) && !/\b(rent|rental|lease|sewa)\b/i.test(blob)) {
-    return false;
-  }
-  return /\b(rent|rental|lease|letting|\/mo|per month|monthly|annual rent|yearly|long\s*-?\s*term|lt\s*r|sewa|disewakan|kontrak|kost|villa\s+rent)\b/i.test(
-    blob,
-  );
-}
-
+/** Heuristic removed — rentals page uses sheet `Channel` = rentals only. */
 export default function LongTermRentalsPage() {
   const language = useSiteLanguage();
   const t = useMemo(() => {
@@ -72,54 +61,53 @@ export default function LongTermRentalsPage() {
         title: "Long Term Rentals",
         heroSub:
           "Explore villa and home rentals for extended stays in Bali—relocation, remote work, or seasonal living. Refine your search below to browse options.",
-        portfolioBrowseTitle: "Rental listings",
+        portfolioBrowseTitle: "Rental list",
         portfolioBrowseSubtitle:
           "Results follow your search and filters above. Use page numbers when there are more than nine matches.",
-        rentalFallbackBanner:
-          "No rows in your sheet matched rental keywords yet; showing all website listings. Tag rentals in titles or descriptions, or contact us for availability.",
+        rentalEmptyHint:
+          "Set Channel to rentals (or rental list) in your property sheet for rows that should appear here — not website (property listings).",
       },
       id: {
         kicker: "Sewa",
         title: "Sewa Jangka Panjang",
         heroSub:
           "Jelajahi sewa vila dan rumah untuk tinggal lebih lama di Bali—relokasi, kerja jarak jauh, atau hidup musiman. Sesuaikan pencarian di bawah.",
-        portfolioBrowseTitle: "Listing sewa",
+        portfolioBrowseTitle: "Daftar sewa",
         portfolioBrowseSubtitle:
           "Hasil mengikuti pencarian dan filter di atas. Gunakan nomor halaman jika lebih dari sembilan hasil.",
-        rentalFallbackBanner:
-          "Belum ada baris yang terdeteksi sebagai sewa; menampilkan semua listing website. Tambahkan kata kunci sewa di judul/deskripsi atau hubungi kami.",
+        rentalEmptyHint:
+          "Atur Channel ke rentals di sheet untuk baris yang tampil di sini — bukan website (listing properti).",
       },
       fr: {
         kicker: "Locations",
         title: "Locations longue duree",
         heroSub:
           "Villas et maisons pour sejours prolonges a Bali—relocation, teletravail ou residence saisonniere. Affinez la recherche ci-dessous.",
-        portfolioBrowseTitle: "Annonces location",
+        portfolioBrowseTitle: "Liste location",
         portfolioBrowseSubtitle:
           "Les resultats suivent votre recherche et vos filtres. Pagination au-dela de neuf biens.",
-        rentalFallbackBanner:
-          "Aucune ligne ne correspond encore aux mots-cles location; affichage de tout l inventaire web. Precisez location dans le titre ou contactez-nous.",
+        rentalEmptyHint:
+          "Definissez Channel = rentals dans la feuille pour les annonces affichees ici — pas website (vente).",
       },
       zh: {
         kicker: "租赁",
         title: "长期租赁",
         heroSub:
           "探索巴厘岛别墅与住宅的长期租赁方案——移居、远程办公或季节性居住。在下方完善搜索条件。",
-        portfolioBrowseTitle: "租赁房源",
+        portfolioBrowseTitle: "租赁列表",
         portfolioBrowseSubtitle: "结果随上方搜索与筛选更新；超过九条请用页码翻页。",
-        rentalFallbackBanner:
-          "当前表格中暂无明确租赁关键词的条目；正在显示网站全部房源。可在标题/描述中标注租赁或联系我们。",
+        rentalEmptyHint: "表格中 Channel 设为 rentals 的条目会显示在此页，而非 website（在售房源）。",
       },
       tr: {
         kicker: "Kiralik",
         title: "Uzun Donem Kiralik",
         heroSub:
           "Bali de villa ve ev kiralari—relokasyon, uzaktan calisma veya mevsimsel yasam. Asagidan aramanizi daraltin.",
-        portfolioBrowseTitle: "Kiralik ilanlar",
+        portfolioBrowseTitle: "Kiralik listesi",
         portfolioBrowseSubtitle:
           "Sonuclar ustteki arama ve filtrelere gore guncellenir. Dokuzdan fazla icin sayfa numaralari.",
-        rentalFallbackBanner:
-          "Tabloda kiralama anahtar kelimesi eslesmedi; tum web ilanlari gosteriliyor. Baslik/aciklama ekleyin veya iletisime gecin.",
+        rentalEmptyHint:
+          "Bu sayfada gosterilecek satirlar icin sheet Channel = rentals olmali — website (satilik) degil.",
       },
     };
     return map[language];
@@ -154,7 +142,7 @@ export default function LongTermRentalsPage() {
     isError: inventoryError,
     error: inventoryErr,
   } = useListInventoryListings(
-    { channel: "website", limit: 500, offset: 0 },
+    { channel: "rentals", limit: 500, offset: 0 },
     { query: { staleTime: 5 * 60_000 } },
   );
 
@@ -162,7 +150,7 @@ export default function LongTermRentalsPage() {
   const loadErrorMessage =
     inventoryErr instanceof Error ? inventoryErr.message : "Could not load rental listings";
 
-  const { portfolioFeaturedModels, showingRentalFallback } = useMemo(() => {
+  const { portfolioFeaturedModels } = useMemo(() => {
     const listingsPublic = listingsRaw.filter((row) => {
       const vis = row.visibility ?? "active";
       const sale = row.saleStatus ?? "available";
@@ -171,16 +159,12 @@ export default function LongTermRentalsPage() {
 
     const listingsBaseFiltered = listingsPublic.filter((row) => inventoryListingMatchesSearch(row, filters));
 
-    const rentalPreferred = listingsBaseFiltered.filter(listingLooksLikeRental);
-    const useFallback = rentalPreferred.length === 0 && listingsBaseFiltered.length > 0;
-    const pool = useFallback ? listingsBaseFiltered : rentalPreferred;
-
-    const sorted = [...pool].sort((a, b) => Number(!!b.featured) - Number(!!a.featured));
+    const sorted = [...listingsBaseFiltered].sort((a, b) => Number(!!b.featured) - Number(!!a.featured));
 
     const models = sorted.map((row, idx) =>
       inventoryRowToFeaturedModel(borrowInventoryImages(row, listingsPublic), idx),
     );
-    return { portfolioFeaturedModels: models, showingRentalFallback: useFallback && models.length > 0 };
+    return { portfolioFeaturedModels: models };
   }, [listingsRaw, filters]);
 
   const listingsTotalPages = Math.max(1, Math.ceil(portfolioFeaturedModels.length / LISTINGS_PAGE_SIZE));
@@ -285,15 +269,6 @@ export default function LongTermRentalsPage() {
         ) : (
           <section className="pb-16 pt-4 md:pb-20 md:pt-6" style={{ backgroundColor: BALI_PROPERTIES_PAGE_SURFACE }}>
             <div className="mx-auto max-w-[1400px] px-4 sm:px-6 md:px-10">
-              {showingRentalFallback ? (
-                <div
-                  className="mb-8 rounded-lg border border-amber-600/35 bg-amber-500/[0.08] px-4 py-3 text-sm text-foreground"
-                  role="status"
-                >
-                  {t.rentalFallbackBanner}
-                </div>
-              ) : null}
-
               <div className="mb-10 mx-auto max-w-2xl text-center md:mb-12">
                 <h2 className="font-serif text-3xl font-bold uppercase tracking-[0.06em] text-primary md:text-4xl lg:text-[2.35rem]">
                   {t.portfolioBrowseTitle}
@@ -321,6 +296,7 @@ export default function LongTermRentalsPage() {
                   hasFilters={searchFiltersAreActive(filters)}
                   websiteInventoryCount={inventoryError ? 0 : (inventoryData?.listings?.length ?? 0)}
                   inventoryUnavailable={inventoryError}
+                  emptyHint={t.rentalEmptyHint}
                 />
               ) : (
                 <>
@@ -369,10 +345,12 @@ function RentalsEmptyState({
   hasFilters,
   websiteInventoryCount,
   inventoryUnavailable,
+  emptyHint,
 }: {
   hasFilters: boolean;
   websiteInventoryCount: number;
   inventoryUnavailable: boolean;
+  emptyHint: string;
 }) {
   const language = useSiteLanguage();
   const emptyCopy: Record<SiteLanguage, { title: string; sub: string }> = {
@@ -398,12 +376,16 @@ function RentalsEmptyState({
       <p className="text-sm">
         {inventoryUnavailable
           ? "Inventory could not be loaded."
-          : `Website channel rows in the sheet: ${websiteInventoryCount}.`}
+          : `Rows with Channel = rentals in the sheet: ${websiteInventoryCount}.`}
       </p>
+      <p className="text-sm font-light leading-relaxed">{emptyHint}</p>
       <p className="text-sm font-light leading-relaxed">
-        Add listings with <code className="text-[11px] bg-muted px-1 py-0.5 text-foreground">website</code> channel and
-        include rental wording (e.g. &quot;rent&quot;, &quot;monthly&quot;, &quot;lease&quot;) in titles or descriptions
-        so they appear here first.
+        Property listings for sale use <code className="text-[11px] bg-muted px-1 py-0.5 text-foreground">website</code>{" "}
+        and appear on{" "}
+        <Link href="/projects" className="text-primary underline-offset-4 hover:underline">
+          Bali properties
+        </Link>
+        .
       </p>
       <p className="text-xs text-muted-foreground">
         <Link href="/contact" className="text-primary underline-offset-4 hover:underline">

@@ -12,13 +12,15 @@ function WhatsAppIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-function RednoteIcon(props: SVGProps<SVGSVGElement>) {
-  // Simple “note” mark as placeholder for Rednote/Xiaohongshu.
+function RednoteIcon({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden {...props}>
-      <path d="M7 3h10a2 2 0 0 1 2 2v11.5a2 2 0 0 1-.6 1.42l-2.48 2.48A2 2 0 0 1 14.5 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm10 2H7v14h7.5a.5.5 0 0 0 .35-.15L17 16.7V5Z" />
-      <path d="M8.5 8.2h7v1.8h-7V8.2Zm0 4h7V14h-7v-1.8Z" />
-    </svg>
+    <img
+      src="/brand/rednote-icon.png"
+      alt=""
+      aria-hidden
+      decoding="async"
+      className={className ?? "h-5 w-5 object-contain"}
+    />
   );
 }
 
@@ -253,13 +255,38 @@ export function Footer() {
               </a>
               <a href="https://www.youtube.com/@8Degreeco" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="text-primary-foreground/80 transition-colors hover:text-primary-foreground"><Youtube size={20} /></a>
               <a href="https://id.pinterest.com/8degree/" target="_blank" rel="noopener noreferrer" aria-label="Pinterest" className="text-primary-foreground/80 transition-colors hover:text-primary-foreground"><PinterestIcon className="h-5 w-5" /></a>
-              <a href="https://www.xiaohongshu.com/user/profile/6534ab3c000000000d004713?xsec_token=YBZyIeFu1RtijpXgo6036NerpTZnmTrzUQjllOXl6vuT4=&xsec_source=app_share&xhsshare=CopyLink&shareRedId=ODs1NERHN0w2NzUyOTgwNjZHOTc4PDc8&apptime=1776071179&share_id=49d038ccb54b43fe98e041414e7af137&tab=note" target="_blank" rel="noopener noreferrer" aria-label="Rednote" className="text-primary-foreground/80 transition-colors hover:text-primary-foreground"><RednoteIcon className="h-5 w-5" /></a>
+              <a
+                href="https://xhslink.cn/m/5frPXoeFucH"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Rednote"
+                className="inline-flex opacity-80 transition-opacity hover:opacity-100"
+              >
+                <RednoteIcon className="h-5 w-5" />
+              </a>
               <a href="https://www.tiktok.com/@8degree.co" target="_blank" rel="noopener noreferrer" aria-label="TikTok" className="text-primary-foreground/80 transition-colors hover:text-primary-foreground"><TiktokIcon className="h-5 w-5" /></a>
             </div>
           </div>
 
           <p className="text-left md:justify-self-end md:pt-0.5 md:text-right">{t.rights}</p>
 
+        </div>
+
+        <div className="mt-10 border-t border-primary-foreground/10 pt-6 text-center">
+          <a
+            href="https://kaize.co.uk/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex flex-wrap items-center justify-center gap-x-1.5 text-xs transition-colors"
+            aria-label="Powered by KAIZE — opens kaize.co.uk"
+          >
+            <span className="font-light tracking-[0.12em] text-primary-foreground/55 transition-colors group-hover:text-primary-foreground/75">
+              Powered by
+            </span>
+            <span className="font-semibold uppercase tracking-[0.32em] text-primary-foreground/90 transition-colors group-hover:text-primary-foreground">
+              KAIZE
+            </span>
+          </a>
         </div>
       </div>
     </footer>

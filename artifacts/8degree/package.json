@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite --config vite.config.ts",
     "check:no-raw-api-fetch": "node ./scripts/check-no-raw-api-fetch.mjs",
-    "build": "pnpm run check:no-raw-api-fetch && node ../../scripts/verify-journal-media-bundled.mjs && pnpm run seo:build && node ../../scripts/build-partner-landings.mjs && vite build --config vite.config.ts",
+    "build": "pnpm run check:no-raw-api-fetch && node ../../scripts/verify-journal-media-bundled.mjs && pnpm run seo:build && node ../../scripts/build-partner-landings.mjs && vite build --config vite.config.ts && pnpm --filter @workspace/scripts run seo:prerender-listings",
     "seo:build": "pnpm --filter @workspace/scripts run seo:build",
     "serve": "vite preview --config vite.config.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit"

@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { eq, and, sql, asc } from "drizzle-orm";
+import { eq, and, sql, desc } from "drizzle-orm";
+import { z } from "zod";
 import { db, isDatabaseConfigured } from "@workspace/db";
 import { blogPostsTable, blogCategoriesTable } from "@workspace/db";
 import {
@@ -17,11 +18,36 @@ import {
   syncJournalImportToDatabaseIfEmpty,
   type JournalPostDto,
 } from "../lib/journal-import-fallback";
+import {
+  getJournalFromSheetBySlug,
+  listJournalFromSheet,
+  listJournalSheetCategories,
+  loadArticlesFromGoogleSheet,
+  useSheetAsJournalSource,
+} from "../lib/journal-articles-sheet";
 import { resolveJournalImageUrl, rewriteJournalContentHtml } from "../lib/journal-image-url";
 
 const router = Router();
 
-router.get("/blog/categories", async (_req, res): Promise<void> => {
+const BlogRefreshQuery = z.object({
+  refreshSheet: z.string().optional(),
+});
+
+router.get("/blog/categories", async (req, res): Promise<void> => {
+  const refresh = BlogRefreshQuery.safeParse(req.query);
+  const forceRefresh =
+    refresh.success &&
+    (refresh.data.refreshSheet === "1" || refresh.data.refreshSheet === "true");
+
+  if (useSheetAsJournalSource()) {
+    await loadArticlesFromGoogleSheet({ forceRefresh });
+    const fromSheet = listJournalSheetCategories();
+    if (fromSheet.length > 0) {
+      res.json({ categories: fromSheet });
+      return;
+    }
+  }
+
   if (!isDatabaseConfigured()) {
     res.json({ categories: listJournalFallbackCategories() });
     return;
@@ -50,6 +76,23 @@ router.get("/blog", async (req, res): Promise<void> => {
   }
 
   const { category, limit = 12, offset = 0 } = parsed.data;
+  const refresh = BlogRefreshQuery.safeParse(req.query);
+  const forceRefresh =
+    refresh.success &&
+    (refresh.data.refreshSheet === "1" || refresh.data.refreshSheet === "true");
+
+  if (useSheetAsJournalSource()) {
+    const fromSheet = await listJournalFromSheet({
+      category,
+      limit,
+      offset,
+      forceRefresh,
+    });
+    if (fromSheet) {
+      res.json(fromSheet);
+      return;
+    }
+  }
 
   if (!isDatabaseConfigured()) {
     res.json(listJournalFallback({ category, limit, offset }));
@@ -73,7 +116,7 @@ router.get("/blog", async (req, res): Promise<void> => {
         .from(blogPostsTable)
         .leftJoin(blogCategoriesTable, eq(blogPostsTable.categoryId, blogCategoriesTable.id))
         .where(where)
-        .orderBy(asc(sql`coalesce(${blogPostsTable.publishedAt}, ${blogPostsTable.createdAt})`))
+        .orderBy(desc(sql`coalesce(${blogPostsTable.publishedAt}, ${blogPostsTable.createdAt})`))
         .limit(limit)
         .offset(offset),
       db
@@ -103,6 +146,19 @@ router.get("/blog/:slug", async (req, res): Promise<void> => {
   if (!params.success) {
     res.status(400).json({ error: params.error.message });
     return;
+  }
+
+  const refresh = BlogRefreshQuery.safeParse(req.query);
+  const forceRefresh =
+    refresh.success &&
+    (refresh.data.refreshSheet === "1" || refresh.data.refreshSheet === "true");
+
+  if (useSheetAsJournalSource()) {
+    const fromSheet = await getJournalFromSheetBySlug(params.data.slug, { forceRefresh });
+    if (fromSheet) {
+      res.json(fromSheet);
+      return;
+    }
   }
 
   if (!isDatabaseConfigured()) {

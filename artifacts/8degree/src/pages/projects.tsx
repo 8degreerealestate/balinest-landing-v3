@@ -1,14 +1,18 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useListInventoryListings, useListProjects } from "@workspace/api-client-react";
 import { borrowInventoryImages, inferListingArea } from "@/lib/portfolio-listing";
 import {
   inventoryListingMatchesSearch,
+  projectMatchesBedroomsFilter,
   searchFiltersAreActive,
   type PropertySearchFilterState,
 } from "@/lib/property-search-filters";
 import {
   filtersFromSearchPayload,
+  filtersToSearchPayload,
+  pageIndexFromLocationSearch,
+  rememberProjectsUrl,
   replaceProjectsSearchUrl,
   searchPayloadFromLocationSearch,
 } from "@/lib/property-search-url";
@@ -111,7 +115,10 @@ export default function Projects() {
           priceMaxUsd: null,
         };
   });
-  const [listingsPage, setListingsPage] = useState(0);
+  const [listingsPage, setListingsPage] = useState(() =>
+    typeof window !== "undefined" ? pageIndexFromLocationSearch(window.location.search) : 0,
+  );
+  const skipFilterPageReset = useRef(true);
 
   const {
     data: projectData,
@@ -121,10 +128,6 @@ export default function Projects() {
   } = useListProjects({
     area: filters.area !== "all" ? filters.area : undefined,
     property_type: filters.propertyType !== "all" ? filters.propertyType : undefined,
-    bedrooms:
-      filters.bedrooms !== "all" && filters.bedrooms !== "4" && filters.bedrooms !== "6+"
-        ? Number(filters.bedrooms)
-        : undefined,
     limit: 200,
   });
 
@@ -138,7 +141,12 @@ export default function Projects() {
     { query: { staleTime: 5 * 60_000 } },
   );
 
-  const projects = projectsError ? EMPTY_LIST : (projectData?.projects ?? []);
+  const projects = useMemo(() => {
+    const raw = projectsError ? EMPTY_LIST : (projectData?.projects ?? []);
+    return raw.filter((p) =>
+      projectMatchesBedroomsFilter(filters.bedrooms, p.bedroomsMin, p.bedroomsMax),
+    );
+  }, [projectsError, projectData?.projects, filters.bedrooms]);
   const listingsRaw = inventoryError ? EMPTY_LIST : (inventoryData?.listings ?? []);
 
   const isLoading = projectsLoading || inventoryLoading;
@@ -216,15 +224,32 @@ export default function Projects() {
   );
 
   useEffect(() => {
+    // Keep URL page on first mount; only reset when the user changes filters later.
+    if (skipFilterPageReset.current) {
+      skipFilterPageReset.current = false;
+      return;
+    }
     setListingsPage(0);
   }, [filters]);
 
   useEffect(() => {
+    // Avoid clamping to page 0 while the grid is still empty/loading.
+    if (isLoading) return;
     setListingsPage((p) => Math.min(p, listingsTotalPages - 1));
-  }, [listingsTotalPages]);
+  }, [listingsTotalPages, isLoading]);
 
   useEffect(() => {
-    if (!searchPayloadFromLocationSearch(window.location.search)) return;
+    if (isLoading) return;
+    replaceProjectsSearchUrl(filtersToSearchPayload(filters), { pageIndex: listingsPageSafe });
+  }, [filters, listingsPageSafe, isLoading]);
+
+  useEffect(() => {
+    rememberProjectsUrl();
+  }, []);
+
+  useEffect(() => {
+    const search = window.location.search;
+    if (!searchPayloadFromLocationSearch(search) && pageIndexFromLocationSearch(search) === 0) return;
     requestAnimationFrame(() =>
       document.getElementById("portfolio-results")?.scrollIntoView({ behavior: "smooth", block: "start" }),
     );
@@ -246,7 +271,7 @@ export default function Projects() {
   function handleSearchApply(payload: PropertySearchApplyPayload) {
     const next = filtersFromSearchPayload(payload);
     setFilters(next);
-    replaceProjectsSearchUrl(payload);
+    replaceProjectsSearchUrl(payload, { pageIndex: 0 });
     requestAnimationFrame(() =>
       document.getElementById("portfolio-results")?.scrollIntoView({ behavior: "smooth", block: "start" }),
     );
@@ -299,7 +324,11 @@ export default function Projects() {
         </div>
       </section>
 
-      <PropertySearchPanel labels={searchLabels} onApply={handleSearchApply} />
+      <PropertySearchPanel
+        labels={searchLabels}
+        onApply={handleSearchApply}
+        initialValues={filtersToSearchPayload(filters)}
+      />
 
       <div id="portfolio-results" className="container mx-auto max-w-6xl px-6 py-16">
         {projectsFetchFailed ? (
@@ -389,7 +418,10 @@ export default function Projects() {
                         <button
                           key={i}
                           type="button"
-                          onClick={() => setListingsPage(i)}
+                          onClick={() => {
+                            setListingsPage(i);
+                            replaceProjectsSearchUrl(filtersToSearchPayload(filters), { pageIndex: i });
+                          }}
                           className={cn(
                             "min-h-9 min-w-9 rounded-full border px-3 py-1.5 text-sm font-medium tabular-nums transition-colors",
                             i === listingsPageSafe

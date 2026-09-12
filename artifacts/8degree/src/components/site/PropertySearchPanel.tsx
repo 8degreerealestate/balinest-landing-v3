@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { Check, ChevronDown } from "lucide-react";
 import { AreaSearchMenuDropdown } from "@/components/site/AreaSearchMenuDropdown";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { HOME_LISTINGS_BAND } from "@/lib/home-section-surfaces";
+import { BEDROOM_FILTER_OPTIONS, serializeBedroomFilterValues } from "@/lib/property-search-filters";
 
 const MIN_PRICE_BOUND = 0;
 const MAX_PRICE_BOUND = 3000000;
@@ -35,6 +36,33 @@ function formatPriceInput(value: number, maxBound: number = MAX_PRICE_BOUND) {
   if (!Number.isFinite(value)) return "0";
   return clamp(value, MIN_PRICE_BOUND, maxBound).toLocaleString("en-US");
 }
+
+function isFullPriceRange(minUsd: number | null, maxUsd: number | null, maxBound: number): boolean {
+  const min = minUsd ?? MIN_PRICE_BOUND;
+  const max = maxUsd ?? maxBound;
+  return min <= MIN_PRICE_BOUND && max >= maxBound;
+}
+
+function formatPriceTriggerLabel(
+  selectedPriceLabel: string,
+  minPrice: string,
+  maxPrice: string,
+  maxBound: number,
+  placeholder = "Price",
+): string {
+  if (selectedPriceLabel) return selectedPriceLabel;
+  const parsedMin = parseNumericInput(minPrice);
+  const parsedMax = parseNumericInput(maxPrice);
+  if (parsedMin === null || parsedMax === null) return placeholder;
+  if (isFullPriceRange(parsedMin, parsedMax, maxBound)) return placeholder;
+  return `$${formatPriceInput(parsedMin, maxBound)} – $${formatPriceInput(parsedMax, maxBound)}`;
+}
+
+const SALES_QUICK_PRICE_OPTIONS = [
+  { label: "$150k-$500k", min: 150_000, max: 500_000 },
+  { label: "$500k-$1M", min: 500_000, max: 1_000_000 },
+  { label: ">$1M", min: 1_000_000, max: null as number | null },
+] as const;
 
 const SEARCH_SELECT_ITEM =
   "cursor-pointer hover:bg-[#e0fdac] focus:bg-[#e0fdac] focus:text-[#1f1d1b] data-[highlighted]:bg-[#e0fdac] data-[highlighted]:text-[#1f1d1b]";
@@ -85,9 +113,72 @@ function mapPropertyTypeChoice(raw: string | undefined): string {
   return raw.charAt(0).toUpperCase() + raw.slice(1).toLowerCase();
 }
 
-function mapBedroomsChoice(raw: string | undefined): string {
-  if (!raw) return "all";
-  return raw;
+function formatBedroomsTriggerLabel(selected: readonly string[], placeholder: string): string {
+  if (selected.length === 0) return placeholder;
+  return selected
+    .map((v) => BEDROOM_FILTER_OPTIONS.find((o) => o.value === v)?.label ?? v)
+    .join(", ");
+}
+
+function BedroomsMultiSelect({
+  label,
+  selected,
+  onChange,
+}: {
+  label: string;
+  selected: string[];
+  onChange: (next: string[]) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (!menuRef.current?.contains(event.target as Node)) setOpen(false);
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  function toggle(value: string) {
+    onChange(selected.includes(value) ? selected.filter((v) => v !== value) : [...selected, value]);
+  }
+
+  return (
+    <div className="relative mt-1 min-w-0" ref={menuRef}>
+      <button
+        type="button"
+        className="flex h-10 w-full items-center justify-between border-0 border-b border-[#1f1d1b]/35 bg-transparent px-0 text-left text-base text-[#1f1d1b] focus:border-[#01514E] focus:outline-none"
+        onClick={() => setOpen((prev) => !prev)}
+        aria-expanded={open}
+        aria-label={label}
+      >
+        <span className="min-w-0 truncate pr-2">{formatBedroomsTriggerLabel(selected, label)}</span>
+        <SearchFieldChevron open={open} />
+      </button>
+      {open ? (
+        <div className="absolute left-0 right-0 top-12 z-40 overflow-hidden rounded border border-[#1f1d1b]/20 bg-[#f7f5f1] py-1 shadow-lg">
+          {BEDROOM_FILTER_OPTIONS.map((opt) => {
+            const isSelected = selected.includes(opt.value);
+            return (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => toggle(opt.value)}
+                className={cn(
+                  "flex w-full items-center justify-between px-3 py-2 text-left text-sm text-[#1f1d1b]",
+                  isSelected ? "bg-[#e0fdac]" : "hover:bg-[#e0fdac]/70",
+                )}
+              >
+                <span>{opt.label}</span>
+                {isSelected ? <Check className="h-4 w-4 shrink-0" strokeWidth={2.5} aria-hidden /> : null}
+              </button>
+            );
+          })}
+        </div>
+      ) : null}
+    </div>
+  );
 }
 
 function mapAreaChoice(selectedArea: string): string {
@@ -116,6 +207,8 @@ type PropertySearchPanelProps = {
   fieldSet?: "full" | "rentalsMinimal";
   /** Upper bound for price min/max inputs and sliders (USD). Defaults to 3,000,000. */
   priceRangeMax?: number;
+  /** Hydrate controls from URL / prior search (e.g. /projects?area=Melasti). */
+  initialValues?: Partial<PropertySearchApplyPayload> | null;
 };
 
 export function PropertySearchPanel({
@@ -124,23 +217,51 @@ export function PropertySearchPanel({
   layout = "overlapBelowHero",
   fieldSet = "full",
   priceRangeMax,
+  initialValues,
 }: PropertySearchPanelProps) {
   const effectivePriceMax = priceRangeMax ?? MAX_PRICE_BOUND;
 
+  const initialArea =
+    initialValues?.area && initialValues.area !== "all" ? initialValues.area : "Area";
+  const initialMin =
+    initialValues?.priceMinUsd != null && Number.isFinite(initialValues.priceMinUsd)
+      ? clamp(initialValues.priceMinUsd, MIN_PRICE_BOUND, effectivePriceMax)
+      : MIN_PRICE_BOUND;
+  const initialMax =
+    initialValues?.priceMaxUsd != null && Number.isFinite(initialValues.priceMaxUsd)
+      ? clamp(initialValues.priceMaxUsd, MIN_PRICE_BOUND, effectivePriceMax)
+      : effectivePriceMax;
+
   const [isAreaMenuOpen, setIsAreaMenuOpen] = useState(false);
   const [areaLocationSearch, setAreaLocationSearch] = useState("");
-  const [selectedArea, setSelectedArea] = useState("Area");
-  const [propertyTypeChoice, setPropertyTypeChoice] = useState<string | undefined>(undefined);
-  const [bedroomsChoice, setBedroomsChoice] = useState<string | undefined>(undefined);
-  const [ownershipChoice, setOwnershipChoice] = useState<string | undefined>(undefined);
-  const [devStatusChoice, setDevStatusChoice] = useState<string | undefined>(undefined);
+  const [selectedArea, setSelectedArea] = useState(initialArea);
+  const [propertyTypeChoice, setPropertyTypeChoice] = useState<string | undefined>(() => {
+    const raw = initialValues?.propertyType;
+    if (!raw || raw === "all") return undefined;
+    return raw.toLowerCase();
+  });
+  const [bedroomsChoices, setBedroomsChoices] = useState<string[]>(() => {
+    const raw = initialValues?.bedrooms;
+    if (!raw || raw === "all") return [];
+    return raw.split(",").map((s) => s.trim()).filter(Boolean);
+  });
+  const [ownershipChoice, setOwnershipChoice] = useState<string | undefined>(() => {
+    const raw = initialValues?.ownership;
+    if (!raw || raw === "all") return undefined;
+    return raw.toLowerCase();
+  });
+  const [devStatusChoice, setDevStatusChoice] = useState<string | undefined>(() => {
+    const raw = initialValues?.devStatus;
+    if (!raw || raw === "all") return undefined;
+    return raw;
+  });
   const [isPriceMenuOpen, setIsPriceMenuOpen] = useState(false);
   const [selectedPriceLabel, setSelectedPriceLabel] = useState("");
-  const [minPrice, setMinPrice] = useState("0");
-  const [maxPrice, setMaxPrice] = useState(() => formatPriceInput(effectivePriceMax, effectivePriceMax));
-  const [minSlider, setMinSlider] = useState(0);
-  const [maxSlider, setMaxSlider] = useState(100);
-  const [propertyCode, setPropertyCode] = useState("");
+  const [minPrice, setMinPrice] = useState(() => formatPriceInput(initialMin, effectivePriceMax));
+  const [maxPrice, setMaxPrice] = useState(() => formatPriceInput(initialMax, effectivePriceMax));
+  const [minSlider, setMinSlider] = useState(() => priceToSlider(initialMin, effectivePriceMax));
+  const [maxSlider, setMaxSlider] = useState(() => priceToSlider(initialMax, effectivePriceMax));
+  const [propertyCode, setPropertyCode] = useState(() => initialValues?.listingQuery?.trim() ?? "");
   const areaTriggerRef = useRef<HTMLButtonElement | null>(null);
   const areaLocationSearchRef = useRef<HTMLInputElement | null>(null);
   const priceMenuRef = useRef<HTMLDivElement | null>(null);
@@ -168,19 +289,29 @@ export function PropertySearchPanel({
   function emitApply() {
     const parsedMin = parseNumericInput(minPrice);
     const parsedMax = parseNumericInput(maxPrice);
-    const priceFilterActive =
-      Boolean(selectedPriceLabel) || minSlider > 0 || maxSlider < 100;
+    const minUsd = parsedMin ?? MIN_PRICE_BOUND;
+    const maxUsd = parsedMax ?? effectivePriceMax;
+    // Full-range defaults should not count as an active price filter.
+    const priceFilterActive = !isFullPriceRange(minUsd, maxUsd, effectivePriceMax);
     onApply?.({
       area: mapAreaChoice(selectedArea),
       propertyType: mapPropertyTypeChoice(propertyTypeChoice),
-      bedrooms: mapBedroomsChoice(bedroomsChoice),
+      bedrooms: serializeBedroomFilterValues(bedroomsChoices),
       listingQuery: propertyCode.trim(),
       ownership: mapOwnershipChoice(ownershipChoice),
       devStatus: mapDevStatusChoice(devStatusChoice),
-      priceMinUsd: priceFilterActive ? (parsedMin ?? 0) : null,
-      priceMaxUsd: priceFilterActive ? (parsedMax ?? effectivePriceMax) : null,
+      priceMinUsd: priceFilterActive ? minUsd : null,
+      priceMaxUsd: priceFilterActive ? maxUsd : null,
     });
   }
+
+  const priceTriggerText = formatPriceTriggerLabel(
+    selectedPriceLabel,
+    minPrice,
+    maxPrice,
+    effectivePriceMax,
+    "Price",
+  );
 
   const embedded = layout === "embeddedInHero";
   const minimalRental = fieldSet === "rentalsMinimal";
@@ -219,31 +350,7 @@ export function PropertySearchPanel({
       </label>
       <div className="block md:col-span-6 lg:col-span-2">
         <span className={SEARCH_FIELD_LABEL}>{t.bedrooms}</span>
-        <Select value={bedroomsChoice} onValueChange={setBedroomsChoice}>
-          <SelectTrigger className={SEARCH_SELECT_TRIGGER} aria-label={t.bedrooms}>
-            <SelectValue placeholder={t.bedrooms} />
-          </SelectTrigger>
-          <SelectContent className="border-[#1f1d1b]/20 bg-[#f7f5f1]">
-            <SelectItem value="1" className={SEARCH_SELECT_ITEM}>
-              1 Bedroom
-            </SelectItem>
-            <SelectItem value="2" className={SEARCH_SELECT_ITEM}>
-              2 Bedrooms
-            </SelectItem>
-            <SelectItem value="3" className={SEARCH_SELECT_ITEM}>
-              3 Bedrooms
-            </SelectItem>
-            <SelectItem value="4" className={SEARCH_SELECT_ITEM}>
-              4 Bedrooms
-            </SelectItem>
-            <SelectItem value="5" className={SEARCH_SELECT_ITEM}>
-              5 Bedrooms
-            </SelectItem>
-            <SelectItem value="6+" className={SEARCH_SELECT_ITEM}>
-              6+ Bedrooms
-            </SelectItem>
-          </SelectContent>
-        </Select>
+        <BedroomsMultiSelect label={t.bedrooms} selected={bedroomsChoices} onChange={setBedroomsChoices} />
       </div>
       <label className="block md:col-span-12 lg:col-span-4">
         <span className={SEARCH_FIELD_LABEL}>{t.priceRange}</span>
@@ -256,8 +363,7 @@ export function PropertySearchPanel({
             aria-label={t.priceRange}
           >
             <span>
-              {selectedPriceLabel ||
-                (minPrice && maxPrice ? `$${minPrice} – $${maxPrice}` : "Price")}
+              {priceTriggerText}
             </span>
             <SearchFieldChevron open={isPriceMenuOpen} />
           </button>
@@ -445,31 +551,11 @@ export function PropertySearchPanel({
               </label>
               <div className="block min-w-0">
                 <span className={SEARCH_FIELD_LABEL}>{t.bedrooms}</span>
-                <Select value={bedroomsChoice} onValueChange={setBedroomsChoice}>
-                  <SelectTrigger className={SEARCH_SELECT_TRIGGER} aria-label={t.bedrooms}>
-                    <SelectValue placeholder={t.bedrooms} />
-                  </SelectTrigger>
-                  <SelectContent className="border-[#1f1d1b]/20 bg-[#f7f5f1]">
-                    <SelectItem value="1" className={SEARCH_SELECT_ITEM}>
-                      1 Bedroom
-                    </SelectItem>
-                    <SelectItem value="2" className={SEARCH_SELECT_ITEM}>
-                      2 Bedrooms
-                    </SelectItem>
-                    <SelectItem value="3" className={SEARCH_SELECT_ITEM}>
-                      3 Bedrooms
-                    </SelectItem>
-                    <SelectItem value="4" className={SEARCH_SELECT_ITEM}>
-                      4 Bedrooms
-                    </SelectItem>
-                    <SelectItem value="5" className={SEARCH_SELECT_ITEM}>
-                      5 Bedrooms
-                    </SelectItem>
-                    <SelectItem value="6+" className={SEARCH_SELECT_ITEM}>
-                      6+ Bedrooms
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
+                <BedroomsMultiSelect
+                  label={t.bedrooms}
+                  selected={bedroomsChoices}
+                  onChange={setBedroomsChoices}
+                />
               </div>
               <div className="block min-w-0">
                 <span className={SEARCH_FIELD_LABEL}>{t.ownership}</span>
@@ -500,7 +586,7 @@ export function PropertySearchPanel({
                     aria-expanded={isPriceMenuOpen}
                     aria-label={t.priceRange}
                   >
-                    <span>{selectedPriceLabel || "Price"}</span>
+                    <span>{priceTriggerText}</span>
                     <SearchFieldChevron open={isPriceMenuOpen} />
                   </button>
 
@@ -508,26 +594,32 @@ export function PropertySearchPanel({
                     <div className="absolute left-0 right-0 top-12 z-40 rounded border border-[#1f1d1b]/20 bg-[#f7f5f1] p-3 shadow-lg">
                       <p className="text-xs font-semibold text-[#1f1d1b]">Quick Price Selections</p>
                       <div className="mt-2 grid grid-cols-3 gap-2">
-                        {[
-                          { label: "$150k-$500k", min: "150000", max: "500000", minS: 5, maxS: 17 },
-                          { label: "$500k-$1M", min: "500000", max: "1000000", minS: 17, maxS: 33 },
-                          { label: ">$1M", min: "1000000", max: String(effectivePriceMax), minS: 33, maxS: 100 },
-                        ].map((option) => (
+                        {SALES_QUICK_PRICE_OPTIONS.map((option) => {
+                          const optionMax = option.max ?? effectivePriceMax;
+                          const isActive =
+                            selectedPriceLabel === option.label ||
+                            (parseNumericInput(minPrice) === option.min &&
+                              parseNumericInput(maxPrice) === optionMax);
+                          return (
                           <button
                             key={option.label}
                             type="button"
-                            className="rounded border border-[#1f1d1b]/20 px-2 py-1 text-xs text-[#1f1d1b] hover:bg-[#01514E]/10"
+                            className={cn(
+                              "rounded border px-2 py-1 text-xs text-[#1f1d1b] hover:bg-[#01514E]/10",
+                              isActive ? "border-[#01514E] bg-[#01514E]/10" : "border-[#1f1d1b]/20",
+                            )}
                             onClick={() => {
                               setSelectedPriceLabel(option.label);
-                              setMinPrice(formatPriceInput(Number(option.min), effectivePriceMax));
-                              setMaxPrice(formatPriceInput(Number(option.max), effectivePriceMax));
-                              setMinSlider(option.minS);
-                              setMaxSlider(option.maxS);
+                              setMinPrice(formatPriceInput(option.min, effectivePriceMax));
+                              setMaxPrice(formatPriceInput(optionMax, effectivePriceMax));
+                              setMinSlider(priceToSlider(option.min, effectivePriceMax));
+                              setMaxSlider(priceToSlider(optionMax, effectivePriceMax));
                             }}
                           >
                             {option.label}
                           </button>
-                        ))}
+                          );
+                        })}
                       </div>
 
                       <p className="mt-3 text-xs font-semibold text-[#1f1d1b]">Enter Price Manually</p>

@@ -1,8 +1,19 @@
 /** Public contact channels — set via Vite env at build time (see root `.env.example`). */
 
-const DEFAULT_WHATSAPP_URL = "https://wa.link/paxsz0";
-const DEFAULT_WHATSAPP_E164 = "6287787169089";
-const DEFAULT_CONTACT_EMAIL = "hello@8degree.com";
+const DEFAULT_WHATSAPP_URL = "https://wa.link/hpmtve";
+/** WhatsApp display / wa.me digits (matches wa.link/hpmtve). */
+const DEFAULT_WHATSAPP_E164 = "6287746615888";
+const DEFAULT_WHATSAPP_DISPLAY = "+62 877-4661-5888";
+/** Office / voice line (separate from WhatsApp). */
+const DEFAULT_PHONE_E164 = "6287846619888";
+const DEFAULT_PHONE_DISPLAY = "+62 878-4661-9888";
+/** Ignore stale values still set in Vercel env. */
+const LEGACY_WHATSAPP_E164 = new Set([
+  "6287846616888",
+  "6287787169089",
+  "6287846621888",
+]);
+const DEFAULT_CONTACT_EMAIL = "concierge@8degree.co";
 
 export const OFFICE_ADDRESS =
   "Teratai S18, Jl. Kayu Tulang, Canggu, Kec. Kuta Utara, Kabupaten Badung, Bali 80361";
@@ -16,38 +27,51 @@ export function getWhatsappE164(): string {
   const raw = import.meta.env.VITE_WHATSAPP_NUMBER_E164?.trim();
   if (!raw) return DEFAULT_WHATSAPP_E164;
   const digits = raw.replace(/\D/g, "");
-  return digits || DEFAULT_WHATSAPP_E164;
+  if (!digits || LEGACY_WHATSAPP_E164.has(digits)) return DEFAULT_WHATSAPP_E164;
+  return digits;
 }
 
 export function getContactEmail(): string {
-  return import.meta.env.VITE_CONTACT_EMAIL?.trim() || DEFAULT_CONTACT_EMAIL;
+  const raw = import.meta.env.VITE_CONTACT_EMAIL?.trim();
+  if (!raw || raw === "hello@8degree.com") return DEFAULT_CONTACT_EMAIL;
+  return raw;
 }
 
-/** Human-readable display for phone / WhatsApp (kept in sync with {@link getWhatsappE164}). */
+/** Human-readable display for an E.164 digit string. */
 export function formatContactPhoneDisplay(e164Digits: string): string {
   const d = e164Digits.replace(/\D/g, "");
+  if (d === DEFAULT_WHATSAPP_E164) return DEFAULT_WHATSAPP_DISPLAY;
+  if (d === DEFAULT_PHONE_E164) return DEFAULT_PHONE_DISPLAY;
   if (d.startsWith("62") && d.length >= 11) {
     const local = d.slice(2);
+    // +62 XXX-XXXX-XXXX style for Indonesian mobiles
+    if (local.length >= 10) {
+      return `+62 ${local.slice(0, 3)}-${local.slice(3, 7)}-${local.slice(7)}`.trim();
+    }
     return `+62 ${local.slice(0, 3)} ${local.slice(3, 7)} ${local.slice(7)}`.trim();
   }
   if (d.startsWith("62")) return `+${d}`;
   return d ? `+${d}` : "";
 }
 
+/** Office phone number shown on the contact page (not WhatsApp). */
 export function getContactPhoneDisplay(): string {
-  const e164 = getWhatsappE164();
-  const fromEnv = import.meta.env.VITE_CONTACT_PHONE_DISPLAY?.trim();
-  if (fromEnv) {
-    const envDigits = fromEnv.replace(/\D/g, "");
-    if (envDigits === e164) return fromEnv;
-  }
-  return formatContactPhoneDisplay(e164);
+  return DEFAULT_PHONE_DISPLAY;
 }
 
-export function buildWhatsappUrl(message?: string): string {
-  const custom = import.meta.env.VITE_WHATSAPP_URL?.trim();
-  const base = custom || DEFAULT_WHATSAPP_URL;
-  if (base.includes("wa.link") || !message?.trim()) return base;
-  const waMe = `https://wa.me/${getWhatsappE164()}`;
-  return `${waMe}?text=${encodeURIComponent(message)}`;
+export function getContactPhoneTelHref(): string {
+  return `tel:+${DEFAULT_PHONE_E164}`;
+}
+
+/** WhatsApp number shown next to the WhatsApp channel. */
+export function getWhatsappDisplay(): string {
+  return formatContactPhoneDisplay(getWhatsappE164());
+}
+
+export function getWhatsappUrl(): string {
+  return import.meta.env.VITE_WHATSAPP_URL?.trim() || DEFAULT_WHATSAPP_URL;
+}
+
+export function buildWhatsappUrl(_message?: string): string {
+  return getWhatsappUrl();
 }

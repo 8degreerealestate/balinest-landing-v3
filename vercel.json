@@ -1,7 +1,7 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "installCommand": "pnpm install --no-frozen-lockfile",
-  "buildCommand": "pnpm --filter @workspace/api-server run build && VITE_PUBLIC_SITE_URL=https://8degree.co VITE_WHATSAPP_NUMBER_E164=6287787169089 pnpm --filter @workspace/8degree run build",
+  "buildCommand": "pnpm --filter @workspace/api-server run build && VITE_PUBLIC_SITE_URL=https://8degree.co VITE_WHATSAPP_URL=https://wa.link/hpmtve VITE_WHATSAPP_NUMBER_E164=6287746615888 VITE_CONTACT_EMAIL=concierge@8degree.co pnpm --filter @workspace/8degree run build",
   "outputDirectory": "artifacts/8degree/dist/public",
   "framework": null,
   "functions": {
@@ -13,6 +13,10 @@
     {
       "path": "/api/inventory/listings?limit=1&channel=website",
       "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/blog?limit=1",
+      "schedule": "30 2 * * *"
     }
   ],
   "rewrites": [
@@ -106,6 +110,16 @@
     {
       "source": "/blog",
       "destination": "/journal",
+      "permanent": true
+    },
+    {
+      "source": "/balinest",
+      "destination": "/8-degree-real-estate-x-balinest-villa/",
+      "permanent": true
+    },
+    {
+      "source": "/balinest/",
+      "destination": "/8-degree-real-estate-x-balinest-villa/",
       "permanent": true
     },
     {

@@ -22,7 +22,9 @@ import {
   buildWhatsappUrl,
   getContactEmail,
   getContactPhoneDisplay,
+  getContactPhoneTelHref,
   getOfficeMapsUrl,
+  getWhatsappDisplay,
   OFFICE_ADDRESS,
 } from "@/lib/site-contact";
 
@@ -86,6 +88,8 @@ export default function Contact() {
 
   const contactEmail = getContactEmail();
   const contactPhone = getContactPhoneDisplay();
+  const whatsappDisplay = getWhatsappDisplay();
+  const whatsappUrl = buildWhatsappUrl();
   const contactDetails = [
     {
       icon: MapPin,
@@ -93,9 +97,9 @@ export default function Contact() {
       value: OFFICE_ADDRESS,
       href: getOfficeMapsUrl(),
     },
-    { icon: Mail, label: "Email", value: contactEmail },
-    { icon: Phone, label: "Phone", value: contactPhone },
-    { icon: MessageCircle, label: "WhatsApp", value: contactPhone },
+    { icon: Mail, label: "Email", value: contactEmail, href: `mailto:${contactEmail}` },
+    { icon: Phone, label: "Phone", value: contactPhone, href: getContactPhoneTelHref() },
+    { icon: MessageCircle, label: "WhatsApp", value: whatsappDisplay, href: whatsappUrl },
   ];
 
   return (
@@ -166,7 +170,7 @@ export default function Contact() {
               ))}
             </div>
             <div className="mt-8 pt-8 border-t border-border">
-              <a href={buildWhatsappUrl()} target="_blank" rel="noopener noreferrer">
+              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
                 <Button className="w-full rounded-none tracking-widest uppercase h-12" data-testid="button-whatsapp-contact">
                   <MessageCircle size={16} className="mr-2" />
                   {t.chat}

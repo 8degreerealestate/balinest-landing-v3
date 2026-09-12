@@ -251,11 +251,12 @@ export default function BlogDetail() {
             <h2 className="font-serif text-2xl mb-8 text-primary">{t.related}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               {related.map(p => (
-                <Link key={p.id} href={journalPostPath(p.slug)}>
+                <Link key={p.slug} href={journalPostPath(p.slug)}>
                   <div className="group cursor-pointer">
                     {p.featuredImageUrl && (
                       <div className="aspect-video overflow-hidden bg-muted mb-3">
                         <img
+                          key={p.featuredImageUrl}
                           src={p.featuredImageUrl}
                           alt={p.title}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"

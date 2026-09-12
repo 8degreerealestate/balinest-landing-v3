@@ -8,20 +8,24 @@ import {
   ExternalLink,
   Infinity as InfinityIcon,
   MapPin,
-  Maximize2,
-  Square,
 } from "lucide-react";
+import { ListingStatIcon, type ListingStatIconName } from "@/components/site/listing-stat-icons";
 import type { PropertyInventoryListing } from "@workspace/api-client-react";
 import {
+  resolveLeaseYearsLabel,
+  resolveListingPhotoBadges,
   inferLeaseYearsLabel,
   inferListingArea,
   inferListingStatus,
   inventoryListingPriceUsd,
   listingPriceLine,
   inventoryGalleryUrls,
+  listingHasDriveFolderSource,
   LISTING_IMAGE_FALLBACK,
   pickInventoryThumbnail,
+  proxyInventoryImageUrl,
 } from "@/lib/portfolio-listing";
+import { useListingPhotos } from "@/hooks/use-listing-photos";
 import { formatPriceForSiteCurrency, parseUsdNumber, useSiteCurrency } from "@/lib/site-currency";
 import { COMMON_COPY } from "@/lib/i18n/common";
 import { useSiteCopy } from "@/lib/site-language";
@@ -38,6 +42,8 @@ export type FeaturedCardModel = {
   imageUrl: string | null;
   /** Additional URLs to try if the primary photo fails to load. */
   imageCandidates?: string[];
+  /** When true, card fetches resolved Drive photos lazily (projects grid). */
+  needsPhotoResolve?: boolean;
   imageAlt: string;
   area: string;
   /** Canonical USD for navbar currency conversion; null uses `priceDisplay` fallback. */
@@ -49,9 +55,16 @@ export type FeaturedCardModel = {
   buildingSqm: string | null;
   landSqm: string | null;
   leaseYears: string | null;
+  /** Homepage highlighted strip sort priority — not the EXCLUSIVE badge. */
   featured: boolean;
-  categoryLabel: string;
-  showGreatDeal: boolean;
+  /** EXCLUSIVE badge + green card styling; only when legally accurate. */
+  showExclusive: boolean;
+  /** Top-left photo badge label; falls back to localized “Exclusive” when `showExclusive` and unset. */
+  badgeTopLeft: string | null;
+  /** Top-right photo badge (category / tag slot 2). */
+  categoryLabel: string | null;
+  /** Bottom-right photo badge (status / tag slot 3). */
+  statusBadge: string | null;
   /** Optional third-party listing URL (opens in new tab). */
   externalListingUrl?: string | null;
 };
@@ -83,23 +96,41 @@ function stripEmojis(text: string): string {
     .trim();
 }
 
-function categoryBadge(row: PropertyInventoryListing): string {
-  const t = `${row.title} ${row.description}`.toLowerCase();
-  if (/\b(villa|residence|home|house)\b/.test(t)) return "Residential";
-  return "Investment";
+type CommonCardCopy = (typeof COMMON_COPY)["en"];
+
+/** Localized label for sheet-driven status badges on listing cards. */
+export function statusBadgeDisplayLabel(badge: string, common: CommonCardCopy): string {
+  const lower = badge.trim().toLowerCase();
+  if (lower === "ready") return common.ready;
+  if (lower === "off-plan" || lower === "offplan") return common.offPlan;
+  if (lower === "great deal") return common.greatDeal;
+  return badge.trim();
+}
+
+function categoryBadgeDisplayLabel(label: string, common: CommonCardCopy): string {
+  if (label === "Residential") return common.residential;
+  if (label === "Investment") return common.investment;
+  return label;
 }
 
 /** Map an inventory API row to the highlighted card model (homepage / projects). */
-export function inventoryRowToFeaturedModel(row: PropertyInventoryListing, idx: number): FeaturedCardModel {
+export function inventoryRowToFeaturedModel(row: PropertyInventoryListing, _idx: number): FeaturedCardModel {
   const gallery = inventoryGalleryUrls(row);
-  const img = gallery[0] ?? pickInventoryThumbnail(row) ?? LISTING_IMAGE_FALLBACK;
+  const needsPhotoResolve = listingHasDriveFolderSource(row) && !pickInventoryThumbnail(row);
+  const img = needsPhotoResolve
+    ? null
+    : gallery[0] ?? pickInventoryThumbnail(row) ?? LISTING_IMAGE_FALLBACK;
   const area = row.location?.trim() || inferListingArea(row.title, row.description);
   const ownership = row.ownership?.trim() || inferListingStatus(row.description);
-  const leaseYears =
-    inferLeaseYearsLabel(row.description) ??
-    inferLeaseYearsLabel(ownership) ??
-    inferLeaseYearsLabel(row.deliveryEstimate ?? "");
-  const showGreatDeal = Boolean(row.featured) || idx >= 2;
+  // Prefer sheet `Year of Leasehold`; only infer from copy when the column is blank.
+  const leaseYears = resolveLeaseYearsLabel(
+    row.leaseYears,
+    ownership,
+    row.title,
+    row.description,
+    row.deliveryEstimate,
+  );
+  const badges = resolveListingPhotoBadges(row);
   const displayTitle = stripEmojis(row.title || row.code) || row.code;
   return {
     id: row.id,
@@ -107,7 +138,8 @@ export function inventoryRowToFeaturedModel(row: PropertyInventoryListing, idx: 
     code: row.code,
     title: displayTitle,
     imageUrl: img,
-    imageCandidates: gallery.length > 0 ? gallery : [img],
+    imageCandidates: gallery.length > 0 ? gallery : needsPhotoResolve ? [] : img ? [img] : [],
+    needsPhotoResolve,
     imageAlt: `${row.code} property photo`,
     area,
     priceUsd: inventoryListingPriceUsd(row.estimatePriceUsd, row.description),
@@ -118,8 +150,10 @@ export function inventoryRowToFeaturedModel(row: PropertyInventoryListing, idx: 
     landSqm: row.landSizeSqm?.trim() ? row.landSizeSqm : null,
     leaseYears,
     featured: Boolean(row.featured),
-    categoryLabel: categoryBadge(row),
-    showGreatDeal,
+    showExclusive: badges.showExclusive,
+    badgeTopLeft: badges.badgeTopLeft,
+    categoryLabel: badges.categoryLabel,
+    statusBadge: badges.statusBadge,
     externalListingUrl: row.listingUrl?.trim() || null,
   };
 }
@@ -139,7 +173,7 @@ export type DevelopmentFeaturedInput = {
   bedroomsMax: number;
 };
 
-export function developmentProjectToFeaturedModel(p: DevelopmentFeaturedInput, idx: number): FeaturedCardModel {
+export function developmentProjectToFeaturedModel(p: DevelopmentFeaturedInput, _idx: number): FeaturedCardModel {
   const bedrooms =
     p.bedroomsMin === p.bedroomsMax
       ? String(p.bedroomsMin)
@@ -149,7 +183,8 @@ export function developmentProjectToFeaturedModel(p: DevelopmentFeaturedInput, i
   const priceUsd =
     p.priceFrom > 0 && p.currency.trim().toUpperCase() === "USD" ? p.priceFrom : null;
   const leaseYears = inferLeaseYearsLabel(p.shortDescription);
-  const showGreatDeal = Boolean(p.featured) || idx >= 2;
+  const showExclusive = Boolean(p.featured);
+  const statusBadge = /\boff[\s-]?plan\b/i.test(p.ownership) ? "Off-plan" : null;
   const category =
     p.propertyType?.trim() ||
     (/\b(villa|residence|home|house)\b/i.test(p.title) ? "Residential" : "Development");
@@ -169,10 +204,41 @@ export function developmentProjectToFeaturedModel(p: DevelopmentFeaturedInput, i
     landSqm: null,
     leaseYears,
     featured: Boolean(p.featured),
+    showExclusive,
+    badgeTopLeft: showExclusive ? null : null,
     categoryLabel: category,
-    showGreatDeal,
+    statusBadge,
     externalListingUrl: null,
   };
+}
+
+function StatSqmValue({
+  value,
+  muted,
+  isExclusive,
+  iconName,
+}: {
+  value: string | null;
+  muted: boolean;
+  isExclusive: boolean;
+  iconName: Extract<ListingStatIconName, "land" | "building">;
+}) {
+  const num = value?.trim() || "—";
+  const iconClass = isExclusive ? "shrink-0 text-[#e0fdac]" : "shrink-0";
+  const iconStyle = !isExclusive ? { color: HIGHLIGHTED_CARD_BRAND } : undefined;
+  return (
+    <span
+      className={[
+        "inline-flex items-center gap-1 tabular-nums whitespace-nowrap",
+        muted && !isExclusive ? "text-[#1c1917]/45" : "",
+        muted && isExclusive ? "text-white/50" : "",
+      ].join(" ")}
+    >
+      <ListingStatIcon name={iconName} size={14} className={iconClass} style={iconStyle} />
+      <span>{num}</span>
+      <span className="shrink-0">m²</span>
+    </span>
+  );
 }
 
 export type FeaturedListingCardProps = {
@@ -185,45 +251,66 @@ export type FeaturedListingCardProps = {
 export function FeaturedListingCard({ model: row, idx, onImageUnavailable }: FeaturedListingCardProps) {
   const common = useSiteCopy(COMMON_COPY);
   const currency = useSiteCurrency();
+  const { data: resolvedPhotos, isLoading: photosLoading } = useListingPhotos(
+    row.code,
+    Boolean(row.needsPhotoResolve),
+  );
+  const resolvedGallery = useMemo(
+    () => (resolvedPhotos ? inventoryGalleryUrls(resolvedPhotos) : []),
+    [resolvedPhotos],
+  );
   const priceLabel = useMemo(
     () => formatPriceForSiteCurrency(row.priceUsd, row.priceDisplay, currency),
     [row.priceUsd, row.priceDisplay, currency],
   );
   const candidates = useMemo(() => {
-    const raw = row.imageCandidates?.length
-      ? row.imageCandidates
-      : row.imageUrl
-        ? [row.imageUrl]
-        : [];
+    const raw = resolvedGallery.length
+      ? resolvedGallery
+      : row.imageCandidates?.length
+        ? row.imageCandidates
+        : row.imageUrl
+          ? [row.imageUrl]
+          : [];
     const seen = new Set<string>();
-    return raw.filter((u) => {
-      if (!u || seen.has(u)) return false;
-      seen.add(u);
-      return true;
-    });
-  }, [row.imageCandidates, row.imageUrl]);
+    return raw
+      .map((u) => proxyInventoryImageUrl(u) ?? "")
+      .filter((u) => {
+        if (!u || seen.has(u)) return false;
+        seen.add(u);
+        return true;
+      });
+  }, [resolvedGallery, row.imageCandidates, row.imageUrl]);
 
   const [candidateIdx, setCandidateIdx] = useState(0);
   const [showStockFallback, setShowStockFallback] = useState(false);
+
+  useEffect(() => {
+    setCandidateIdx(0);
+    setShowStockFallback(false);
+  }, [row.code, resolvedGallery]);
+
   const swapOnFailure = Boolean(onImageUnavailable);
   const photoSrc = showStockFallback
     ? LISTING_IMAGE_FALLBACK
     : (candidates[candidateIdx] ?? (swapOnFailure ? null : LISTING_IMAGE_FALLBACK));
 
   useEffect(() => {
-    if (swapOnFailure && candidates.length === 0) {
+    if (swapOnFailure && !photosLoading && candidates.length === 0) {
       onImageUnavailable?.(row.code);
     }
-  }, [swapOnFailure, candidates.length, row.code, onImageUnavailable]);
+  }, [swapOnFailure, photosLoading, candidates.length, row.code, onImageUnavailable]);
 
-  const isExclusive = row.featured;
+  const isExclusive = row.showExclusive;
   const calendarTenure = resolveCalendarTenure(row.ownership, row.leaseYears);
   const tenureMetaIconClass = isExclusive ? "text-[#e0fdac]" : "";
   const tenureMetaIconStyle = !isExclusive ? { color: HIGHLIGHTED_CARD_BRAND } : undefined;
   const ext = row.externalListingUrl?.trim();
 
-  const buildingLabel = row.buildingSqm?.trim() ? `${row.buildingSqm.trim()} m²` : "— m²";
-  const landLabel = row.landSqm?.trim() ? `${row.landSqm.trim()} m²` : "— m²";
+  const topLeftLabel = row.badgeTopLeft ?? (row.showExclusive ? common.exclusive : null);
+  const topRightLabel = row.categoryLabel
+    ? categoryBadgeDisplayLabel(row.categoryLabel, common)
+    : null;
+  const statusBadgeLabel = row.statusBadge ? statusBadgeDisplayLabel(row.statusBadge, common) : null;
 
   return (
     <motion.article
@@ -235,7 +322,9 @@ export function FeaturedListingCard({ model: row, idx, onImageUnavailable }: Fea
     >
       <Link href={row.href} className="group flex h-full min-h-0 flex-1 flex-col">
         <div className="relative aspect-[16/10] shrink-0 overflow-hidden bg-[#d8d4ce]">
-          {photoSrc ? (
+          {photosLoading && row.needsPhotoResolve ? (
+            <div className="h-full w-full animate-pulse bg-[#d8d4ce]" aria-hidden />
+          ) : photoSrc ? (
             <img
               src={photoSrc}
               alt=""
@@ -261,24 +350,22 @@ export function FeaturedListingCard({ model: row, idx, onImageUnavailable }: Fea
             <div className="h-full w-full animate-pulse bg-[#d8d4ce]" aria-hidden />
           )}
 
-          {row.featured ? (
+          {topLeftLabel ? (
             <span
               className="absolute left-3 top-3 rounded px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.28em] text-white shadow-md"
               style={{ backgroundColor: HIGHLIGHTED_CARD_BRAND }}
             >
-              {common.exclusive}
+              {topLeftLabel}
             </span>
           ) : null}
 
-          <span className="absolute right-3 top-3 rounded bg-white/95 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-[#1c1917] shadow-sm backdrop-blur-sm">
-            {row.categoryLabel === "Residential" || row.categoryLabel === "Investment"
-              ? row.categoryLabel === "Residential"
-                ? common.residential
-                : common.investment
-              : row.categoryLabel}
-          </span>
+          {topRightLabel ? (
+            <span className="absolute right-3 top-3 rounded bg-white/95 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-[#1c1917] shadow-sm backdrop-blur-sm">
+              {topRightLabel}
+            </span>
+          ) : null}
 
-          {row.featured ? (
+          {row.showExclusive ? (
             <span
               className="absolute bottom-3 left-3 flex h-8 w-8 items-center justify-center rounded-md shadow-md"
               style={{ backgroundColor: "#1c1917", color: HIGHLIGHTED_CARD_ACCENT }}
@@ -288,12 +375,12 @@ export function FeaturedListingCard({ model: row, idx, onImageUnavailable }: Fea
             </span>
           ) : null}
 
-          {row.showGreatDeal ? (
+          {statusBadgeLabel ? (
             <span
               className="absolute bottom-3 right-3 rounded px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.28em] text-[#1c1917] shadow-md"
               style={{ backgroundColor: HIGHLIGHTED_CARD_ACCENT }}
             >
-              {common.greatDeal}
+              {statusBadgeLabel}
             </span>
           ) : null}
         </div>
@@ -345,44 +432,46 @@ export function FeaturedListingCard({ model: row, idx, onImageUnavailable }: Fea
             </span>
             <span
               className={[
-                "text-xs font-medium",
+                "shrink-0 text-right text-xs font-medium leading-tight",
                 isExclusive ? "text-white/70" : "text-[#1c1917]/60",
               ].join(" ")}
             >
-              {row.ownership}
+              <span className="block">{row.ownership}</span>
+              {row.leaseYears && /\bleasehold\b/i.test(row.ownership) ? (
+                <span
+                  className={[
+                    "mt-0.5 block text-[11px] font-semibold tabular-nums",
+                    isExclusive ? "text-white/90" : "text-[#1c1917]/80",
+                  ].join(" ")}
+                >
+                  {row.leaseYears}
+                </span>
+              ) : null}
             </span>
           </div>
 
           <div
             className={[
-              "mt-4 grid grid-cols-2 gap-x-3 gap-y-2.5 border-t pt-3 text-xs sm:grid-cols-4 sm:gap-x-4",
+              "mt-4 grid grid-cols-4 gap-x-1.5 gap-y-2.5 border-t pt-3 text-[11px] sm:gap-x-3 sm:text-xs",
               isExclusive ? "border-white/15 text-white/90" : "border-[#1c1917]/10 text-[#1c1917]/80",
             ].join(" ")}
           >
-            <span className="inline-flex min-w-0 items-center gap-1.5 tabular-nums">
+            <span className="inline-flex items-center gap-1 tabular-nums whitespace-nowrap">
               <BedDouble size={14} className={isExclusive ? "shrink-0 text-[#e0fdac]" : "shrink-0"} style={!isExclusive ? { color: HIGHLIGHTED_CARD_BRAND } : undefined} />
-              <span className="truncate">{row.bedrooms}</span>
+              <span>{row.bedrooms}</span>
             </span>
-            <span
-              className={[
-                "inline-flex min-w-0 items-center gap-1.5 tabular-nums",
-                !row.buildingSqm?.trim() && !isExclusive ? "text-[#1c1917]/45" : "",
-                !row.buildingSqm?.trim() && isExclusive ? "text-white/50" : "",
-              ].join(" ")}
-            >
-              <Maximize2 size={14} className={isExclusive ? "shrink-0 text-[#e0fdac]" : "shrink-0"} style={!isExclusive ? { color: HIGHLIGHTED_CARD_BRAND } : undefined} />
-              <span className="truncate">{buildingLabel}</span>
-            </span>
-            <span
-              className={[
-                "inline-flex min-w-0 items-center gap-1.5 tabular-nums",
-                !row.landSqm?.trim() && !isExclusive ? "text-[#1c1917]/45" : "",
-                !row.landSqm?.trim() && isExclusive ? "text-white/50" : "",
-              ].join(" ")}
-            >
-              <Square size={14} className={isExclusive ? "shrink-0 text-[#e0fdac]" : "shrink-0"} style={!isExclusive ? { color: HIGHLIGHTED_CARD_BRAND } : undefined} />
-              <span className="truncate">{landLabel}</span>
-            </span>
+            <StatSqmValue
+              value={row.buildingSqm}
+              muted={!row.buildingSqm?.trim()}
+              isExclusive={isExclusive}
+              iconName="building"
+            />
+            <StatSqmValue
+              value={row.landSqm}
+              muted={!row.landSqm?.trim()}
+              isExclusive={isExclusive}
+              iconName="land"
+            />
             <span className="inline-flex min-w-0 items-center gap-1.5 tabular-nums">
               <CalendarDays size={14} className={tenureMetaIconClass} style={tenureMetaIconStyle} />
               {calendarTenure.kind === "infinity" ? (

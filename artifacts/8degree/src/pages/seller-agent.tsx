@@ -1,28 +1,12 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { useForm } from "react-hook-form";
-import { useCreateEnquiry } from "@workspace/api-client-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
-import { PhoneCountryNumberField } from "@/components/site/PhoneCountryNumberField";
+import { CrmInlineForm } from "@/components/site/CrmInlineForm";
 import { Seo } from "@/components/site/Seo";
-import { buildInternationalPhone, DEFAULT_PHONE_COUNTRY_ID, findPhoneCountry } from "@/lib/phone-countries";
 import { SITE_MEDIA } from "@/lib/site-assets";
 import { truncateForMeta } from "@/lib/site-seo";
 import { cn } from "@/lib/utils";
 import { useSiteCopy } from "@/lib/site-language";
-import { COMMON_COPY } from "@/lib/i18n/common";
-import { SELLER_AGENT_COPY, type SellerAgentCopy } from "@/lib/i18n/seller-agent";
+import { SELLER_AGENT_COPY } from "@/lib/i18n/seller-agent";
 
 function FallbackImage({
   src,
@@ -41,234 +25,6 @@ function FallbackImage({
       className={className}
       onError={() => setUseFallback(true)}
     />
-  );
-}
-
-const LABEL = "text-[11px] font-semibold uppercase tracking-[0.28em] text-[#01514E]";
-const CONTROL =
-  "rounded-lg border border-[#1f1d1b]/18 bg-white text-[#1c1917] shadow-sm placeholder:text-[#1c1917]/40 focus-visible:border-[#01514E] focus-visible:ring-1 focus-visible:ring-[#01514E]/25";
-
-const PROPERTY_TYPES = ["Villa", "Apartment", "Land"] as const;
-const PROPERTY_CATEGORIES = ["Leasehold", "Freehold"] as const;
-const PERMITS_OPTIONS = ["Yes", "In process", "No"] as const;
-
-function SellerPartnershipForm({ formCopy }: { formCopy: SellerAgentCopy["form"] }) {
-  const common = useSiteCopy(COMMON_COPY);
-  const { toast } = useToast();
-  const createEnquiry = useCreateEnquiry();
-  const [phoneCountryId, setPhoneCountryId] = useState(DEFAULT_PHONE_COUNTRY_ID);
-  const [phoneNational, setPhoneNational] = useState("");
-
-  const form = useForm({
-    defaultValues: {
-      fullName: "",
-      email: "",
-      country: "",
-      propertyType: "",
-      propertyCategory: "",
-      permitsStatus: "",
-      webSocial: "",
-      message: "",
-    },
-  });
-
-  const onSubmit = form.handleSubmit(async (values) => {
-    const dial = findPhoneCountry(phoneCountryId).dial;
-    const fullPhone = buildInternationalPhone(dial, phoneNational);
-    const phoneDigits = fullPhone.replace(/\D/g, "");
-    if (phoneDigits.length < 8) {
-      toast({
-        title: common.invalidPhoneTitle,
-        description: common.invalidPhoneDesc,
-        variant: "destructive",
-      });
-      return;
-    }
-
-    const lines = [
-      `Property type: ${values.propertyType || "—"}`,
-      `Property category: ${values.propertyCategory || "—"}`,
-      `IMB/PBG and legal permits: ${values.permitsStatus || "—"}`,
-      `Website / Instagram: ${values.webSocial.trim() || "—"}`,
-    ];
-    const body = values.message.trim();
-    const composedMessage = body ? `${lines.join("\n")}\n\n${body}` : lines.join("\n");
-
-    try {
-      await createEnquiry.mutateAsync({
-        data: {
-          name: values.fullName.trim(),
-          email: values.email.trim(),
-          phone: fullPhone || null,
-          country: values.country.trim() || null,
-          budgetRange: null,
-          message: composedMessage || null,
-          source: "seller_agent_partnership",
-        },
-      });
-      toast({
-        title: common.enquirySentTitle,
-        description: common.enquirySentDesc,
-      });
-      form.reset();
-      setPhoneCountryId(DEFAULT_PHONE_COUNTRY_ID);
-      setPhoneNational("");
-    } catch {
-      toast({ title: common.enquiryFailedTitle, description: common.enquiryFailedDesc, variant: "destructive" });
-    }
-  });
-
-  const field = "space-y-1.5";
-  const controlH = `h-11 ${CONTROL}`;
-
-  return (
-    <form
-      onSubmit={onSubmit}
-      className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-x-6 md:gap-y-3.5"
-    >
-      <div className={field}>
-        <Label htmlFor="seller-full-name" className={LABEL}>
-          {formCopy.fullName} <span className="text-[#01514E]">*</span>
-        </Label>
-        <Input
-          id="seller-full-name"
-          autoComplete="name"
-          className={controlH}
-          placeholder={formCopy.fullNamePh}
-          {...form.register("fullName", { required: true })}
-        />
-      </div>
-
-      <div className={field}>
-        <Label htmlFor="seller-country" className={LABEL}>
-          {formCopy.country}
-        </Label>
-        <Input
-          id="seller-country"
-          autoComplete="country-name"
-          className={controlH}
-          placeholder={formCopy.countryPh}
-          {...form.register("country")}
-        />
-      </div>
-
-      <div className={field}>
-        <Label htmlFor="seller-email" className={LABEL}>
-          {formCopy.email} <span className="text-[#01514E]">*</span>
-        </Label>
-        <Input
-          id="seller-email"
-          type="email"
-          autoComplete="email"
-          className={controlH}
-          placeholder={formCopy.emailPh}
-          {...form.register("email", { required: true })}
-        />
-      </div>
-
-      <div className={field}>
-        <Label htmlFor="seller-phone" id="seller-phone-label" className={LABEL}>
-          {formCopy.phone}
-          <span className="ml-1 inline-block translate-y-[-1px] text-[0.45rem] leading-none text-[#01514E]">◆</span>
-        </Label>
-        <PhoneCountryNumberField
-          inputId="seller-phone"
-          groupAriaLabelledBy="seller-phone-label"
-          countryId={phoneCountryId}
-          onCountryIdChange={setPhoneCountryId}
-          national={phoneNational}
-          onNationalChange={setPhoneNational}
-        />
-      </div>
-
-      <div className={field}>
-        <Label className={LABEL}>{formCopy.propertyType}</Label>
-        <Select onValueChange={(v) => form.setValue("propertyType", v)} value={form.watch("propertyType") || undefined}>
-          <SelectTrigger className={controlH}>
-            <SelectValue placeholder={common.selectType} />
-          </SelectTrigger>
-          <SelectContent>
-            {PROPERTY_TYPES.map((opt) => (
-              <SelectItem key={opt} value={opt}>
-                {opt === "Villa" ? formCopy.villa : opt === "Apartment" ? formCopy.apartment : formCopy.land}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div className={field}>
-        <Label className={LABEL}>{formCopy.propertyCategory}</Label>
-        <Select
-          onValueChange={(v) => form.setValue("propertyCategory", v)}
-          value={form.watch("propertyCategory") || undefined}
-        >
-          <SelectTrigger className={controlH}>
-            <SelectValue placeholder={common.selectCategory} />
-          </SelectTrigger>
-          <SelectContent>
-            {PROPERTY_CATEGORIES.map((opt) => (
-              <SelectItem key={opt} value={opt}>
-                {opt === "Leasehold" ? formCopy.leasehold : formCopy.freehold}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div className={field}>
-        <Label className={`${LABEL} max-w-none leading-snug`}>{formCopy.permitsQ}</Label>
-        <Select onValueChange={(v) => form.setValue("permitsStatus", v)} value={form.watch("permitsStatus") || undefined}>
-          <SelectTrigger className={controlH}>
-            <SelectValue placeholder={common.selectStatus} />
-          </SelectTrigger>
-          <SelectContent>
-            {PERMITS_OPTIONS.map((opt) => (
-              <SelectItem key={opt} value={opt}>
-                {opt === "Yes" ? formCopy.permitsYes : opt === "In process" ? formCopy.permitsInProcess : formCopy.permitsNo}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div className={field}>
-        <Label htmlFor="seller-web-social" className={LABEL}>
-          {formCopy.webSocial}
-        </Label>
-        <Input
-          id="seller-web-social"
-          type="text"
-          className={controlH}
-          placeholder={formCopy.webSocialPh}
-          {...form.register("webSocial")}
-        />
-      </div>
-
-      <div className={`${field} md:col-span-2`}>
-        <Label htmlFor="seller-message" className={LABEL}>
-          {formCopy.message}
-        </Label>
-        <Textarea
-          id="seller-message"
-          rows={3}
-          className={`min-h-[96px] resize-y py-2.5 ${CONTROL}`}
-          placeholder={formCopy.messagePh}
-          {...form.register("message")}
-        />
-      </div>
-
-      <div className="flex flex-col items-stretch gap-3 border-t border-[#01514E]/10 pt-4 sm:flex-row sm:items-center sm:justify-between md:col-span-2">
-        <p className="text-[11px] font-light leading-relaxed text-[#1c1917]/55 sm:max-w-md">{formCopy.consent}</p>
-        <Button
-          type="submit"
-          disabled={createEnquiry.isPending}
-          className="h-11 shrink-0 rounded-lg bg-[#01514E] px-8 text-sm font-semibold uppercase tracking-[0.14em] text-white hover:bg-[#013d3a] disabled:opacity-60"
-        >
-          {createEnquiry.isPending ? formCopy.submitting : formCopy.submit}
-        </Button>
-      </div>
-    </form>
   );
 }
 
@@ -371,7 +127,7 @@ export default function SellerAgentPage() {
             transition={{ duration: 0.75, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
             className="rounded-2xl border border-[#01514E]/12 bg-white p-5 shadow-[0_16px_40px_-20px_rgba(1,81,78,0.16)] md:p-6"
           >
-            <SellerPartnershipForm formCopy={t.form} />
+            <CrmInlineForm form="seller-agent" />
           </motion.div>
         </div>
       </section>

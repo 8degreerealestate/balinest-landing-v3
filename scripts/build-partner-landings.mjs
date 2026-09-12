@@ -57,7 +57,7 @@ function buildPage(partner) {
     partner.formUrl,
   );
 
-  html = html.replace(/https:\/\/wa\.link\/5ouk5b/g, partner.whatsappUrl);
+  html = html.replace(/https:\/\/wa\.link\/[a-zA-Z0-9]+/g, partner.whatsappUrl);
 
   if (partner.formOpensInModal === false) {
     html = html.replace(

@@ -1,27 +1,6 @@
 import type { PropertyInventoryListing } from "@workspace/api-client-react";
+import { BALI_SUB_AREA_PARENT } from "@/lib/bali-search-areas";
 import { inferBedroomsBucket, inferListingArea, inventoryListingPriceUsd } from "@/lib/portfolio-listing";
-
-/** Sub-areas in the search UI that roll up to a broader inferred region. */
-const SUB_AREA_PARENT: Record<string, string> = {
-  Melasti: "Uluwatu",
-  Bingin: "Uluwatu",
-  Pecatu: "Uluwatu",
-  Pandawa: "Uluwatu",
-  Ungasan: "Uluwatu",
-  "Padang Padang": "Uluwatu",
-  Balangan: "Uluwatu",
-  Dreamland: "Uluwatu",
-  Jimbaran: "Uluwatu",
-  Bukit: "Uluwatu",
-  Berawa: "Canggu",
-  Pererenan: "Canggu",
-  "Batu Bolong": "Canggu",
-  Padonan: "Canggu",
-  Babakan: "Canggu",
-  Seseh: "Canggu",
-  Cemagi: "Canggu",
-  Mengening: "Canggu",
-};
 
 export type PropertySearchFilterState = {
   area: string;
@@ -43,24 +22,85 @@ export function listingMatchesAreaFilter(
   if (!filterArea || filterArea === "all" || filterArea === "Area") return true;
 
   const hay = `${title}\n${description}\n${location ?? ""}`;
+  const hayLower = hay.toLowerCase();
   const needle = filterArea.toLowerCase();
-  if (hay.toLowerCase().includes(needle)) return true;
+  if (hayLower.includes(needle)) return true;
 
   const loc = (location ?? "").trim();
   if (loc && loc.toLowerCase() === needle) return true;
 
-  const inferred = inferListingArea(title, description);
+  // Include sheet LOCATION so Melasti/etc. roll up to parent regions correctly.
+  const inferred = inferListingArea(title, description, location);
   if (inferred === filterArea) return true;
 
-  const parent = SUB_AREA_PARENT[filterArea];
-  if (parent && inferred === parent && hay.toLowerCase().includes(needle)) return true;
+  const parent = BALI_SUB_AREA_PARENT[filterArea];
+  if (parent && (inferred === parent || hayLower.includes(parent.toLowerCase()))) {
+    return hayLower.includes(needle);
+  }
+
+  // Parent region selected (e.g. Uluwatu) → include known sub-areas even when
+  // copy only mentions Melasti / Pecatu and not the parent name.
+  const childKeys = Object.entries(BALI_SUB_AREA_PARENT)
+    .filter(([, p]) => p === filterArea)
+    .map(([child]) => child.toLowerCase());
+  if (childKeys.length > 0) {
+    if (childKeys.some((child) => hayLower.includes(child))) return true;
+    if (inferred !== "Bali" && BALI_SUB_AREA_PARENT[inferred] === filterArea) return true;
+  }
 
   if (filterArea === "Others") {
-    const known = ["Uluwatu", "Canggu", "Umalas", "Seminyak", "Ubud", "Tabanan", "Sanur", "Nusa Dua"];
+    const known = [
+      "Uluwatu",
+      "Canggu",
+      "Umalas",
+      "Seminyak",
+      "Ubud",
+      "Tabanan",
+      "Sanur",
+      "Nusa Dua",
+      "Denpasar",
+      "Kuta",
+      "Lovina",
+      "Amed",
+      "Candidasa",
+      "Medewi",
+      "Munduk",
+      "Pemuteran",
+      "Nusa Penida",
+    ];
     return !known.some((k) => hay.includes(k) || inferred === k);
   }
 
   return false;
+}
+
+export const BEDROOM_FILTER_OPTIONS = [
+  { value: "1", label: "1 Bedroom" },
+  { value: "2", label: "2 Bedrooms" },
+  { value: "3", label: "3 Bedrooms" },
+  { value: "4", label: "4 Bedrooms" },
+  { value: "5", label: "5 Bedrooms" },
+  { value: "6+", label: "6+ Bedrooms" },
+] as const;
+
+export function parseBedroomFilterValues(bedrooms: string): string[] {
+  if (!bedrooms || bedrooms === "all") return [];
+  return bedrooms
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+export function serializeBedroomFilterValues(values: readonly string[]): string {
+  const unique = [...new Set(values.map((v) => v.trim()).filter(Boolean))];
+  return unique.length === 0 ? "all" : unique.join(",");
+}
+
+function listingMatchesSingleBedroomOption(option: string, bedroomCount: number): boolean {
+  if (option === "4") return bedroomCount >= 4;
+  if (option === "6+") return bedroomCount >= 6;
+  const n = Number(option);
+  return Number.isFinite(n) && n === bedroomCount;
 }
 
 export function listingMatchesBedroomsFilter(
@@ -68,12 +108,28 @@ export function listingMatchesBedroomsFilter(
   title: string,
   description: string,
 ): boolean {
-  if (!bedrooms || bedrooms === "all") return true;
+  const selected = parseBedroomFilterValues(bedrooms);
+  if (selected.length === 0) return true;
   const n = inferBedroomsBucket(title, description);
   if (n === null) return true;
-  if (bedrooms === "4") return n >= 4;
-  if (bedrooms === "6+") return n >= 6;
-  return Number(bedrooms) === n;
+  return selected.some((opt) => listingMatchesSingleBedroomOption(opt, n));
+}
+
+/** Off-plan / development projects expose a min–max bedroom range. */
+export function projectMatchesBedroomsFilter(
+  bedrooms: string,
+  bedroomsMin: number,
+  bedroomsMax: number,
+): boolean {
+  const selected = parseBedroomFilterValues(bedrooms);
+  if (selected.length === 0) return true;
+  return selected.some((opt) => {
+    if (opt === "4") return bedroomsMax >= 4;
+    if (opt === "6+") return bedroomsMax >= 6;
+    const n = Number(opt);
+    if (!Number.isFinite(n)) return false;
+    return bedroomsMin <= n && bedroomsMax >= n;
+  });
 }
 
 export function listingMatchesPropertyTypeFilter(

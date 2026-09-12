@@ -96,9 +96,15 @@ export function listJournalFallback(options: {
   if (options.category) {
     rows = rows.filter((r) => r.categoryName === options.category);
   }
-  const total = rows.length;
-  const slice = rows.slice(options.offset, options.offset + options.limit);
-  return { posts: journalRowsToDtos(slice), total };
+  const dtos = journalRowsToDtos(rows).sort((a, b) => {
+    const ta = a.publishedAt ? Date.parse(a.publishedAt) : 0;
+    const tb = b.publishedAt ? Date.parse(b.publishedAt) : 0;
+    if (tb !== ta) return tb - ta;
+    return b.id - a.id;
+  });
+  const total = dtos.length;
+  const slice = dtos.slice(options.offset, options.offset + options.limit);
+  return { posts: slice, total };
 }
 
 export function getJournalFallbackBySlug(slug: string): JournalPostDto | null {

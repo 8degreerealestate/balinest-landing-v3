@@ -23,10 +23,17 @@ export default function AdminSettings() {
             PROPERTY_INVENTORY_SHEET_EXPORT_URL / SPREADSHEET_ID / SHEET_GID: optional sheet overrides (see API server).
           </li>
           <li className="text-foreground/80 list-none -ml-5 mt-2 font-sans text-[13px]">
-            <strong>Featured on the public site:</strong> add a <code>Featured</code> column on the sheet (values{" "}
-            <code>Yes</code> / <code>Y</code> / <code>1</code>) for homepage highlighted listings. Admin → Inventory
-            star actions still override when set. <strong>Draft / sold</strong> overrides are stored in Postgres (
-            <code>inventory_listing_meta</code>).
+            <strong>Homepage highlighted listings:</strong> add a <code>Featured</code> column (values{" "}
+            <code>Yes</code> / <code>Y</code> / <code>1</code>) — sort priority only, <em>not</em> the EXCLUSIVE badge.
+            Admin → Inventory star still overrides <code>Featured</code> when set.             <strong>Listing card badges</strong>{" "}
+            (you control these on the sheet — no developer needed): preferred column <code>Tag</code> — up to three
+            comma-separated labels per row (e.g. <code>Exclusive, Leasehold, Family Friendly</code>) map to the
+            top-left, top-right, and bottom-right photo badges on every listing card. When <code>Tag</code> is blank,
+            legacy columns still apply: <code>Exclusive</code> (green card styling), <code>Category</code> /{" "}
+            <code>Listing Type</code>, <code>Status</code> / <code>Development Status</code> (Ready / Off-plan), and an
+            opt-in <code>Great Deal</code> column (<code>Yes</code> only — not applied from Status checkboxes). Sheet
+            edits typically appear on the site within ~5 minutes.{" "}
+            <strong>Draft / sold</strong> overrides are stored in Postgres (<code>inventory_listing_meta</code>).
             Apply the SQL migration in <code className="text-xs">scripts/sql/inventory_listing_meta.sql</code> if PATCH
             returns 503.
           </li>

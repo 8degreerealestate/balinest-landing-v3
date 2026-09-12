@@ -228,6 +228,7 @@ export type PropertyInventoryListingChannel =
 export const PropertyInventoryListingChannel = {
   silent: "silent",
   website: "website",
+  rentals: "rentals",
 } as const;
 
 export interface PropertyInventoryListing {
@@ -241,7 +242,12 @@ export interface PropertyInventoryListing {
   /** Extra gallery URLs when provided by the inventory source. */
   imageUrls?: string[] | null;
   ownership: string | null;
+  /** Lease term from sheet `Year of Leasehold` (e.g. `36 Years`). */
+  leaseYears?: string | null;
   location: string | null;
+  /** Decimal degrees from sheet `Map Lat` (privacy-offset pin). */
+  mapLat?: string | null;
+  mapLng?: string | null;
   estimatePriceUsd: string | null;
   deliveryEstimate: string | null;
   landSizeSqm: string | null;
@@ -257,8 +263,16 @@ export interface PropertyInventoryListing {
   sortOrder: number;
   createdAt: string | null;
   updatedAt: string | null;
-  /** Merged from `inventory_listing_meta` when configured. */
+  /** Merged from `inventory_listing_meta` when configured. Homepage sort priority only. */
   featured?: boolean;
+  /** EXCLUSIVE badge + green card styling — sheet `Exclusive` column; default off. */
+  exclusive?: boolean;
+  /** Top-right badge label from sheet `Category` / `Listing Type`. */
+  listingCategory?: string | null;
+  /** Bottom-right photo badge — sheet `Status` / `Great Deal` column (Ready, Off-plan, etc.). */
+  statusBadge?: string | null;
+  /** Up to 3 photo badge labels from sheet `Tag` (comma-separated: top-left, top-right, bottom-right). */
+  listingTags?: string[] | null;
   /** `draft` rows are hidden from the public portfolio. */
   visibility?: "active" | "draft";
   /** `sold` rows are hidden from the public portfolio. */
@@ -386,4 +400,5 @@ export type ListInventoryListingsChannel =
 export const ListInventoryListingsChannel = {
   silent: "silent",
   website: "website",
+  rentals: "rentals",
 } as const;

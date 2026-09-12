@@ -1,21 +1,37 @@
 /** Public site origin for canonicals and OG URLs. Set in production via VITE_PUBLIC_SITE_URL (no trailing slash). */
 export function getPublicSiteOrigin(): string {
-  const fromEnv = import.meta.env.VITE_PUBLIC_SITE_URL?.trim().replace(/\/$/, "");
-  if (fromEnv) return fromEnv;
+  const viteEnv =
+    typeof import.meta !== "undefined"
+      ? (import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env
+      : undefined;
+  const fromVite = viteEnv?.VITE_PUBLIC_SITE_URL?.trim().replace(/\/$/, "");
+  if (fromVite) return fromVite;
+  const fromNode =
+    typeof process !== "undefined"
+      ? process.env?.VITE_PUBLIC_SITE_URL?.trim().replace(/\/$/, "")
+      : undefined;
+  if (fromNode) return fromNode;
   if (typeof window !== "undefined") return window.location.origin;
   return "";
 }
 
 export function normalizeBasePath(): string {
-  const raw = import.meta.env.BASE_URL || "/";
+  const viteEnv =
+    typeof import.meta !== "undefined"
+      ? (import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env
+      : undefined;
+  const raw = viteEnv?.BASE_URL || "/";
   if (raw === "/") return "";
   return raw.endsWith("/") ? raw.slice(0, -1) : raw;
 }
 
 /** Absolute URL for the current deployment (includes Vite base path). */
-export function canonicalUrl(pathname: string): string {
+export function canonicalUrl(pathname: string, originOverride?: string): string {
   const origin =
-    getPublicSiteOrigin() || (typeof window !== "undefined" ? window.location.origin : "") || "http://localhost";
+    originOverride?.replace(/\/$/, "") ||
+    getPublicSiteOrigin() ||
+    (typeof window !== "undefined" ? window.location.origin : "") ||
+    "http://localhost";
   const base = normalizeBasePath();
   const path = pathname.startsWith("/") ? pathname : `/${pathname}`;
   const joined = `${base}${path}`.replace(/\/{2,}/g, "/") || "/";
@@ -36,11 +52,17 @@ export function jsonLdGraph(nodes: Record<string, unknown>[]): Record<string, un
   return { "@context": "https://schema.org", "@graph": nodes };
 }
 
-export function toAbsoluteImageUrl(url: string | null | undefined): string | undefined {
+export function toAbsoluteImageUrl(
+  url: string | null | undefined,
+  originOverride?: string,
+): string | undefined {
   if (!url?.trim()) return undefined;
   const u = url.trim();
   if (u.startsWith("http://") || u.startsWith("https://")) return u;
-  const origin = getPublicSiteOrigin() || (typeof window !== "undefined" ? window.location.origin : "");
+  const origin =
+    originOverride?.replace(/\/$/, "") ||
+    getPublicSiteOrigin() ||
+    (typeof window !== "undefined" ? window.location.origin : "");
   const base = normalizeBasePath();
   if (u.startsWith("/")) return `${origin}${base}${u}`.replace(/(?<!:)\/+/g, (m) => (m.length > 1 ? "/" : m));
   return u;

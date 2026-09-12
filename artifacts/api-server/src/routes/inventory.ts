@@ -15,12 +15,17 @@ import {
   inventoryListingMetaTable,
 } from "@workspace/db";
 import {
+  applyCachedDriveImagesToRows,
   clearPropertyInventorySheetCache,
   enrichListingRowWithDriveImages,
+  enrichListingRowsWithDriveImages,
   loadListingsFromGoogleSheet,
   useSheetAsInventorySource,
 } from "../lib/property-inventory-sheet";
 import type { SheetListingRow } from "../lib/property-inventory-sheet";
+import { fetchListingNearbyPlaces } from "../lib/listing-nearby";
+import { pickFeaturedInventoryListings } from "../lib/featured-inventory-listings";
+import { listingRowHasThumbnail, pickSimilarInventoryListings } from "../lib/similar-inventory-listings";
 import { logger } from "../lib/logger";
 
 const router = Router();
@@ -42,8 +47,8 @@ function setInventoryResponseCacheHeaders(res: Response, forceExternalRefresh: b
   }
   // Cache at the edge to reduce serverless cold starts and sheet round-trips.
   res.setHeader("Cache-Control", "public, max-age=0, must-revalidate");
-  res.setHeader("CDN-Cache-Control", "public, s-maxage=300, stale-while-revalidate=600");
-  res.setHeader("Vercel-CDN-Cache-Control", "public, s-maxage=300, stale-while-revalidate=600");
+  res.setHeader("CDN-Cache-Control", "public, s-maxage=900, stale-while-revalidate=3600");
+  res.setHeader("Vercel-CDN-Cache-Control", "public, s-maxage=900, stale-while-revalidate=3600");
 }
 
 function getPgOrSystemErrorCode(error: unknown): string | undefined {
@@ -142,7 +147,7 @@ async function ensureInventoryListingMetaReady(): Promise<boolean> {
 }
 
 const listInventoryQuerySchema = z.object({
-  channel: z.enum(["silent", "website"]).optional(),
+  channel: z.enum(["silent", "website", "rentals"]).optional(),
   limit: z.coerce.number().int().min(1).max(2000).default(50),
   offset: z.coerce.number().int().min(0).default(0),
   refreshSheet: z.string().optional(),
@@ -150,7 +155,7 @@ const listInventoryQuerySchema = z.object({
 
 function orderedExternalRows(
   rows: SheetListingRow[],
-  channel: "silent" | "website" | undefined,
+  channel: "silent" | "website" | "rentals" | undefined,
 ): SheetListingRow[] {
   let filtered = rows;
   if (channel) {
@@ -163,7 +168,7 @@ function orderedExternalRows(
 
 function jsonFromExternalRows(
   rows: SheetListingRow[],
-  channel: "silent" | "website" | undefined,
+  channel: "silent" | "website" | "rentals" | undefined,
   limit: number,
   offset: number,
 ): { listings: Array<ReturnType<typeof mapExternalRow>>; total: number } {
@@ -181,7 +186,8 @@ function compactListingForListResponse(listing: ListingRowJson): ListingRowJson 
     ...listing,
     imageUrls,
     imageUrl: listing.imageUrl ?? imageUrls[0] ?? null,
-    description: (listing.description ?? "").slice(0, 420),
+    // Keep enough of Description/Broadcast for card blurbs without shipping full bios.
+    description: (listing.description ?? "").slice(0, 1200),
   };
 }
 
@@ -196,7 +202,10 @@ function mapExternalRow(r: SheetListingRow) {
     imageUrl: r.imageUrl,
     imageUrls: r.imageUrls,
     ownership: r.ownership,
+    leaseYears: r.leaseYears,
     location: r.location,
+    mapLat: r.mapLat,
+    mapLng: r.mapLng,
     estimatePriceUsd: r.estimatePriceUsd,
     deliveryEstimate: r.deliveryEstimate,
     landSizeSqm: r.landSizeSqm,
@@ -213,6 +222,10 @@ function mapExternalRow(r: SheetListingRow) {
     createdAt: r.createdAt,
     updatedAt: r.updatedAt,
     featured: Boolean(r.featured),
+    exclusive: Boolean(r.exclusive),
+    listingCategory: r.listingCategory,
+    statusBadge: r.statusBadge,
+    listingTags: r.listingTags?.length ? r.listingTags : null,
     visibility: "active" as "active" | "draft",
     saleStatus: "available" as "available" | "sold",
     postedAt: r.updatedAt,
@@ -289,7 +302,10 @@ const inventoryDbRowSelect = {
   imageUrl: sql<string | null>`null`,
   imageUrls: sql<string[]>`ARRAY[]::text[]`,
   ownership: sql<string | null>`null`,
+  leaseYears: sql<string | null>`null`,
   location: sql<string | null>`null`,
+  mapLat: sql<string | null>`null`,
+  mapLng: sql<string | null>`null`,
   estimatePriceUsd: sql<string | null>`null`,
   deliveryEstimate: sql<string | null>`null`,
   landSizeSqm: sql<string | null>`null`,
@@ -314,7 +330,10 @@ function listingJsonFromDbRow(r: {
   imageUrl: string | null;
   imageUrls: string[];
   ownership: string | null;
+  leaseYears: string | null;
   location: string | null;
+  mapLat: string | null;
+  mapLng: string | null;
   estimatePriceUsd: string | null;
   deliveryEstimate: string | null;
   landSizeSqm: string | null;
@@ -338,7 +357,10 @@ function listingJsonFromDbRow(r: {
     imageUrl: r.imageUrl,
     imageUrls: r.imageUrls,
     ownership: r.ownership,
+    leaseYears: r.leaseYears,
     location: r.location,
+    mapLat: r.mapLat,
+    mapLng: r.mapLng,
     estimatePriceUsd: r.estimatePriceUsd,
     deliveryEstimate: r.deliveryEstimate,
     landSizeSqm: r.landSizeSqm,
@@ -350,11 +372,15 @@ function listingJsonFromDbRow(r: {
     livingRoom: null,
     listingUrl: r.listingUrl,
     description: r.description,
-    channel: r.channel as "silent" | "website",
+    channel: r.channel as "silent" | "website" | "rentals",
     sortOrder: r.sortOrder,
     createdAt: r.createdAt?.toISOString() ?? "",
     updatedAt: r.updatedAt?.toISOString() ?? "",
     featured: false,
+    exclusive: false,
+    listingCategory: null,
+    statusBadge: null,
+    listingTags: null,
     visibility: "active" as "active" | "draft",
     saleStatus: "available" as "available" | "sold",
     postedAt: r.updatedAt?.toISOString() ?? "",
@@ -524,6 +550,160 @@ async function upsertListingMetaHandler(req: Request, res: Response): Promise<vo
 router.post("/inventory/listings/:code/meta", upsertListingMetaHandler);
 router.patch("/inventory/listings/:code/meta", upsertListingMetaHandler);
 
+router.get("/inventory/listings/featured", async (req, res): Promise<void> => {
+  const limitRaw = Number(req.query.limit ?? 6);
+  const limit = Number.isFinite(limitRaw) ? Math.min(Math.max(1, limitRaw), 24) : 6;
+
+  try {
+    const fromSheet = await loadListingsFromGoogleSheet({
+      forceRefresh: false,
+      resolveDriveImages: false,
+    });
+    if (!fromSheet?.length) {
+      res.json({ listings: [] });
+      return;
+    }
+
+    const hydratedSheet = applyCachedDriveImagesToRows(fromSheet);
+    const mergedPool = await mergeMetaIntoListings(hydratedSheet.map(mapExternalRow));
+    const prePicks = pickFeaturedInventoryListings(mergedPool, limit);
+    const sheetByCode = new Map(hydratedSheet.map((row) => [inventoryListingCodeKey(row.code), row]));
+    const sheetPicks = prePicks
+      .map((pick) => sheetByCode.get(inventoryListingCodeKey(pick.code)))
+      .filter((row): row is SheetListingRow => Boolean(row));
+    const enrichedSheet = await enrichListingRowsWithDriveImages(sheetPicks);
+    const picks = await mergeMetaIntoListings(enrichedSheet.map(mapExternalRow));
+
+    setInventoryResponseCacheHeaders(res, false);
+    res.json({ listings: picks.map(compactListingForListResponse) });
+  } catch (error: unknown) {
+    logger.error({ err: error }, "inventory featured listings failed");
+    res.status(500).json({ error: "Could not load featured listings" });
+  }
+});
+
+router.get("/inventory/listings/:code/photos", async (req, res): Promise<void> => {
+  const rawCode = req.params.code;
+  const code = (Array.isArray(rawCode) ? rawCode[0] : rawCode ?? "").trim();
+  if (!code || !/^[A-Za-z0-9_-]+$/.test(code)) {
+    res.status(400).json({ error: "Invalid listing code" });
+    return;
+  }
+
+  try {
+    const fromSheet = await loadListingsFromGoogleSheet({
+      forceRefresh: false,
+      resolveDriveImages: false,
+    });
+    const codeKey = inventoryListingCodeKey(code);
+    const hit = fromSheet?.find((row) => inventoryListingCodeKey(row.code) === codeKey);
+    if (!hit) {
+      res.status(404).json({ error: "Listing not found" });
+      return;
+    }
+
+    const [enriched] = await enrichListingRowsWithDriveImages([applyCachedDriveImagesToRows([hit])[0] ?? hit]);
+    const imageUrls = Array.isArray(enriched?.imageUrls) ? enriched.imageUrls.slice(0, 8) : [];
+    const imageUrl = enriched?.imageUrl ?? imageUrls[0] ?? null;
+
+    res.setHeader("Cache-Control", "public, max-age=0, must-revalidate");
+    res.setHeader("CDN-Cache-Control", "public, s-maxage=86400, stale-while-revalidate=172800");
+    res.setHeader("Vercel-CDN-Cache-Control", "public, s-maxage=86400, stale-while-revalidate=172800");
+    res.json({ imageUrl, imageUrls });
+  } catch (error: unknown) {
+    logger.error({ err: error, code }, "inventory listing photos failed");
+    res.status(500).json({ error: "Could not load listing photos" });
+  }
+});
+
+router.get("/inventory/listings/:code/similar", async (req, res): Promise<void> => {
+  const rawCode = req.params.code;
+  const code = (Array.isArray(rawCode) ? rawCode[0] : rawCode ?? "").trim();
+  if (!code || !/^[A-Za-z0-9_-]+$/.test(code)) {
+    res.status(400).json({ error: "Invalid listing code" });
+    return;
+  }
+
+  const limitRaw = Number(req.query.limit ?? 3);
+  const limit = Number.isFinite(limitRaw) ? Math.min(Math.max(1, limitRaw), 12) : 3;
+
+  try {
+    const current = await findListingByCode(code);
+    if (!current) {
+      res.status(404).json({ error: "Listing not found" });
+      return;
+    }
+
+    const fromSheet = await loadListingsFromGoogleSheet({
+      forceRefresh: false,
+      resolveDriveImages: false,
+    });
+    if (!fromSheet?.length) {
+      res.json({ listings: [] });
+      return;
+    }
+
+    const pool = applyCachedDriveImagesToRows(fromSheet);
+    const mergedPool = await mergeMetaIntoListings(pool.map(mapExternalRow));
+    const candidateLimit = Math.min(Math.max(limit * 4, 12), 24);
+    const prePicks = pickSimilarInventoryListings(current, mergedPool, candidateLimit, {
+      requireThumbnail: false,
+    });
+    const sheetByCode = new Map(pool.map((row) => [inventoryListingCodeKey(row.code), row]));
+    const sheetPicks = prePicks
+      .map((pick) => sheetByCode.get(inventoryListingCodeKey(pick.code)))
+      .filter((row): row is SheetListingRow => Boolean(row));
+    const enrichedSheet = await enrichListingRowsWithDriveImages(sheetPicks);
+    const picks = (await mergeMetaIntoListings(enrichedSheet.map(mapExternalRow)))
+      .filter(listingRowHasThumbnail)
+      .slice(0, limit);
+
+    setInventoryResponseCacheHeaders(res, false);
+    res.json({ listings: picks.map(compactListingForListResponse) });
+  } catch (error: unknown) {
+    logger.error({ err: error, code }, "inventory listing similar failed");
+    res.status(500).json({ error: "Could not load similar listings" });
+  }
+});
+
+router.get("/inventory/listings/:code/nearby", async (req, res): Promise<void> => {
+  const rawCode = req.params.code;
+  const code = (Array.isArray(rawCode) ? rawCode[0] : rawCode ?? "").trim();
+  if (!code || !/^[A-Za-z0-9_-]+$/.test(code)) {
+    res.status(400).json({ error: "Invalid listing code" });
+    return;
+  }
+
+  try {
+    const listing = await findListingByCode(code);
+    if (!listing) {
+      res.status(404).json({ error: "Listing not found" });
+      return;
+    }
+
+    const nearby = await fetchListingNearbyPlaces({
+      mapLat: listing.mapLat,
+      mapLng: listing.mapLng,
+      location: listing.location,
+      title: listing.title,
+      description: listing.description,
+    });
+
+    res.setHeader("Cache-Control", "public, max-age=0, must-revalidate");
+    res.setHeader("CDN-Cache-Control", "public, s-maxage=86400, stale-while-revalidate=172800");
+    res.setHeader("Vercel-CDN-Cache-Control", "public, s-maxage=86400, stale-while-revalidate=172800");
+    res.json({
+      shopping: nearby.shopping,
+      cafes: nearby.cafes,
+      landmarks: nearby.landmarks,
+      center: nearby.center,
+    });
+  } catch (error: unknown) {
+    logger.error({ err: error, code }, "inventory listing nearby failed");
+    res.status(500).json({ error: "Could not load nearby places" });
+  }
+});
+
 router.get("/inventory/listings/:code", async (req, res): Promise<void> => {
   const rawCode = req.params.code;
   const code = (Array.isArray(rawCode) ? rawCode[0] : rawCode ?? "").trim();
@@ -583,10 +763,11 @@ router.get("/inventory/listings", async (req, res): Promise<void> => {
     try {
       const fromSheet = await loadListingsFromGoogleSheet({
         forceRefresh: forceExternalRefresh,
-        resolveDriveImages: true,
+        resolveDriveImages: false,
       });
       if (fromSheet && fromSheet.length > 0) {
-        const { listings, total } = jsonFromExternalRows(fromSheet, channel, limit, offset);
+        const hydratedSheet = applyCachedDriveImagesToRows(fromSheet);
+        const { listings, total } = jsonFromExternalRows(hydratedSheet, channel, limit, offset);
         if (total > 0) {
           const merged = await mergeMetaIntoListings(listings);
           if (inventoryListingsDebugEnabled()) {
@@ -713,7 +894,7 @@ const inventoryListingUpsertRowSchema = z.object({
       }
     }),
   description: z.string().max(100_000).default(""),
-  channel: z.enum(["silent", "website"]),
+  channel: z.enum(["silent", "website", "rentals"]),
   sortOrder: z.number().int().min(0).max(1_000_000).optional().default(0),
 });
 

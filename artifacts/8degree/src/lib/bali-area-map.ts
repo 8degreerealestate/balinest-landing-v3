@@ -4,6 +4,8 @@
  * Highlights use rough lon/lat boxes clipped to the island shape.
  */
 
+import { BALI_SUB_AREA_PARENT } from "@/lib/bali-search-areas";
+
 export const BALI_MAP_BRAND = "#01514E";
 export const BALI_MAP_BASE_FILL = "#e4e4e4";
 export const BALI_MAP_BASE_STROKE = "#bcbcbc";
@@ -50,22 +52,39 @@ export const BALI_HIGHLIGHT_BOXES: Record<string, [number, number, number, numbe
   tabanan: [114.95, -8.58, 115.2, -8.32],
 };
 
-const AREA_MAP_REGIONS: Record<string, string[]> = {
-  Uluwatu: ["uluwatu"],
-  Melasti: ["uluwatu"],
-  Bingin: ["uluwatu"],
-  Pecatu: ["uluwatu"],
-  Pandawa: ["uluwatu"],
-  Ungasan: ["uluwatu"],
-  "Padang Padang": ["uluwatu"],
-  Umalas: ["umalas"],
-  Canggu: ["canggu"],
-  Pererenan: ["canggu"],
-  Seminyak: ["seminyak"],
-  Ubud: ["ubud"],
-  Tabanan: ["tabanan"],
+const PARENT_MAP_REGION: Record<string, string> = {
+  Uluwatu: "uluwatu",
+  Umalas: "umalas",
+  Canggu: "canggu",
+  Seminyak: "seminyak",
+  Ubud: "ubud",
+  Tabanan: "tabanan",
+  Sanur: "seminyak",
+  "Nusa Dua": "seminyak",
+  Denpasar: "seminyak",
+  Kuta: "seminyak",
+  Lovina: "tabanan",
+  Amed: "ubud",
+  Candidasa: "ubud",
+  Medewi: "tabanan",
+  Munduk: "tabanan",
+  Pemuteran: "tabanan",
+  "Nusa Penida": "uluwatu",
+};
+
+/** Primary area label for a clickable map region (exact parent, not a proxy). */
+export const BALI_MAP_REGION_AREA: Record<string, string> = {
+  uluwatu: "Uluwatu",
+  umalas: "Umalas",
+  canggu: "Canggu",
+  seminyak: "Seminyak",
+  ubud: "Ubud",
+  tabanan: "Tabanan",
 };
 
 export function activeBaliMapRegions(selectedArea: string): Set<string> {
-  return new Set(AREA_MAP_REGIONS[selectedArea] ?? []);
+  if (!selectedArea || selectedArea === "Area" || selectedArea === "all") return new Set();
+  const parent = BALI_SUB_AREA_PARENT[selectedArea] ?? selectedArea;
+  const region = PARENT_MAP_REGION[parent];
+  return new Set(region ? [region] : []);
 }

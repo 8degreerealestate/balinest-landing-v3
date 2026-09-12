@@ -29,7 +29,12 @@ export type SheetListingRow = {
   imageUrl: string | null;
   imageUrls: string[];
   ownership: string | null;
+  /** Lease term from sheet `Year of Leasehold` (e.g. `36` → `36 Years`). */
+  leaseYears: string | null;
   location: string | null;
+  /** Privacy-offset map pin from sheet `Map Lat` / `Map Lng` (decimal degrees). */
+  mapLat: string | null;
+  mapLng: string | null;
   estimatePriceUsd: string | null;
   deliveryEstimate: string | null;
   landSizeSqm: string | null;
@@ -41,9 +46,17 @@ export type SheetListingRow = {
   livingRoom: string | null;
   listingUrl: string | null;
   description: string;
-  channel: "silent" | "website";
+  channel: "silent" | "website" | "rentals";
   /** When true, listing is prioritized on the homepage highlighted strip (up to 6 cards). */
   featured: boolean;
+  /** When true, show the EXCLUSIVE badge and green card styling (legal representation only). */
+  exclusive: boolean;
+  /** Optional top-right badge label (Residential, Investment, etc.). */
+  listingCategory: string | null;
+  /** Bottom-right photo badge label (Ready, Off-plan, Great deal, etc.). */
+  statusBadge: string | null;
+  /** Up to 3 comma-separated card badges from sheet `Tag` (top-left, top-right, bottom-right). */
+  listingTags: string[];
   sortOrder: number;
   createdAt: string;
   updatedAt: string;
@@ -51,7 +64,8 @@ export type SheetListingRow = {
 
 let cache: { key: string; fetchedAt: number; rows: SheetListingRow[] } | null = null;
 /** In-memory sheet rows (includes resolved Drive folder thumbnails). */
-const CACHE_TTL_MS = 10 * 60_000;
+/** Sheet CSV cache — keep short so Tag / column edits show up within a few minutes. */
+const CACHE_TTL_MS = 5 * 60_000;
 const DRIVE_FOLDER_TTL_MS = 10 * 60_000;
 const driveFolderCache = new Map<string, { fetchedAt: number; imageUrls: string[] }>();
 
@@ -234,12 +248,11 @@ function listingHasDriveFolderSource(row: Pick<SheetListingRow, "imageUrl" | "im
   return urls.some((u) => driveFolderIdFromUrl(u) !== null);
 }
 
+/** Letter-suffixed unit variants only (8DV106A/B). Do not collapse 8D25138 → 8D251. */
 function listingFamilyKey(code: string): string {
   const c = code.trim().toUpperCase();
   const letterSuffix = /^(.+\d)([A-Z])$/.exec(c);
   if (letterSuffix && letterSuffix[1].length >= 5) return letterSuffix[1];
-  if (/^8D\d/i.test(c) && c.length >= 6) return c.slice(0, 5);
-  if (/^8DV\d/i.test(c) && c.length >= 6) return c.slice(0, 5);
   return c;
 }
 
@@ -302,9 +315,13 @@ function normalizedRowGet(row: Record<string, string>, ...keys: string[]): strin
   for (const [k, v] of Object.entries(row)) {
     normalized.set(normalizeHeaderKey(k), v ?? "");
   }
+  // Prefer the first non-empty match so blank Status cells don't block Great Deal / aliases.
   for (const key of keys) {
     const v = normalized.get(normalizeHeaderKey(key));
-    if (v !== undefined) return v;
+    if (v !== undefined && v.trim() !== "") return v;
+  }
+  for (const key of keys) {
+    if (normalized.has(normalizeHeaderKey(key))) return "";
   }
   return "";
 }
@@ -315,6 +332,24 @@ function normalizedNullableCell(row: Record<string, string>, ...keys: string[]):
     if (v) return v;
   }
   return null;
+}
+
+/** Sheet `Year of Leasehold` — numeric cells become marketing labels for listing cards. */
+function formatLeaseYearsCell(raw: string): string {
+  const s = raw.trim().replace(/\s+/g, " ");
+  if (!s) return s;
+  if (/\byears?\b/i.test(s)) {
+    // Normalize "31,5 Years" / "31.5 years" → "31.5 Years"
+    return s.replace(/^(\d+)[,.](\d+)\s*years?$/i, "$1.$2 Years").replace(/^(\d+)\s*years?$/i, "$1 Years");
+  }
+  // Excel / EU decimals: 31,5 or 31.5
+  const decimal = s.match(/^(\d+)[,.](\d+)\s*\+?$/);
+  if (decimal) return `${decimal[1]}.${decimal[2]} Years`;
+  const whole = s.match(/^(\d+)\s*\+?$/);
+  if (whole) return `${whole[1]} Years`;
+  const prefixed = s.match(/^(\d+)\s*(?:years?|yrs?)\b/i);
+  if (prefixed) return `${prefixed[1]} Years`;
+  return s;
 }
 
 /** Workbook header is often `Code Silent listing / Unlist property` rather than `Code`. */
@@ -436,7 +471,7 @@ function enrichListingFieldsFromDescription(row: Omit<SheetListingRow, "id" | "s
   "id" | "sortOrder" | "createdAt" | "updatedAt"
 > {
   const d = row.description;
-  let { landSizeSqm, buildingSizeSqm, br, ba, ownership, level, zoning, livingRoom } = row;
+  let { landSizeSqm, buildingSizeSqm, br, ba, ownership, leaseYears, level, zoning, livingRoom } = row;
 
   if (!landSizeSqm) {
     const m = d.match(/Land\s*Size\s*:\s*([\d.,\s–-]+?)\s*m\s*²/i) ?? d.match(/Land\s*Size\s*:\s*([\d.,\s–-]+)/i);
@@ -461,13 +496,20 @@ function enrichListingFieldsFromDescription(row: Omit<SheetListingRow, "id" | "s
   if (leaseInDesc && ownership && /leasehold/i.test(ownership) && !/\d+\s*Years?/i.test(ownership)) {
     ownership = `Leasehold (${leaseInDesc[1]} Years)`;
   }
+  if (!leaseYears) {
+    const fromParen = d.match(/Leasehold\s*\(\s*(\d+)\s*Years?\s*\)/i);
+    const fromLease = d.match(/\b(\d+)\s*(?:years?|yrs?)\s*leasehold/i);
+    const fromRemaining = d.match(/\b(\d+)\s*(?:years?|yrs?)\b(?:\s*(?:lease|remaining))?/i);
+    const raw = fromParen?.[1] ?? fromLease?.[1] ?? fromRemaining?.[1];
+    if (raw) leaseYears = formatLeaseYearsCell(raw);
+  }
 
   const fromDesc = listingSpecFieldsFromDescription(d);
   if (!level) level = fromDesc.level;
   if (!zoning) zoning = fromDesc.zoning;
   if (!livingRoom) livingRoom = fromDesc.livingRoom;
 
-  return { ...row, landSizeSqm, buildingSizeSqm, br, ba, ownership, level, zoning, livingRoom };
+  return { ...row, landSizeSqm, buildingSizeSqm, br, ba, ownership, leaseYears, level, zoning, livingRoom };
 }
 
 function enrichListingFieldsFromLegacy(
@@ -519,9 +561,19 @@ function driveFolderIdFromUrl(url: string | null): string | null {
   return m?.[1] ?? null;
 }
 
-function rowChannel(row: Record<string, string>): "silent" | "website" {
+function rowChannel(row: Record<string, string>): "silent" | "website" | "rentals" {
   const ch = (row["Channel"] ?? row["channel"] ?? "").trim().toLowerCase();
   if (ch === "silent") return "silent";
+  if (
+    ch === "rentals" ||
+    ch === "rental" ||
+    ch === "rental list" ||
+    ch === "rental listings" ||
+    ch === "long-term-rentals" ||
+    ch === "long term rentals"
+  ) {
+    return "rentals";
+  }
   return "website";
 }
 
@@ -531,7 +583,7 @@ function isTruthySheetFlag(raw: string): boolean {
   return ["yes", "y", "true", "1", "featured", "highlight", "highlighted", "on", "✓", "✅", "x"].includes(v);
 }
 
-/** Sheet column for homepage highlighted listings (not a separate “tag” field). */
+/** Sheet column for homepage highlighted listings (sort priority only — not the EXCLUSIVE badge). */
 function rowFeatured(row: Record<string, string>): boolean {
   const raw = normalizedRowGet(
     row,
@@ -544,6 +596,143 @@ function rowFeatured(row: Record<string, string>): boolean {
     "Highlight on homepage",
   );
   return isTruthySheetFlag(raw);
+}
+
+/** Sheet column for the EXCLUSIVE badge — default off; only set when representation is legally accurate. */
+function rowExclusive(row: Record<string, string>): boolean {
+  const raw = normalizedRowGet(
+    row,
+    "Exclusive",
+    "exclusive",
+    "Exclusive listing",
+    "Exclusive badge",
+    "Exclusive Listing",
+  );
+  return isTruthySheetFlag(raw);
+}
+
+/** Normalize a sheet cell into Ready / Off-plan (not Great deal — that is a separate column). */
+function normalizeDevelopmentStatusBadge(raw: string): string | null {
+  const t = raw.trim();
+  if (!t) return null;
+  // Checkbox-like values in a Status column are not development status.
+  if (isTruthySheetFlag(t)) return null;
+  const lower = t.toLowerCase();
+  if (/\bready\b/.test(lower) || /\bcompleted\b/.test(lower) || /\bbuilt\b/.test(lower) || /\bturnkey\b/.test(lower)) {
+    return "Ready";
+  }
+  if (/\boff[\s-]?plan\b/.test(lower) || /\bunder\s+construction\b/.test(lower) || /\bpre[\s-]?sale\b/.test(lower)) {
+    return "Off-plan";
+  }
+  // Explicit marketing label typed into Status (rare).
+  if (/\bgreat\s*deal\b/.test(lower)) return "Great deal";
+  // Ignore generic CRM statuses so cards are not flooded with noise.
+  if (
+    /^(available|active|open|listed|published|live|sale|for\s*sale|ok|okay|pending|hold|on\s*hold)$/i.test(
+      t,
+    )
+  ) {
+    return null;
+  }
+  return t.slice(0, 32);
+}
+
+function inferStatusBadgeFromDelivery(delivery: string | null): string | null {
+  if (!delivery?.trim()) return null;
+  return normalizeDevelopmentStatusBadge(delivery);
+}
+
+/** Opt-in Great Deal column only (Yes / Y / Great Deal). Never inferred from Status/Delivery. */
+function rowGreatDealFlag(row: Record<string, string>): boolean {
+  const raw = normalizedRowGet(row, "Great Deal", "Great deal", "GreatDeal", "Great deal?").trim();
+  if (!raw) return false;
+  if (isTruthySheetFlag(raw)) return true;
+  return /\bgreat\s*deal\b/i.test(raw);
+}
+
+/** Sheet column for the bottom-right photo badge (Ready, Off-plan, Great deal, etc.). */
+function rowStatusBadge(row: Record<string, string>, deliveryEstimate: string | null): string | null {
+  // Great Deal is opt-in and wins over Ready/Off-plan when explicitly marked.
+  if (rowGreatDealFlag(row)) return "Great deal";
+
+  const raw = normalizedRowGet(
+    row,
+    "Status",
+    "status",
+    "Listing Status",
+    "Listing status",
+    "Development Status",
+    "Development status",
+    "Photo Badge",
+    "Card Badge",
+  ).trim();
+  if (raw) {
+    const fromStatus = normalizeDevelopmentStatusBadge(raw);
+    if (fromStatus) return fromStatus;
+  }
+  return inferStatusBadgeFromDelivery(deliveryEstimate);
+}
+
+function normalizeTagCellRaw(raw: string): string {
+  return raw.trim().replace(/^[,;|]+/, "").replace(/[,;|]+$/, "");
+}
+
+/** Sheet `Tag` column — comma-separated labels for the three photo badges (max 3). */
+function rowListingTags(row: Record<string, string>): string[] {
+  const raw = normalizeTagCellRaw(
+    normalizedRowGet(
+      row,
+      "Tag",
+      "tag",
+      "TAG",
+      "Tags",
+      "tags",
+      "Listing Tag",
+      "Listing Tags",
+      "Listing tags",
+      "Card Tags",
+      "Card tags",
+    ),
+  );
+  if (!raw) return [];
+  return raw
+    .split(/[,;|]/)
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .slice(0, 3);
+}
+
+/** When the same code appears on multiple sheet tabs, keep tags from whichever tab has them. */
+function mergeSheetListingRows(existing: SheetListingRow, incoming: SheetListingRow): SheetListingRow {
+  return {
+    ...incoming,
+    listingTags: incoming.listingTags.length > 0 ? incoming.listingTags : existing.listingTags,
+    listingCategory: incoming.listingCategory ?? existing.listingCategory,
+    statusBadge: incoming.statusBadge ?? existing.statusBadge,
+    leaseYears: incoming.leaseYears ?? existing.leaseYears,
+    mapLat: incoming.mapLat ?? existing.mapLat,
+    mapLng: incoming.mapLng ?? existing.mapLng,
+    exclusive: incoming.exclusive || existing.exclusive,
+    featured: incoming.featured || existing.featured,
+  };
+}
+
+/** Sheet column for the top-right category badge (Residential, Investment, etc.). */
+function rowListingCategory(row: Record<string, string>): string | null {
+  const raw = normalizedRowGet(
+    row,
+    "Category",
+    "category",
+    "Listing Type",
+    "Listing type",
+    "Listing Category",
+  ).trim();
+  if (!raw) return null;
+  const lower = raw.toLowerCase();
+  if (/\bresidential\b/.test(lower)) return "Residential";
+  if (/\binvestment\b/.test(lower)) return "Investment";
+  if (/\bdevelopment\b/.test(lower)) return "Development";
+  return raw.slice(0, 48);
 }
 
 /** Reject HTML / auth walls / empty bodies so we never treat a failed export as an empty inventory. */
@@ -592,7 +781,46 @@ export function parsePropertyInventorySheetCsv(csvText: string): SheetListingRow
     }
     if (!imageUrl) imageUrl = imageUrlFromDescription(desc);
     const ownership = normalizedNullableCell(row, "OWNERSHIP", "ownership");
+    const leaseYearsRaw = normalizedNullableCell(
+      row,
+      "Year of Leasehold",
+      "year of leasehold",
+      "Years of Leasehold",
+      "years of leasehold",
+      "Leasehold Years",
+      "LEASEHOLD YEARS",
+      "Lease Years",
+      "lease years",
+      "Lease Term",
+      "lease term",
+      "Leasehold Year",
+      "leasehold year",
+    );
+    const leaseYears = leaseYearsRaw ? formatLeaseYearsCell(leaseYearsRaw) : null;
     const location = normalizedNullableCell(row, "LOCATION", "location");
+    const mapLat = normalizedNullableCell(
+      row,
+      "Map Lat",
+      "map lat",
+      "Map Latitude",
+      "Latitude",
+      "latitude",
+      "Lat",
+      "lat",
+    );
+    const mapLng = normalizedNullableCell(
+      row,
+      "Map Lng",
+      "map lng",
+      "Map Long",
+      "Map Longitude",
+      "Longitude",
+      "longitude",
+      "Lng",
+      "lng",
+      "Lon",
+      "lon",
+    );
     const estimatePriceUsd = normalizedNullableCell(
       row,
       "ESTIMATE PRICE IN USD",
@@ -654,6 +882,10 @@ export function parsePropertyInventorySheetCsv(csvText: string): SheetListingRow
     const listingUrl = redirectUrl ?? sourceUrl;
     const channel = rowChannel(row);
     const featured = rowFeatured(row);
+    const exclusive = rowExclusive(row);
+    const listingCategory = rowListingCategory(row);
+    const statusBadge = rowStatusBadge(row, deliveryEstimate);
+    const listingTags = rowListingTags(row);
     const sortOrder = i * 10;
     const parsed = enrichListingFieldsFromLegacy(
       code,
@@ -666,7 +898,10 @@ export function parsePropertyInventorySheetCsv(csvText: string): SheetListingRow
         imageUrl,
         imageUrls: imageUrl ? [imageUrl] : [],
         ownership,
+        leaseYears,
         location,
+        mapLat,
+        mapLng,
         estimatePriceUsd,
         deliveryEstimate,
         landSizeSqm,
@@ -680,6 +915,10 @@ export function parsePropertyInventorySheetCsv(csvText: string): SheetListingRow
         description: String(desc).slice(0, 100_000),
         channel,
         featured,
+        exclusive,
+        listingCategory,
+        statusBadge,
+        listingTags,
       }),
     );
     out.push({
@@ -749,6 +988,27 @@ export async function enrichListingRowWithDriveImages(row: SheetListingRow): Pro
   if (!folderId) return row;
   const [enriched] = await enrichRowsWithDriveImages([row]);
   return enriched ?? row;
+}
+
+/** Resolve Drive folders for a small set of rows (similar cards, featured picks). */
+export async function enrichListingRowsWithDriveImages(rows: SheetListingRow[]): Promise<SheetListingRow[]> {
+  if (rows.length === 0) return rows;
+  return enrichRowsWithDriveImages(rows);
+}
+
+/** Apply cached Drive folder thumbnails without network I/O (warms up after detail views). */
+export function applyCachedDriveImagesToRows(rows: SheetListingRow[]): SheetListingRow[] {
+  return rows.map((row) => {
+    const folderId = driveFolderIdFromUrl(row.imageUrl);
+    if (!folderId) return row;
+    const cached = driveFolderCache.get(folderId);
+    if (!cached?.imageUrls.length) return row;
+    return {
+      ...row,
+      imageUrl: cached.imageUrls[0] ?? null,
+      imageUrls: cached.imageUrls,
+    };
+  });
 }
 
 async function enrichRowsWithDriveImages(rows: SheetListingRow[]): Promise<SheetListingRow[]> {
@@ -872,7 +1132,10 @@ export async function loadListingsFromGoogleSheet(options?: {
     const csv = await fetchSheetCsv(fullExport);
     if (csv?.trim() && looksLikePropertyInventorySheetCsv(csv)) {
       try {
-        for (const row of parsePropertyInventorySheetCsv(csv)) byCode.set(row.code, row);
+        for (const row of parsePropertyInventorySheetCsv(csv)) {
+          const prev = byCode.get(row.code);
+          byCode.set(row.code, prev ? mergeSheetListingRows(prev, row) : row);
+        }
       } catch (err) {
         logger.warn({ err, url: fullExport }, "property inventory sheet: CSV parse failed");
       }
@@ -884,7 +1147,10 @@ export async function loadListingsFromGoogleSheet(options?: {
       if (!fetched) continue;
       try {
         const parsedRows = parsePropertyInventorySheetCsv(fetched.csv);
-        for (const row of parsedRows) byCode.set(row.code, row);
+        for (const row of parsedRows) {
+          const prev = byCode.get(row.code);
+          byCode.set(row.code, prev ? mergeSheetListingRows(prev, row) : row);
+        }
         loadedTabs.push({ gid, url: fetched.url, rowCount: parsedRows.length });
       } catch (err) {
         logger.warn({ err, gid, url: fetched.url }, "property inventory sheet: tab CSV parse failed");
@@ -897,7 +1163,10 @@ export async function loadListingsFromGoogleSheet(options?: {
       const csv = await fetchSheetCsv(url);
       if (!csv?.trim() || !looksLikePropertyInventorySheetCsv(csv)) continue;
       try {
-        for (const row of parsePropertyInventorySheetCsv(csv)) byCode.set(row.code, row);
+        for (const row of parsePropertyInventorySheetCsv(csv)) {
+          const prev = byCode.get(row.code);
+          byCode.set(row.code, prev ? mergeSheetListingRows(prev, row) : row);
+        }
         logger.info({ url, rowCount: byCode.size }, "property inventory sheet: loaded from fallback CSV");
         break;
       } catch (err) {

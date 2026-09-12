@@ -6,6 +6,8 @@ export const COMMON_COPY: Record<
   {
     exclusive: string;
     greatDeal: string;
+    ready: string;
+    offPlan: string;
     residential: string;
     investment: string;
     learnMore: string;
@@ -32,6 +34,8 @@ export const COMMON_COPY: Record<
   en: {
     exclusive: "Exclusive",
     greatDeal: "Great deal",
+    ready: "Ready",
+    offPlan: "Off-plan",
     residential: "Residential",
     investment: "Investment",
     learnMore: "Learn more",
@@ -57,6 +61,8 @@ export const COMMON_COPY: Record<
   id: {
     exclusive: "Eksklusif",
     greatDeal: "Penawaran bagus",
+    ready: "Siap",
+    offPlan: "Off-plan",
     residential: "Residensial",
     investment: "Investasi",
     learnMore: "Pelajari lebih lanjut",
@@ -82,6 +88,8 @@ export const COMMON_COPY: Record<
   fr: {
     exclusive: "Exclusif",
     greatDeal: "Bonne affaire",
+    ready: "Pret",
+    offPlan: "Sur plan",
     residential: "Residentiel",
     investment: "Investissement",
     learnMore: "En savoir plus",
@@ -107,6 +115,8 @@ export const COMMON_COPY: Record<
   zh: {
     exclusive: "独家",
     greatDeal: "超值",
+    ready: "现房",
+    offPlan: "期房",
     residential: "住宅",
     investment: "投资",
     learnMore: "了解更多",
@@ -132,6 +142,8 @@ export const COMMON_COPY: Record<
   tr: {
     exclusive: "Ozel",
     greatDeal: "Avantajli firsat",
+    ready: "Hazir",
+    offPlan: "Proje asamasinda",
     residential: "Konut",
     investment: "Yatirim",
     learnMore: "Daha fazla",

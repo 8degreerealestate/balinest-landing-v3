@@ -1,3 +1,3 @@
 Code,Name,Url,Channel,Description
 8DV106A,8DV106A Balangan Villa,https://8degree.co/projects,website,"Sample listing for local dev when the Google Sheet CSV export cannot be fetched (offline, DNS, or sandbox). Leasehold villa Balangan — replace with real sheet or DATABASE_URL + seed in production."
-8DV28,Semesta Villas,https://8degree.co/long-term-rentals,website,"Second sample row for development fallback. Three-bedroom villas — contact 8 Degree for real inventory."
+8DV28,Semesta Villas,https://8degree.co/long-term-rentals,rentals,"Second sample row for development fallback. Three-bedroom villas — contact 8 Degree for real inventory."

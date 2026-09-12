@@ -12,4 +12,5 @@ export type ListInventoryListingsChannel =
 export const ListInventoryListingsChannel = {
   silent: "silent",
   website: "website",
+  rentals: "rentals",
 } as const;

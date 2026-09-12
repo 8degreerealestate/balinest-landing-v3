@@ -12,15 +12,28 @@ import {
   type SiteLanguage,
 } from "@/lib/site-language";
 import {
-  CURRENCY_CHANGE_EVENT,
-  CURRENCY_STORAGE_KEY,
+  setSiteCurrency,
+  useSiteCurrency,
+  type SiteCurrency,
 } from "@/lib/site-currency";
+import {
+  PROJECTS_SEARCH_PATH,
+  readRememberedProjectsUrl,
+  rememberProjectsUrl,
+} from "@/lib/property-search-url";
+
+const CURRENCY_MENU_OPTIONS: { value: SiteCurrency; label: string }[] = [
+  { value: "IDR", label: "IDR" },
+  { value: "USD", label: "USD (indicative only)" },
+  { value: "AUD", label: "AUD (indicative only)" },
+  { value: "EUR", label: "EUR (indicative only)" },
+];
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [language, setLanguage] = useState<SiteLanguage>("en");
-  const [currency, setCurrency] = useState("USD");
+  const currency = useSiteCurrency();
   const [isLanguageMenuOpen, setIsLanguageMenuOpen] = useState(false);
   const [isCurrencyMenuOpen, setIsCurrencyMenuOpen] = useState(false);
   const [isPropertyMenuOpen, setIsPropertyMenuOpen] = useState(false);
@@ -34,6 +47,7 @@ export function Navbar() {
   const servicesMenuRef = useRef<HTMLDivElement | null>(null);
   const guidesMenuRef = useRef<HTMLDivElement | null>(null);
   const [location] = useLocation();
+  const [projectsBackHref, setProjectsBackHref] = useState(PROJECTS_SEARCH_PATH);
   const languageFlagMap: Record<SiteLanguage, string> = {
     id: "🇮🇩",
     en: "🇬🇧",
@@ -68,7 +82,6 @@ export function Navbar() {
   useEffect(() => {
     if (typeof window === "undefined") return;
     setLanguage(safeLanguage(window.localStorage.getItem(LANGUAGE_STORAGE_KEY)));
-    setCurrency(window.localStorage.getItem(CURRENCY_STORAGE_KEY) ?? "USD");
   }, []);
 
   useEffect(() => {
@@ -77,12 +90,6 @@ export function Navbar() {
     document.documentElement.lang = language;
     window.dispatchEvent(new Event("site-language-change"));
   }, [language]);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    window.localStorage.setItem(CURRENCY_STORAGE_KEY, currency);
-    window.dispatchEvent(new Event(CURRENCY_CHANGE_EVENT));
-  }, [currency]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -158,6 +165,17 @@ export function Navbar() {
     }
   }, [isOpen]);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (location === "/projects") {
+      const full = `${window.location.pathname}${window.location.search}`;
+      rememberProjectsUrl(full);
+      setProjectsBackHref(full);
+      return;
+    }
+    setProjectsBackHref(readRememberedProjectsUrl());
+  }, [location]);
+
   const copy = UI_COPY[language] ?? UI_COPY.en;
   const isPropertySectionActive =
     location === "/projects" ||
@@ -185,7 +203,7 @@ export function Navbar() {
         <div className="flex min-w-0 items-center gap-2 sm:gap-3">
           {isListingDetailPage ? (
             <Link
-              href="/projects"
+              href={projectsBackHref}
               className="flex min-h-11 shrink-0 items-center gap-1.5 text-white transition-colors hover:text-white/90"
               aria-label={copy.portfolio}
               onClick={() => setIsOpen(false)}
@@ -341,12 +359,7 @@ export function Navbar() {
                 className="absolute left-1/2 top-11 z-50 w-max -translate-x-1/2 rounded border border-white/30 bg-[#01514E] p-0.5 shadow-lg animate-in fade-in-0 zoom-in-95 duration-200"
                 role="menu"
               >
-                {[
-                  { value: "AUD", label: "AUD (indicative only)" },
-                  { value: "USD", label: "USD (indicative only)" },
-                  { value: "IDR", label: "IDR" },
-                  { value: "EUR", label: "EUR (indicative only)" },
-                ].map((opt) => (
+                {CURRENCY_MENU_OPTIONS.map((opt) => (
                   <button
                     key={opt.value}
                     type="button"
@@ -357,7 +370,7 @@ export function Navbar() {
                       currency === opt.value && "bg-white/20"
                     )}
                     onClick={() => {
-                      setCurrency(opt.value);
+                      setSiteCurrency(opt.value);
                       setIsCurrencyMenuOpen(false);
                     }}
                   >
@@ -682,12 +695,7 @@ export function Navbar() {
                     className="absolute left-0 right-0 top-full z-10 mt-1 rounded border border-white/30 bg-[#01514E] p-0.5 shadow-lg"
                     role="menu"
                   >
-                    {[
-                      { value: "AUD", label: "AUD (indicative only)" },
-                      { value: "USD", label: "USD (indicative only)" },
-                      { value: "IDR", label: "IDR" },
-                      { value: "EUR", label: "EUR (indicative only)" },
-                    ].map((opt) => (
+                    {CURRENCY_MENU_OPTIONS.map((opt) => (
                       <button
                         key={opt.value}
                         type="button"
@@ -698,7 +706,7 @@ export function Navbar() {
                           currency === opt.value && "bg-white/20"
                         )}
                         onClick={() => {
-                          setCurrency(opt.value);
+                          setSiteCurrency(opt.value);
                           setIsCurrencyMenuOpen(false);
                         }}
                       >

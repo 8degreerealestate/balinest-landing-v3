@@ -3,6 +3,11 @@ import { Link } from "wouter";
 import { ArrowRight } from "lucide-react";
 import type { Project } from "@workspace/api-client-react";
 import { HOME_PORTFOLIO_BAND } from "@/lib/home-section-surfaces";
+import {
+  convertFromUsd,
+  formatCurrency,
+  useSiteCurrency,
+} from "@/lib/site-currency";
 import { useSiteLanguage } from "@/lib/site-language";
 import { HOME_COPY } from "@/lib/i18n/home-copy";
 
@@ -18,6 +23,7 @@ function categoryLabel(p: Project): string {
 
 export function PortfolioShowcase({ projects }: { projects: Project[] }) {
   const language = useSiteLanguage();
+  const currency = useSiteCurrency();
   const t = HOME_COPY[language] ?? HOME_COPY.en;
 
   if (!projects.length) return null;
@@ -76,7 +82,12 @@ export function PortfolioShowcase({ projects }: { projects: Project[] }) {
                   {project.shortDescription}
                 </p>
                 <p className="mt-5 font-sans text-[11px] font-medium uppercase tracking-[0.28em] text-[#1c1917]/45">
-                  {t.portfolioFrom} {project.currency} {project.priceFrom.toLocaleString()}
+                  {t.portfolioFrom}{" "}
+                  {project.priceFrom > 0 && project.currency.trim().toUpperCase() === "USD"
+                    ? formatCurrency(convertFromUsd(project.priceFrom, currency), currency)
+                    : project.priceFrom > 0
+                      ? `${project.currency} ${project.priceFrom.toLocaleString()}`
+                      : "Price on request"}
                 </p>
               </Link>
             </motion.article>

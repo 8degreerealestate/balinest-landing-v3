@@ -2,17 +2,14 @@ import { useCallback, useMemo, useState } from "react";
 import { Link } from "wouter";
 import { ArrowRight } from "lucide-react";
 import type { PropertyInventoryListing } from "@workspace/api-client-react";
-import { useListInventoryListings } from "@workspace/api-client-react";
 import {
   HOME_FEATURED_LISTINGS_MODE,
   HOME_FEATURED_LISTINGS_TEMPLATE,
   type HomeFeaturedListingTemplate,
 } from "@/data/home-featured-listings-template";
 import { HOME_LISTINGS_BAND } from "@/lib/home-section-surfaces";
-import {
-  borrowInventoryImages,
-  pickInventoryThumbnail,
-} from "@/lib/portfolio-listing";
+import { borrowInventoryImages } from "@/lib/portfolio-listing";
+import { useFeaturedInventoryListings } from "@/hooks/use-listing-photos";
 import { parseUsdNumber } from "@/lib/site-currency";
 import {
   FeaturedListingCard,
@@ -44,9 +41,7 @@ export type FeaturedInventoryStripProps = {
   sectionBackgroundColor?: string;
 };
 
-function templateToCard(t: HomeFeaturedListingTemplate, idx: number): FeaturedCardModel {
-  const showGreatDeal =
-    t.showGreatDeal !== undefined ? t.showGreatDeal : Boolean(t.featured) || idx >= 2;
+function templateToCard(t: HomeFeaturedListingTemplate): FeaturedCardModel {
   return {
     id: t.id,
     href: t.href,
@@ -63,8 +58,10 @@ function templateToCard(t: HomeFeaturedListingTemplate, idx: number): FeaturedCa
     landSqm: t.landSqm?.trim() ? t.landSqm : null,
     leaseYears: t.leaseYears?.trim() ? t.leaseYears : null,
     featured: Boolean(t.featured),
+    showExclusive: Boolean(t.showExclusive),
+    badgeTopLeft: null,
     categoryLabel: t.category ?? "Residential",
-    showGreatDeal,
+    statusBadge: t.statusBadge?.trim() || null,
     externalListingUrl: null,
   };
 }
@@ -85,11 +82,6 @@ export function FeaturedInventoryStrip({
   const slots = Math.max(1, Math.min(maxCards, 24));
   const useApi = HOME_FEATURED_LISTINGS_MODE === "api";
 
-  const { data, isError, isPending, isFetching } = useListInventoryListings(
-    { limit: 500, offset: 0 },
-    { query: { enabled: useApi, staleTime: 5 * 60_000 } },
-  );
-
   const [dismissedCodes, setDismissedCodes] = useState(() => new Set<string>());
   const dismissListingPhoto = useCallback((code: string) => {
     setDismissedCodes((prev) => {
@@ -100,6 +92,11 @@ export function FeaturedInventoryStrip({
     });
   }, []);
 
+  const { data, isError, isPending, isFetching } = useFeaturedInventoryListings(
+    slots + dismissedCodes.size,
+    useApi,
+  );
+
   const cards = useMemo((): FeaturedCardModel[] => {
     if (!useApi) {
       return HOME_FEATURED_LISTINGS_TEMPLATE.slice(0, slots).map(templateToCard);
@@ -109,15 +106,11 @@ export function FeaturedInventoryStrip({
       return [];
     }
 
-    if (isError || !data?.listings?.length) {
+    if (isError || !data?.length) {
       return [];
     }
 
-    const eligible = data.listings.filter((row) => {
-      const vis = row.visibility ?? "active";
-      const sale = row.saleStatus ?? "available";
-      return vis !== "draft" && sale !== "sold" && !dismissedCodes.has(row.code);
-    });
+    const eligible = data.filter((row) => !dismissedCodes.has(row.code));
 
     if (eligible.length === 0) {
       return [];
@@ -125,14 +118,7 @@ export function FeaturedInventoryStrip({
 
     const pool = eligible.map((row) => borrowInventoryImages(row, eligible));
 
-    return [...pool]
-      .sort((a, b) => {
-        const featured = Number(!!b.featured) - Number(!!a.featured);
-        if (featured !== 0) return featured;
-        const photo = Number(!!pickInventoryThumbnail(b)) - Number(!!pickInventoryThumbnail(a));
-        if (photo !== 0) return photo;
-        return a.code.localeCompare(b.code);
-      })
+    return pool
       .slice(0, slots)
       .map((row: PropertyInventoryListing, idx: number) => inventoryRowToFeaturedModel(row, idx));
   }, [useApi, data, isError, isPending, isFetching, slots, dismissedCodes]);

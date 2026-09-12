@@ -6,7 +6,6 @@ import {
   getInventoryListingQueryKey,
   useCreateEnquiry,
   useGetInventoryListing,
-  useListInventoryListings,
 } from "@workspace/api-client-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,7 +17,7 @@ import { useHorizontalSwipe } from "@/lib/use-horizontal-swipe";
 import { useForm } from "react-hook-form";
 import {
   borrowInventoryImages,
-  inferLeaseYearsLabel,
+  formatTenureBesidePrice,
   inferListingArea,
   inferListingStatus,
   inventoryGalleryUrls,
@@ -26,7 +25,11 @@ import {
   listingShortBlurb,
   pickInventoryThumbnail,
 } from "@/lib/portfolio-listing";
-import { pickSimilarInventoryListings } from "@/lib/similar-inventory-listings";
+import { buildListingOpenGraph } from "@/lib/listing-seo";
+import { readRememberedProjectsUrl } from "@/lib/property-search-url";
+import { useListingNearby } from "@/hooks/use-listing-nearby";
+import { useListingSimilar } from "@/hooks/use-listing-similar";
+import type { ListingNearbyResponse, NearbyCategory, NearbyPlace } from "@/lib/listing-nearby";
 import { propertyListingPath } from "@/lib/site-paths";
 import { buildWhatsappUrl, getContactEmail } from "@/lib/site-contact";
 import { Seo } from "@/components/site/Seo";
@@ -52,6 +55,7 @@ import {
   inventoryRowToFeaturedModel,
   type FeaturedCardModel,
 } from "@/components/site/highlighted-listing-card";
+import { ListingStatIcon as StatIcon } from "@/components/site/listing-stat-icons";
 
 /**
  * Brand palette — matches buyer/seller/projects pages.
@@ -549,6 +553,7 @@ export default function ListingDetail() {
   const code = (params?.code ?? "").replace(/\/+$/, "").trim();
   const isPreview = code.toLowerCase() === "preview";
   const [location, setLocation] = useLocation();
+  const portfolioHref = useMemo(() => readRememberedProjectsUrl(), []);
 
   const { data, isLoading: apiLoading, isError, error } = useGetInventoryListing(code, {
     query: {
@@ -556,15 +561,42 @@ export default function ListingDetail() {
       queryKey: getInventoryListingQueryKey(code),
     },
   });
-  const { data: inventoryListData } = useListInventoryListings(
-    { channel: "website", limit: 500, offset: 0 },
-    { query: { enabled: Boolean(code) && !isPreview, staleTime: 5 * 60_000 } },
-  );
   const createEnquiry = useCreateEnquiry();
   const { toast } = useToast();
 
   const listing = isPreview ? PREVIEW_LISTING : data?.listing;
   const isLoading = !isPreview && apiLoading;
+
+  const nearbySectionRef = useRef<HTMLDivElement>(null);
+  const [nearbyEnabled, setNearbyEnabled] = useState(false);
+  useEffect(() => {
+    if (isPreview || !listing || nearbyEnabled) return;
+    const node = nearbySectionRef.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setNearbyEnabled(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px 0px" },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [isPreview, listing, nearbyEnabled]);
+
+  const {
+    data: nearbyData,
+    isLoading: nearbyLoading,
+    isError: nearbyError,
+  } = useListingNearby(listing?.code, Boolean(listing) && !isPreview && nearbyEnabled);
+
+  const { data: similarListings } = useListingSimilar(
+    listing?.code,
+    Boolean(listing) && !isPreview,
+    12,
+  );
 
   const listingJsonLd = useMemo(() => {
     if (!listing) return null;
@@ -582,6 +614,13 @@ export default function ListingDetail() {
       },
     ]);
   }, [listing]);
+
+  const listingOgMeta = useMemo(() => {
+    if (!listing || isPreview) return null;
+    return buildListingOpenGraph(listing, {
+      imagePool: [listing],
+    });
+  }, [listing, isPreview]);
 
   /** Silent listings are link-only (not on public browse); still viewable at /property/:code. */
   const isSilentListing = listing?.channel === "silent";
@@ -658,18 +697,16 @@ export default function ListingDetail() {
     if (isPreview) {
       return SIMILAR_LISTINGS_DEFAULT.map((s, idx) => similarToFeaturedModel(s));
     }
-    if (!listing || !inventoryListData?.listings?.length) return [];
+    if (!listing || !similarListings?.length) return [];
 
-    const pool = inventoryListData.listings;
-    const picks = pickSimilarInventoryListings(listing, pool, 12).filter(
-      (row) => !dismissedSimilarCodes.has(row.code),
-    );
+    const pool = similarListings;
+    const picks = similarListings.filter((row) => !dismissedSimilarCodes.has(row.code));
 
     return picks
       .filter((row) => pickInventoryThumbnail(borrowInventoryImages(row, pool)))
       .slice(0, 3)
       .map((row, idx) => inventoryRowToFeaturedModel(borrowInventoryImages(row, pool), idx));
-  }, [isPreview, listing, inventoryListData, currency, dismissedSimilarCodes]);
+  }, [isPreview, listing, similarListings, currency, dismissedSimilarCodes]);
 
   // Keyboard nav (Esc / ← / →) + body scroll lock while the lightbox is open.
   useEffect(() => {
@@ -818,7 +855,13 @@ export default function ListingDetail() {
   const area = inferListingArea(listing.title, listing.description);
   const priceLine = listing.estimatePriceUsd?.trim() || listingPriceLine(listing.description);
   const ownership = listing.ownership?.trim() || inferListingStatus(listing.description) || "—";
-  const leaseLabel = inferLeaseYearsLabel(listing.description);
+  const { ownershipLabel, yearsLabel: leaseLabel } = formatTenureBesidePrice(
+    ownership,
+    listing.leaseYears,
+    listing.title,
+    listing.description,
+    listing.deliveryEstimate,
+  );
   const primaryImage = allImages[0] ?? null;
   const description = listing.description?.trim() ?? "";
   const pullquote = firstShortQuote(description);
@@ -952,12 +995,13 @@ export default function ListingDetail() {
       }}
     >
       <Seo
-        title={listing.title || listing.code}
-        description={truncateForMeta(listingShortBlurb(listing.description) || `${area}. ${priceLine}`)}
-        path={propertyListingPath(listing.code)}
-        image={primaryImage}
+        title={listingOgMeta?.title ?? listing.title ?? listing.code}
+        description={listingOgMeta?.description ?? truncateForMeta(`${area}. ${priceLine}`)}
+        path={listingOgMeta?.canonicalPath ?? propertyListingPath(listing.code)}
+        image={listingOgMeta?.image ?? primaryImage}
         jsonLd={listingJsonLd}
-        noindex={isSilentListing}
+        noindex={isSilentListing || listingOgMeta?.noindex}
+        useMigration={false}
       />
 
       {/* Film grain overlay */}
@@ -1008,13 +1052,13 @@ export default function ListingDetail() {
             {t.home}
           </Link>
           <BreadcrumbChevron />
-          <Link href="/projects" className="transition-opacity hover:opacity-100" style={{ opacity: 0.75 }}>
+          <Link href={portfolioHref} className="transition-opacity hover:opacity-100" style={{ opacity: 0.75 }}>
             {t.property}
           </Link>
           {area && area !== "—" ? (
             <>
               <BreadcrumbChevron />
-              <Link href="/projects" className="transition-opacity hover:opacity-100" style={{ opacity: 0.75 }}>
+              <Link href={portfolioHref} className="transition-opacity hover:opacity-100" style={{ opacity: 0.75 }}>
                 {area}
               </Link>
             </>
@@ -1195,7 +1239,17 @@ export default function ListingDetail() {
       {/* LOCATION MAP + ACTION SIDEBAR ===================================== */}
       {(() => {
         const locationLabel = (listing.location?.trim() || area || "Bali").toString();
-        const mapQuery = `${locationLabel}, Bali`;
+        const mapLat = listing.mapLat?.trim();
+        const mapLng = listing.mapLng?.trim();
+        const centerLat = nearbyData?.center.lat ?? (mapLat ? Number(mapLat) : null);
+        const centerLng = nearbyData?.center.lng ?? (mapLng ? Number(mapLng) : null);
+        const mapQuery =
+          centerLat != null &&
+          centerLng != null &&
+          Number.isFinite(centerLat) &&
+          Number.isFinite(centerLng)
+            ? `${centerLat},${centerLng}`
+            : `${locationLabel}, Bali`;
         const mapSrc = `https://maps.google.com/maps?q=${encodeURIComponent(mapQuery)}&t=&z=14&ie=UTF8&iwloc=&output=embed`;
         const mailtoHref = `mailto:${getContactEmail()}?subject=${encodeURIComponent(
           `${t.requestedListing}: ${listing.code} · ${listing.title || ""}`,
@@ -1241,8 +1295,15 @@ export default function ListingDetail() {
                   </div>
                 </div>
 
-                {/* Nearby card */}
-                <NearbyCard data={NEARBY_DEFAULT} t={t} />
+                {/* Nearby card — fetch deferred until section is near viewport */}
+                <div ref={nearbySectionRef}>
+                  <NearbyCard
+                    data={nearbyData}
+                    loading={nearbyEnabled && nearbyLoading}
+                    error={nearbyError}
+                    t={t}
+                  />
+                </div>
               </div>
 
               {/* RIGHT COLUMN — Action sidebar (sticky on lg+) */}
@@ -1363,7 +1424,7 @@ export default function ListingDetail() {
                       {priceDisplay}
                     </div>
                   </div>
-                  {ownership && ownership !== "—" ? (
+                  {ownershipLabel && ownershipLabel !== "—" ? (
                     <div className="shrink-0 text-right">
                       <div
                         style={{
@@ -1374,7 +1435,7 @@ export default function ListingDetail() {
                           opacity: 0.7,
                         }}
                       >
-                        {ownership}
+                        {ownershipLabel}
                       </div>
                       {leaseLabel ? (
                         <div
@@ -1715,127 +1776,6 @@ function numberWithUnit(raw: string | undefined | null, unit: string): React.Rea
   );
 }
 
-/**
- * Line-art icons used in the stats card row. `name` selects the glyph.
- * All icons share the same stroke style so the row reads as a system.
- */
-function StatIcon({
-  name,
-}: {
-  name:
-    | "bed"
-    | "bath"
-    | "land"
-    | "building"
-    | "tenure"
-    | "calendar"
-    | "pin"
-    | "price"
-    | "stairs"
-    | "zoning"
-    | "sofa";
-}) {
-  const common = {
-    width: 28,
-    height: 28,
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: 1.6,
-    strokeLinecap: "round" as const,
-    strokeLinejoin: "round" as const,
-    "aria-hidden": true,
-  };
-  switch (name) {
-    case "bed":
-      return (
-        <svg {...common}>
-          <path d="M3 18v-5a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v5" />
-          <path d="M3 18v2M21 18v2M3 14h18" />
-          <rect x="7" y="10.5" width="4" height="2" rx="0.5" />
-        </svg>
-      );
-    case "bath":
-      return (
-        <svg {...common}>
-          <path d="M5 12V6a2 2 0 0 1 4 0v.5" />
-          <circle cx="9" cy="8" r="1.4" />
-          <path d="M3 12h18" />
-          <path d="M5 12v2a4 4 0 0 0 4 4h6a4 4 0 0 0 4-4v-2" />
-          <path d="M7 18l-1 3M17 18l1 3" />
-        </svg>
-      );
-    case "land":
-      return (
-        <svg {...common}>
-          <rect x="4" y="4" width="16" height="16" rx="1" />
-          <path d="M8 4v3M16 4v3M4 8h3M4 16h3M17 17l3 3" />
-        </svg>
-      );
-    case "building":
-      return (
-        <svg {...common}>
-          <path d="M3 11v9a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-9" />
-          <path d="M3 11l9-7 9 7" />
-          <path d="M10 21v-5h4v5" />
-        </svg>
-      );
-    case "tenure":
-      return (
-        <svg {...common}>
-          <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
-          <path d="M14 3v5h5" />
-          <path d="M9 13h6M9 17h4" />
-        </svg>
-      );
-    case "calendar":
-      return (
-        <svg {...common}>
-          <rect x="3" y="5" width="18" height="16" rx="2" />
-          <path d="M3 10h18" />
-          <path d="M8 3v4M16 3v4" />
-        </svg>
-      );
-    case "pin":
-      return (
-        <svg {...common}>
-          <path d="M12 21s-7-7.2-7-12a7 7 0 1 1 14 0c0 4.8-7 12-7 12z" />
-          <circle cx="12" cy="9" r="2.5" />
-        </svg>
-      );
-    case "price":
-      return (
-        <svg {...common}>
-          <path d="M12 2v20" />
-          <path d="M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-        </svg>
-      );
-    case "stairs":
-      return (
-        <svg {...common}>
-          <path d="M3 21h4v-4h4v-4h4v-4h4v-4h2" />
-          <path d="M3 21v-1" />
-        </svg>
-      );
-    case "zoning":
-      return (
-        <svg {...common}>
-          <path d="M12 3l-5 7h3v4h-2l-3 5h14l-3-5h-2v-4h3z" />
-          <line x1="12" y1="19" x2="12" y2="21" />
-        </svg>
-      );
-    case "sofa":
-      return (
-        <svg {...common}>
-          <path d="M4 13a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4H4z" />
-          <path d="M4 13V9a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4" />
-          <path d="M7 11V8a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v3" />
-          <path d="M4 17v2M20 17v2" />
-        </svg>
-      );
-  }
-}
-
 function BreadcrumbChevron() {
   return (
     <svg
@@ -1855,38 +1795,7 @@ function BreadcrumbChevron() {
   );
 }
 
-type NearbyKey = "shopping" | "cafes" | "landmarks";
-
-interface NearbyPlace {
-  name: string;
-  /** Distance in metres from the property. */
-  distance: number;
-}
-
-/** Indicative POI data — universal Bali staples that work for most listings.
- * Easy to swap for a real Google Places call later (the prop signature only
- * needs `Record<NearbyKey, NearbyPlace[]>`). */
-const NEARBY_DEFAULT: Record<NearbyKey, NearbyPlace[]> = {
-  shopping: [
-    { name: "Indomaret", distance: 418 },
-    { name: "Alfamart", distance: 498 },
-    { name: "Alfamart", distance: 564 },
-    { name: "Pepito", distance: 762 },
-  ],
-  cafes: [
-    { name: "Crate Cafe", distance: 320 },
-    { name: "Milk & Madu", distance: 540 },
-    { name: "Sisterfields", distance: 620 },
-    { name: "Revolver Espresso", distance: 780 },
-    { name: "The Loft", distance: 850 },
-    { name: "Cafe Vida", distance: 920 },
-    { name: "Watercress", distance: 1100 },
-    { name: "Cafe Organic", distance: 1250 },
-  ],
-  landmarks: [
-    { name: "Pererenan Beach", distance: 650 },
-  ],
-};
+type NearbyKey = NearbyCategory;
 
 /**
  * Similar-properties data shape. Minimal seed shape; rendered with the shared
@@ -1908,8 +1817,9 @@ interface SimilarSeed {
   landSqm: string | null;
   leaseYears: string | null;
   featured: boolean;
+  showExclusive: boolean;
   categoryLabel: string;
-  showGreatDeal: boolean;
+  statusBadge: string | null;
 }
 
 /** Indicative similar-listings used for the preview route. */
@@ -1928,8 +1838,9 @@ const SIMILAR_LISTINGS_DEFAULT: SimilarSeed[] = [
     landSqm: "450",
     leaseYears: "30 Years",
     featured: true,
+    showExclusive: true,
     categoryLabel: "Residential",
-    showGreatDeal: false,
+    statusBadge: null,
   },
   {
     id: "sim-2",
@@ -1945,8 +1856,9 @@ const SIMILAR_LISTINGS_DEFAULT: SimilarSeed[] = [
     landSqm: "520",
     leaseYears: null,
     featured: true,
+    showExclusive: true,
     categoryLabel: "Investment",
-    showGreatDeal: false,
+    statusBadge: null,
   },
   {
     id: "sim-3",
@@ -1962,8 +1874,9 @@ const SIMILAR_LISTINGS_DEFAULT: SimilarSeed[] = [
     landSqm: "380",
     leaseYears: "25 Years",
     featured: false,
+    showExclusive: false,
     categoryLabel: "Residential",
-    showGreatDeal: true,
+    statusBadge: "Ready",
   },
 ];
 
@@ -1985,8 +1898,10 @@ function similarToFeaturedModel(s: SimilarSeed): FeaturedCardModel {
     landSqm: s.landSqm,
     leaseYears: s.leaseYears,
     featured: s.featured,
+    showExclusive: s.showExclusive,
+    badgeTopLeft: null,
     categoryLabel: s.categoryLabel,
-    showGreatDeal: s.showGreatDeal,
+    statusBadge: s.statusBadge,
     externalListingUrl: null,
   };
 }
@@ -2040,9 +1955,13 @@ function formatDistance(metres: number): string {
 
 function NearbyCard({
   data,
+  loading,
+  error,
   t,
 }: {
-  data: Record<NearbyKey, NearbyPlace[]>;
+  data: ListingNearbyResponse | undefined;
+  loading: boolean;
+  error: boolean;
   t: Record<string, string>;
 }) {
   const [active, setActive] = useState<NearbyKey>("shopping");
@@ -2051,7 +1970,7 @@ function NearbyCard({
     { key: "cafes", label: t.cafes },
     { key: "landmarks", label: t.landmarks },
   ];
-  const places = data[active] ?? [];
+  const places = data?.[active] ?? [];
   return (
     <div
       className="rounded-2xl p-4"
@@ -2091,7 +2010,7 @@ function NearbyCard({
       <div className="mt-2.5 flex flex-wrap gap-1">
         {categories.map((c) => {
           const isActive = c.key === active;
-          const count = data[c.key]?.length ?? 0;
+          const count = data?.[c.key]?.length ?? 0;
           return (
             <button
               key={c.key}
@@ -2123,7 +2042,17 @@ function NearbyCard({
       </div>
 
       {/* Place grid */}
-      {places.length === 0 ? (
+      {loading ? (
+        <div className="mt-2.5 grid gap-1.5 sm:grid-cols-2">
+          {Array.from({ length: 4 }, (_, i) => (
+            <div
+              key={i}
+              className="h-10 animate-pulse rounded-xl bg-[#d8d4ce]/60"
+              aria-hidden
+            />
+          ))}
+        </div>
+      ) : places.length === 0 ? (
         <div
           className="mt-3"
           style={{
@@ -2133,7 +2062,7 @@ function NearbyCard({
             opacity: 0.6,
           }}
         >
-          —
+          {error ? "—" : "—"}
         </div>
       ) : (
         <div className="mt-2.5 grid gap-1.5 sm:grid-cols-2">
@@ -2281,6 +2210,7 @@ function ErrorState({
   backLabel: string;
   extra?: React.ReactNode;
 }) {
+  const portfolioHref = readRememberedProjectsUrl();
   return (
     <div
       className="min-h-screen px-6 pt-32 text-center"
@@ -2307,7 +2237,7 @@ function ErrorState({
         </p>
       ) : null}
       {extra}
-      <Link href="/projects">
+      <Link href={portfolioHref}>
         <Button
           className="mt-8 h-12 rounded-none px-6"
           style={{ backgroundColor: PALETTE.brand, color: PALETTE.cream, letterSpacing: "0.14em" }}
