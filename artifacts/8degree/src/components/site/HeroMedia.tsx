@@ -1,18 +1,28 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { SITE_MEDIA } from "@/lib/site-assets";
 
-const heroImgClass =
+const heroMediaLayerClass =
   "absolute inset-0 z-0 h-full w-full object-cover object-center";
 
-/** Hide iOS/Safari’s big center play control on decorative background videos. */
+/**
+ * iOS Safari draws a native center play control on paused/loading videos that
+ * can escape normal stacking. Keep the element invisible + covered until
+ * `playing`, and zero out webkit control chrome.
+ */
 const heroVideoClass = [
-  heroImgClass,
+  heroMediaLayerClass,
   "pointer-events-none",
+  "[-webkit-appearance:none]",
   "[&::-webkit-media-controls]:hidden",
   "[&::-webkit-media-controls-enclosure]:hidden",
   "[&::-webkit-media-controls-panel]:hidden",
-  "[&::-webkit-media-controls-start-playback-button]:hidden",
-  "[&::-webkit-media-controls-play-button]:hidden",
+  "[&::-webkit-media-controls-overlay-enclosure]:hidden",
+  "[&::-webkit-media-controls-start-playback-button]:!hidden",
+  "[&::-webkit-media-controls-start-playback-button]:!opacity-0",
+  "[&::-webkit-media-controls-start-playback-button]:!pointer-events-none",
+  "[&::-webkit-media-controls-start-playback-button]:!h-0",
+  "[&::-webkit-media-controls-start-playback-button]:!w-0",
+  "[&::-webkit-media-controls-play-button]:!hidden",
 ].join(" ");
 
 function isMobileHeroViewport(): boolean {
@@ -20,7 +30,6 @@ function isMobileHeroViewport(): boolean {
   return window.matchMedia("(max-width: 767px)").matches;
 }
 
-/** Static image only — no video (accessibility / data saver). */
 function preferStaticHeroMedia(): boolean {
   if (typeof window === "undefined") return false;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return true;
@@ -29,11 +38,6 @@ function preferStaticHeroMedia(): boolean {
   return false;
 }
 
-/**
- * Mobile hero is always a still — iOS Safari paints a native play glyph on
- * `<video>` that can sit above page content no matter what CSS we apply.
- * Desktop keeps the cinematic autoplay loop.
- */
 export function HeroMedia() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [hydrated, setHydrated] = useState(false);
@@ -41,6 +45,20 @@ export function HeroMedia() {
   const [preferStatic, setPreferStatic] = useState(false);
   const [videoFailed, setVideoFailed] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+
+  const { videoSrc, posterSrc } = useMemo(
+    () =>
+      isMobile
+        ? {
+            videoSrc: SITE_MEDIA.heroMobileVideo,
+            posterSrc: SITE_MEDIA.heroMobilePoster,
+          }
+        : {
+            videoSrc: SITE_MEDIA.heroVideo,
+            posterSrc: SITE_MEDIA.heroStill,
+          },
+    [isMobile],
+  );
 
   useLayoutEffect(() => {
     setIsMobile(isMobileHeroViewport());
@@ -68,10 +86,10 @@ export function HeroMedia() {
     };
   }, []);
 
-  const useDesktopVideo = hydrated && !isMobile && !preferStatic && !videoFailed;
+  const allowVideo = hydrated && !preferStatic && !videoFailed;
 
   useEffect(() => {
-    if (!useDesktopVideo) return;
+    if (!allowVideo) return;
     const video = videoRef.current;
     if (!video) return;
 
@@ -79,89 +97,97 @@ export function HeroMedia() {
     video.muted = true;
     video.defaultMuted = true;
     video.playsInline = true;
-    video.setAttribute("playsinline", "");
-    video.setAttribute("webkit-playsinline", "");
-    video.setAttribute("muted", "");
     video.controls = false;
+    video.setAttribute("playsinline", "true");
+    video.setAttribute("webkit-playsinline", "true");
+    video.setAttribute("muted", "true");
+    video.setAttribute("x-webkit-airplay", "deny");
 
     let cancelled = false;
+
+    const markPlaying = () => {
+      if (!cancelled) setIsPlaying(true);
+    };
+
     const tryPlay = () => {
-      const playAttempt = video.play();
-      if (playAttempt && typeof playAttempt.then === "function") {
-        playAttempt
-          .then(() => {
-            if (!cancelled) setIsPlaying(true);
-          })
-          .catch(() => {
-            if (!cancelled) setVideoFailed(true);
-          });
+      const attempt = video.play();
+      if (attempt && typeof attempt.then === "function") {
+        attempt.then(markPlaying).catch(() => {
+          // Keep the still visible — never reveal a paused <video> (iOS play glyph).
+          if (!cancelled) setVideoFailed(true);
+        });
       }
     };
 
     if (video.readyState >= 2) tryPlay();
-    else video.addEventListener("loadeddata", tryPlay, { once: true });
+    else {
+      video.addEventListener("loadeddata", tryPlay, { once: true });
+      video.addEventListener("canplay", tryPlay, { once: true });
+    }
 
-    const onPlaying = () => {
-      if (!cancelled) setIsPlaying(true);
-    };
-    video.addEventListener("playing", onPlaying);
+    video.addEventListener("playing", markPlaying);
 
     return () => {
       cancelled = true;
       video.removeEventListener("loadeddata", tryPlay);
-      video.removeEventListener("playing", onPlaying);
+      video.removeEventListener("canplay", tryPlay);
+      video.removeEventListener("playing", markPlaying);
     };
-  }, [useDesktopVideo]);
+  }, [allowVideo, videoSrc]);
 
-  // Mobile / reduced-motion / pre-hydrate: still only — never mount <video>.
-  if (!useDesktopVideo) {
+  // First paint / reduced-motion / failed autoplay: still only (no <video> = no play button).
+  if (!allowVideo) {
     return (
       <picture>
         <source media="(max-width: 767px)" srcSet={SITE_MEDIA.heroMobilePoster} />
         <img
           src={SITE_MEDIA.heroStill}
           alt=""
-          className={heroImgClass}
+          className={heroMediaLayerClass}
           decoding="async"
           fetchPriority="high"
-          onError={(e) => {
-            e.currentTarget.src = SITE_MEDIA.heroMobilePoster;
-          }}
         />
       </picture>
     );
   }
 
   return (
-    <>
-      {!isPlaying ? (
-        <img
-          src={SITE_MEDIA.heroStill}
-          alt=""
-          className={`${heroImgClass} z-[1]`}
-          decoding="async"
-          fetchPriority="high"
-          aria-hidden
-        />
-      ) : null}
+    <div className="absolute inset-0 z-0 overflow-hidden" aria-hidden>
+      {/* Opaque cover until playback — blocks iOS center play affordance on first load. */}
+      <img
+        src={posterSrc}
+        alt=""
+        className={[
+          heroMediaLayerClass,
+          "z-[2] transition-opacity duration-300",
+          isPlaying ? "pointer-events-none opacity-0" : "opacity-100",
+        ].join(" ")}
+        decoding="async"
+        fetchPriority="high"
+      />
       <video
         ref={videoRef}
-        className={`${heroVideoClass} ${isPlaying ? "opacity-100" : "opacity-0"}`}
+        key={videoSrc}
+        className={[
+          heroVideoClass,
+          "z-[1]",
+          isPlaying ? "opacity-100" : "opacity-0",
+        ].join(" ")}
         autoPlay
         muted
         loop
         playsInline
         controls={false}
+        controlsList="nodownload nofullscreen noremoteplayback"
         disablePictureInPicture
         disableRemotePlayback
         preload="auto"
-        poster={SITE_MEDIA.heroStill}
-        aria-hidden
+        // Omit native `poster` — it pairs with iOS’s start-playback button.
         tabIndex={-1}
         onError={() => setVideoFailed(true)}
       >
-        <source src={SITE_MEDIA.heroVideo} type="video/mp4" />
+        <source src={videoSrc} type="video/mp4" />
       </video>
-    </>
+    </div>
   );
 }
