@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { SITE_MEDIA } from "@/lib/site-assets";
 
 const heroImgClass =
@@ -29,36 +29,23 @@ function preferStaticHeroMedia(): boolean {
   return false;
 }
 
+/**
+ * Mobile hero is always a still — iOS Safari paints a native play glyph on
+ * `<video>` that can sit above page content no matter what CSS we apply.
+ * Desktop keeps the cinematic autoplay loop.
+ */
 export function HeroMedia() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [hydrated, setHydrated] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [preferStatic, setPreferStatic] = useState(false);
   const [videoFailed, setVideoFailed] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isMobile, setIsMobile] = useState(() =>
-    typeof window !== "undefined" ? isMobileHeroViewport() : false,
-  );
-  const [preferStatic, setPreferStatic] = useState(() =>
-    typeof window !== "undefined" ? preferStaticHeroMedia() : false,
-  );
-
-  const { videoSrc, posterSrc, stillFallback } = useMemo(
-    () =>
-      isMobile
-        ? {
-            videoSrc: SITE_MEDIA.heroMobileVideo,
-            posterSrc: SITE_MEDIA.heroMobilePoster,
-            stillFallback: SITE_MEDIA.heroMobilePoster,
-          }
-        : {
-            videoSrc: SITE_MEDIA.heroVideo,
-            posterSrc: SITE_MEDIA.heroStill,
-            stillFallback: SITE_MEDIA.heroStill,
-          },
-    [isMobile],
-  );
 
   useLayoutEffect(() => {
     setIsMobile(isMobileHeroViewport());
     setPreferStatic(preferStaticHeroMedia());
+    setHydrated(true);
   }, []);
 
   useEffect(() => {
@@ -81,8 +68,10 @@ export function HeroMedia() {
     };
   }, []);
 
+  const useDesktopVideo = hydrated && !isMobile && !preferStatic && !videoFailed;
+
   useEffect(() => {
-    if (preferStatic || videoFailed) return;
+    if (!useDesktopVideo) return;
     const video = videoRef.current;
     if (!video) return;
 
@@ -104,7 +93,6 @@ export function HeroMedia() {
             if (!cancelled) setIsPlaying(true);
           })
           .catch(() => {
-            // Autoplay blocked — keep poster only; never leave a native play affordance.
             if (!cancelled) setVideoFailed(true);
           });
       }
@@ -116,7 +104,6 @@ export function HeroMedia() {
     const onPlaying = () => {
       if (!cancelled) setIsPlaying(true);
     };
-
     video.addEventListener("playing", onPlaying);
 
     return () => {
@@ -124,29 +111,32 @@ export function HeroMedia() {
       video.removeEventListener("loadeddata", tryPlay);
       video.removeEventListener("playing", onPlaying);
     };
-  }, [preferStatic, videoFailed, videoSrc]);
+  }, [useDesktopVideo]);
 
-  if (preferStatic || videoFailed) {
+  // Mobile / reduced-motion / pre-hydrate: still only — never mount <video>.
+  if (!useDesktopVideo) {
     return (
-      <img
-        src={posterSrc}
-        alt=""
-        className={heroImgClass}
-        decoding="async"
-        fetchPriority="high"
-        onError={(e) => {
-          e.currentTarget.src = stillFallback;
-        }}
-      />
+      <picture>
+        <source media="(max-width: 767px)" srcSet={SITE_MEDIA.heroMobilePoster} />
+        <img
+          src={SITE_MEDIA.heroStill}
+          alt=""
+          className={heroImgClass}
+          decoding="async"
+          fetchPriority="high"
+          onError={(e) => {
+            e.currentTarget.src = SITE_MEDIA.heroMobilePoster;
+          }}
+        />
+      </picture>
     );
   }
 
   return (
     <>
-      {/* Poster stays on top until playback starts — hides iOS center play button. */}
       {!isPlaying ? (
         <img
-          src={posterSrc}
+          src={SITE_MEDIA.heroStill}
           alt=""
           className={`${heroImgClass} z-[1]`}
           decoding="async"
@@ -156,7 +146,6 @@ export function HeroMedia() {
       ) : null}
       <video
         ref={videoRef}
-        key={videoSrc}
         className={`${heroVideoClass} ${isPlaying ? "opacity-100" : "opacity-0"}`}
         autoPlay
         muted
@@ -166,12 +155,12 @@ export function HeroMedia() {
         disablePictureInPicture
         disableRemotePlayback
         preload="auto"
-        poster={posterSrc}
+        poster={SITE_MEDIA.heroStill}
         aria-hidden
         tabIndex={-1}
         onError={() => setVideoFailed(true)}
       >
-        <source src={videoSrc} type="video/mp4" />
+        <source src={SITE_MEDIA.heroVideo} type="video/mp4" />
       </video>
     </>
   );
