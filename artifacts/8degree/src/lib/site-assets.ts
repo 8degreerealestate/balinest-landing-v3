@@ -45,10 +45,10 @@ export const SITE_MEDIA = {
   team: [
     { src: "/site-media/team-robert.jpg",   name: "Robert",   role: "CEO" },
     { src: "/site-media/team-stephen.jpg",  name: "Stephen",  role: "Listing Agent" },
-    { src: "/site-media/team-ryan.jpg",     name: "Ryan",     role: "Marketing Manager" },
+    { src: "/site-media/team-abdee.jpg",    name: "Abdee",    role: "Marketing Manager" },
     { src: "/site-media/team-mariam.jpg",   name: "Mariam",   role: "Business Office Manager" },
     { src: "/site-media/team-yohanes.jpg",  name: "Yohanes",  role: "Executive Sales Advisor" },
-    { src: "/site-media/team-kinan.jpg",    name: "Kinan",    role: "Social Media Manager" },
+    { src: "/site-media/team-didi.jpg",     name: "Didi",     role: "Social Media Manager" },
     { src: "/site-media/team-rangga.jpg",   name: "Rangga",   role: "Photographer & Graphic Designer" },
   ] as const,
 
