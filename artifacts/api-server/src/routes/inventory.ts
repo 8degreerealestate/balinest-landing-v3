@@ -715,12 +715,13 @@ function listingCodeParam(req: Request): string | null {
   return code && /^[A-Za-z0-9_-]+$/.test(code) ? code : null;
 }
 
+/** Vercel forwards an internal *.vercel.app host, so only trust the request host locally. */
 function requestSiteOrigin(req: Request): string {
   const configured = (process.env.PUBLIC_SITE_URL || process.env.VITE_PUBLIC_SITE_URL || "").trim();
   if (configured) return configured.replace(/\/$/, "");
-  const host = req.get("x-forwarded-host") || req.get("host") || "8degree.co";
-  const proto = req.get("x-forwarded-proto") || (/^localhost|^127\./.test(host) ? "http" : "https");
-  return `${proto}://${host}`;
+  const host = req.get("host") || "";
+  if (/^(localhost|127\.0\.0\.1)(:\d+)?$/.test(host)) return `http://${host}`;
+  return "https://8degree.co";
 }
 
 /** Preview image for WhatsApp / social links — first loadable photo, size-capped. */
