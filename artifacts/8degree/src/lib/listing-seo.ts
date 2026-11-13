@@ -1,21 +1,12 @@
 import type { PropertyInventoryListing } from "@workspace/api-client-react";
 import {
-  borrowInventoryImages,
   inferListingArea,
   inferListingStatus,
-  inventoryGalleryUrls,
   listingPriceLine,
-  pickInventoryThumbnail,
   resolveLeaseYearsLabel,
 } from "@/lib/portfolio-listing";
 import { propertyListingPath } from "@/lib/site-paths";
-import {
-  DEFAULT_OG_IMAGE,
-  SITE_NAME,
-  canonicalUrl,
-  toAbsoluteImageUrl,
-  truncateForMeta,
-} from "@/lib/site-seo";
+import { SITE_NAME, canonicalUrl, truncateForMeta } from "@/lib/site-seo";
 
 export type ListingOpenGraphMeta = {
   pageTitle: string;
@@ -42,25 +33,12 @@ function escapeHtmlAttr(value: string): string {
     .replace(/>/g, "&gt;");
 }
 
-function formatOgImageUrl(raw: string | null | undefined, siteOrigin: string): string {
-  const absolute = toAbsoluteImageUrl(raw, siteOrigin) ?? DEFAULT_OG_IMAGE;
-  if (/images\.unsplash\.com/i.test(absolute)) {
-    const url = new URL(absolute);
-    url.searchParams.set("w", "1200");
-    url.searchParams.set("h", "630");
-    url.searchParams.set("fit", "crop");
-    url.searchParams.set("q", "80");
-    return url.toString();
-  }
-  if (/drive\.google\.com\/thumbnail/i.test(absolute)) {
-    const url = new URL(absolute);
-    url.searchParams.set("sz", "w1200");
-    return url.toString();
-  }
-  if (absolute.includes("/api/inventory/thumb/")) {
-    return absolute.startsWith("http") ? absolute : `${siteOrigin.replace(/\/$/, "")}${absolute}`;
-  }
-  return absolute;
+/**
+ * Resolved live by the API (first photo that loads, size-capped for WhatsApp),
+ * so previews don't break when Drive files change after a build.
+ */
+function listingOgImageUrl(code: string, siteOrigin: string): string {
+  return `${siteOrigin.replace(/\/$/, "")}/api/inventory/listings/${encodeURIComponent(code.trim().toUpperCase())}/og-image`;
 }
 
 function formatLandSize(listing: PropertyInventoryListing): string | null {
@@ -86,11 +64,9 @@ function formatListingPriceForMeta(listing: PropertyInventoryListing): string {
 /** Build Open Graph / Twitter metadata for a property listing detail page. */
 export function buildListingOpenGraph(
   listing: PropertyInventoryListing,
-  options?: { siteOrigin?: string; imagePool?: PropertyInventoryListing[] },
+  options?: { siteOrigin?: string },
 ): ListingOpenGraphMeta {
   const siteOrigin = options?.siteOrigin?.replace(/\/$/, "") || "https://8degree.co";
-  const pool = options?.imagePool ?? [listing];
-  const enriched = borrowInventoryImages(listing, pool);
   const area = listing.location?.trim() || inferListingArea(listing.title, listing.description);
   const ownership =
     listing.ownership?.trim() || inferListingStatus(listing.description) || null;
@@ -116,10 +92,7 @@ export function buildListingOpenGraph(
     ? title
     : `${title} | ${SITE_NAME}`;
 
-  const gallery = inventoryGalleryUrls(enriched);
-  const thumb = pickInventoryThumbnail(enriched);
-  const imageRaw = gallery[0] ?? thumb;
-  const image = formatOgImageUrl(imageRaw, siteOrigin);
+  const image = listingOgImageUrl(listing.code, siteOrigin);
   const canonicalPath = propertyListingPath(listing.code);
   const noindex =
     listing.channel === "silent" ||
@@ -163,8 +136,8 @@ export function injectListingOpenGraphIntoHtml(html: string, meta: ListingOpenGr
   out = upsertMetaTag(out, "property", "og:url", meta.url);
   out = upsertMetaTag(out, "property", "og:type", "website");
   out = upsertMetaTag(out, "property", "og:image", meta.image);
-  out = upsertMetaTag(out, "property", "og:image:width", "1200");
-  out = upsertMetaTag(out, "property", "og:image:height", "630");
+  out = upsertMetaTag(out, "property", "og:image:secure_url", meta.image);
+  out = upsertMetaTag(out, "property", "og:image:alt", meta.title);
   out = upsertMetaTag(out, "property", "og:site_name", SITE_NAME);
   out = upsertMetaTag(out, "name", "twitter:card", "summary_large_image");
   out = upsertMetaTag(out, "name", "twitter:title", meta.title);

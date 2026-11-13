@@ -27,7 +27,8 @@ function mapSheetRow(row: ExternalListingRow): PropertyInventoryListing {
 
 async function loadListingsFromSheet(): Promise<PropertyInventoryListing[]> {
   const mod = await import("../../artifacts/api-server/src/lib/property-inventory-sheet.ts");
-  const rows = await mod.loadListingsFromGoogleSheet({ resolveDriveImages: true });
+  // og:image points at the live /og-image endpoint, so Drive folders needn't be resolved at build time.
+  const rows = await mod.loadListingsFromGoogleSheet({ resolveDriveImages: false });
   return (rows ?? []).map(mapSheetRow);
 }
 
@@ -85,7 +86,7 @@ async function main(): Promise<void> {
   let written = 0;
   for (const listing of listings) {
     if (!shouldPrerender(listing)) continue;
-    const meta = buildListingOpenGraph(listing, { siteOrigin: SITE_ORIGIN, imagePool: listings });
+    const meta = buildListingOpenGraph(listing, { siteOrigin: SITE_ORIGIN });
     const html = injectListingOpenGraphIntoHtml(shellHtml, meta);
     const code = listing.code.trim().toLowerCase();
     const outDir = path.join(REPO_ROOT, "artifacts/8degree/dist/public/property", code);

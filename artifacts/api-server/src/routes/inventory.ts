@@ -26,6 +26,11 @@ import type { SheetListingRow } from "../lib/property-inventory-sheet";
 import { fetchListingNearbyPlaces } from "../lib/listing-nearby";
 import { pickFeaturedInventoryListings } from "../lib/featured-inventory-listings";
 import { listingRowHasThumbnail, pickSimilarInventoryListings } from "../lib/similar-inventory-listings";
+import {
+  DEFAULT_SHARE_IMAGE,
+  renderListingShareHtml,
+  resolveListingShareImage,
+} from "../lib/listing-share-preview";
 import { logger } from "../lib/logger";
 
 const router = Router();
@@ -701,6 +706,79 @@ router.get("/inventory/listings/:code/nearby", async (req, res): Promise<void> =
   } catch (error: unknown) {
     logger.error({ err: error, code }, "inventory listing nearby failed");
     res.status(500).json({ error: "Could not load nearby places" });
+  }
+});
+
+function listingCodeParam(req: Request): string | null {
+  const raw = req.params.code;
+  const code = (Array.isArray(raw) ? raw[0] : raw ?? "").trim();
+  return code && /^[A-Za-z0-9_-]+$/.test(code) ? code : null;
+}
+
+function requestSiteOrigin(req: Request): string {
+  const configured = (process.env.PUBLIC_SITE_URL || process.env.VITE_PUBLIC_SITE_URL || "").trim();
+  if (configured) return configured.replace(/\/$/, "");
+  const host = req.get("x-forwarded-host") || req.get("host") || "8degree.co";
+  const proto = req.get("x-forwarded-proto") || (/^localhost|^127\./.test(host) ? "http" : "https");
+  return `${proto}://${host}`;
+}
+
+/** Preview image for WhatsApp / social links — first loadable photo, size-capped. */
+router.get("/inventory/listings/:code/og-image", async (req, res): Promise<void> => {
+  const code = listingCodeParam(req);
+  if (!code) {
+    res.status(400).json({ error: "Invalid listing code" });
+    return;
+  }
+  try {
+    const listing = await findListingByCode(code);
+    const image = listing ? await resolveListingShareImage(listing) : null;
+    if (!image) {
+      res.setHeader("Cache-Control", "public, max-age=3600, s-maxage=3600");
+      res.redirect(302, DEFAULT_SHARE_IMAGE);
+      return;
+    }
+    res.setHeader("Content-Type", image.contentType);
+    res.setHeader("Content-Length", String(image.body.length));
+    // Long CDN cache + SWR: the first lookup can take several seconds (sheet + Drive),
+    // and preview bots time out quickly.
+    res.setHeader("Cache-Control", "public, max-age=86400, s-maxage=604800, stale-while-revalidate=2592000");
+    res.send(image.body);
+  } catch (err) {
+    logger.warn({ err, code }, "listing og-image failed");
+    res.redirect(302, DEFAULT_SHARE_IMAGE);
+  }
+});
+
+/**
+ * Crawler-only HTML for listings without a prerendered page (e.g. added to the
+ * sheet after the last deploy). Vercel routes link-preview bots here.
+ */
+router.get("/share/property/:code", async (req, res): Promise<void> => {
+  const code = listingCodeParam(req);
+  if (!code) {
+    res.status(400).send("Invalid listing code");
+    return;
+  }
+  try {
+    const codeKey = inventoryListingCodeKey(code);
+    let listing: ListingRowJson | null = null;
+    if (useSheetAsInventorySource()) {
+      const rows = await loadListingsFromGoogleSheet({ forceRefresh: false, resolveDriveImages: false });
+      const hit = rows?.find((r) => inventoryListingCodeKey(r.code) === codeKey);
+      if (hit) listing = mapExternalRow(hit);
+    }
+    listing ??= await findListingByCode(code);
+    if (!listing) {
+      res.status(404).send("Listing not found");
+      return;
+    }
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.setHeader("Cache-Control", "public, max-age=600, s-maxage=3600, stale-while-revalidate=86400");
+    res.send(renderListingShareHtml(listing, requestSiteOrigin(req)));
+  } catch (err) {
+    logger.warn({ err, code }, "listing share page failed");
+    res.status(500).send("Could not load listing");
   }
 });
 

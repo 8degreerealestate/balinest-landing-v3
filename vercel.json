@@ -25,6 +25,17 @@
       "destination": "/api/index.js"
     },
     {
+      "source": "/property/:code",
+      "has": [
+        {
+          "type": "header",
+          "key": "user-agent",
+          "value": "(?i).*(whatsapp|facebookexternalhit|facebot|twitterbot|linkedinbot|slackbot|telegrambot|discordbot|pinterest|skypeuripreview|applebot|googlebot|bingbot|redditbot|embedly|vkshare|viber|kakaotalk|snapchat).*"
+        }
+      ],
+      "destination": "/api/index.js"
+    },
+    {
       "source": "/wp-content/uploads/:path*",
       "destination": "/journal-media/:path*"
     },

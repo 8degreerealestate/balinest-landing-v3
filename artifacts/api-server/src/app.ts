@@ -29,6 +29,12 @@ app.use(cors());
 app.use(express.json({ limit: "32mb" }));
 app.use(express.urlencoded({ extended: true }));
 
+// Vercel forwards link-preview bots hitting /property/:code here (original path preserved).
+app.get("/property/:code", (req, _res, next) => {
+  req.url = `/api/share/property/${encodeURIComponent(req.params.code)}`;
+  next();
+});
+
 app.use("/api", router);
 
 export default app;

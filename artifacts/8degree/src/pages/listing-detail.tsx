@@ -13,7 +13,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { useHorizontalSwipe } from "@/lib/use-horizontal-swipe";
+import { cn } from "@/lib/utils";
+import { ZoomableLightboxImage } from "@/components/site/ZoomableLightboxImage";
 import { useForm } from "react-hook-form";
 import {
   borrowInventoryImages,
@@ -617,9 +618,7 @@ export default function ListingDetail() {
 
   const listingOgMeta = useMemo(() => {
     if (!listing || isPreview) return null;
-    return buildListingOpenGraph(listing, {
-      imagePool: [listing],
-    });
+    return buildListingOpenGraph(listing);
   }, [listing, isPreview]);
 
   /** Silent listings are link-only (not on public browse); still viewable at /property/:code. */
@@ -671,13 +670,16 @@ export default function ListingDetail() {
 
   /** Lightbox state — null = closed; number = current index in `allImages`. */
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
-  const closeLightbox = () => setLightboxIndex(null);
+  const closeLightbox = () => {
+    setLightboxIndex(null);
+    setLightboxZoomed(false);
+  };
   const lightboxPrev = () =>
     setLightboxIndex((i) => (i === null ? i : Math.max(0, i - 1)));
   const lightboxNext = () =>
     setLightboxIndex((i) => (i === null ? i : Math.min(allImages.length - 1, i + 1)));
 
-  const lightboxSwipe = useHorizontalSwipe(lightboxNext, lightboxPrev);
+  const [lightboxZoomed, setLightboxZoomed] = useState(false);
 
   const [dismissedSimilarCodes, setDismissedSimilarCodes] = useState(() => new Set<string>());
   useEffect(() => {
@@ -1598,8 +1600,7 @@ export default function ListingDetail() {
 
           {/* Image + arrows */}
           <div
-            className="relative flex flex-1 touch-pan-y items-center justify-center px-3 md:px-16"
-            {...lightboxSwipe.handlers}
+            className="relative flex min-h-0 flex-1 items-center justify-center px-2 py-1 md:px-16"
             onClick={(e) => {
               if (e.target === e.currentTarget) closeLightbox();
             }}
@@ -1609,34 +1610,39 @@ export default function ListingDetail() {
               onClick={lightboxPrev}
               disabled={lightboxIndex === 0}
               aria-label={t.previous}
-              className="absolute left-2 z-[2] inline-flex h-11 w-11 items-center justify-center rounded-full transition-colors hover:bg-black/10 disabled:cursor-not-allowed disabled:opacity-25 md:left-6"
+              className={cn(
+                "absolute left-2 z-[2] h-11 w-11 items-center justify-center rounded-full transition-colors hover:bg-black/10 disabled:cursor-not-allowed disabled:opacity-25 md:left-6",
+                lightboxZoomed ? "hidden" : "inline-flex",
+              )}
               style={{ color: PALETTE.brand, backgroundColor: "rgba(244, 241, 234, 0.55)" }}
             >
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                 <polyline points="15 18 9 12 15 6" />
               </svg>
             </button>
-            <img
-              src={allImages[lightboxIndex]}
-              alt={`${listing.title || listing.code} — ${lightboxIndex + 1} / ${allImages.length}`}
-              className="max-h-[72vh] max-w-full select-none object-contain"
-              style={{
-                borderRadius: 6,
-                // Subtle soft shadow so the image stands off the blurry backdrop.
-                boxShadow: "0 30px 80px -20px rgba(28, 25, 23, 0.35), 0 8px 24px -8px rgba(28, 25, 23, 0.18)",
-              }}
-              draggable={false}
-              onError={() => {
-                const url = allImages[lightboxIndex];
-                if (url) markGalleryImageBroken(url);
-              }}
-            />
+            <div className="h-full w-full md:max-h-[72vh]">
+              <ZoomableLightboxImage
+                src={allImages[lightboxIndex]}
+                alt={`${listing.title || listing.code} — ${lightboxIndex + 1} / ${allImages.length}`}
+                onSwipeLeft={lightboxNext}
+                onSwipeRight={lightboxPrev}
+                onBackdropTap={closeLightbox}
+                onZoomChange={setLightboxZoomed}
+                onError={() => {
+                  const url = allImages[lightboxIndex];
+                  if (url) markGalleryImageBroken(url);
+                }}
+              />
+            </div>
             <button
               type="button"
               onClick={lightboxNext}
               disabled={lightboxIndex >= allImages.length - 1}
               aria-label={t.next}
-              className="absolute right-2 z-[2] inline-flex h-11 w-11 items-center justify-center rounded-full transition-colors hover:bg-black/10 disabled:cursor-not-allowed disabled:opacity-25 md:right-6"
+              className={cn(
+                "absolute right-2 z-[2] h-11 w-11 items-center justify-center rounded-full transition-colors hover:bg-black/10 disabled:cursor-not-allowed disabled:opacity-25 md:right-6",
+                lightboxZoomed ? "hidden" : "inline-flex",
+              )}
               style={{ color: PALETTE.brand, backgroundColor: "rgba(244, 241, 234, 0.55)" }}
             >
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
