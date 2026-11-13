@@ -715,10 +715,13 @@ function listingCodeParam(req: Request): string | null {
   return code && /^[A-Za-z0-9_-]+$/.test(code) ? code : null;
 }
 
-/** Vercel forwards an internal *.vercel.app host, so only trust the request host locally. */
+/**
+ * Share links must use the public domain. Vercel forwards an internal *.vercel.app
+ * host and its env may hold one too, so ignore those and trust the host only locally.
+ */
 function requestSiteOrigin(req: Request): string {
   const configured = (process.env.PUBLIC_SITE_URL || process.env.VITE_PUBLIC_SITE_URL || "").trim();
-  if (configured) return configured.replace(/\/$/, "");
+  if (configured && !/\.vercel\.app/i.test(configured)) return configured.replace(/\/$/, "");
   const host = req.get("host") || "";
   if (/^(localhost|127\.0\.0\.1)(:\d+)?$/.test(host)) return `http://${host}`;
   return "https://8degree.co";
